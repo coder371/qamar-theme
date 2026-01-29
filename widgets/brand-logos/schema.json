@@ -1,0 +1,69 @@
+{
+  "name": "Brand Logos",
+  "settings": {
+    "title": {
+      "type": "string",
+      "label": "العنوان"
+    },
+    "layout": {
+      "type": "select",
+      "label": "التخطيط",
+      "default": "slider",
+      "options": [
+        {
+          "value": "slider",
+          "label": "سلايدر"
+        },
+        {
+          "value": "grid",
+          "label": "شبكة"
+        }
+      ]
+    },
+    "grayscale": {
+      "type": "boolean",
+      "label": "تدرج رمادي",
+      "default": true
+    },
+    "background": {
+      "type": "select",
+      "label": "لون الخلفية",
+      "default": "white",
+      "options": [
+        {
+          "value": "white",
+          "label": "أبيض"
+        },
+        {
+          "value": "gray",
+          "label": "رمادي"
+        }
+      ]
+    }
+  },
+  "blocks": {
+    "brand": {
+      "name": "علامة تجارية",
+      "settings": {
+        "logo": {
+          "type": "image",
+          "label": "الشعار"
+        },
+        "name": {
+          "type": "string",
+          "label": "الاسم"
+        },
+        "link": {
+          "type": "string",
+          "label": "الرابط"
+        }
+      }
+    }
+  },
+  "presets": [
+    {
+      "category": "Social Proof",
+      "name": "Brand Logos"
+    }
+  ]
+}

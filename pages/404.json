@@ -1,0 +1,16 @@
+{
+  "layout": "layout",
+  "widgets": [
+    {
+      "name": "صفحة غير موجودة",
+      "widget": "page-404",
+      "settings": {
+        "title": "الصفحة غير موجودة",
+        "message": "عذراً، الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
+        "button_text": "العودة للرئيسية",
+        "button_link": "/",
+        "show_search": true
+      }
+    }
+  ]
+}

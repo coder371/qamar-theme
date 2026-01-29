@@ -1,0 +1,36 @@
+{
+  "name": "رأس الصفحة",
+  "settings": {
+    "navbar_text": {
+      "type": "string",
+      "label": "نص الشريط العلوي",
+      "default": "توصيل مجاني للطلبات فوق 500 ريال"
+    },
+    "show_top_bar": {
+      "type": "boolean",
+      "label": "إظهار الشريط العلوي",
+      "default": true
+    },
+    "header_menu": {
+      "type": "menu",
+      "label": "القائمة الرئيسية",
+      "default": "header"
+    },
+    "show_search": {
+      "type": "boolean",
+      "label": "إظهار البحث",
+      "default": true
+    },
+    "show_cart": {
+      "type": "boolean",
+      "label": "إظهار السلة",
+      "default": true
+    }
+  },
+  "presets": [
+    {
+      "category": "الصفحة الرئيسية",
+      "name": "رأس الصفحة"
+    }
+  ]
+}

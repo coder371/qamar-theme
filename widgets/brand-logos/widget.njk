@@ -1,0 +1,78 @@
+{# Brand Logos Widget #}
+
+{% set bgClass = 'bg-gray-50' if widget.data.background == 'gray' else 'bg-white' %}
+
+<section class="brand-logos py-10 {{ bgClass }}">
+  <div class="container mx-auto px-4">
+
+    {# Title #}
+    {% if widget.data.title %}
+      <h2 class="text-center text-lg font-medium text-gray-500 mb-8">{{ widget.data.title }}</h2>
+    {% endif %}
+
+    {% if widget.data.layout == 'slider' %}
+      {# Slider Layout #}
+      <div
+        class="brands-slider overflow-hidden"
+        x-data="{
+          scroll: 0,
+          init() {
+            setInterval(() => {
+              this.scroll += 1;
+              if (this.scroll >= this.$refs.track.scrollWidth / 2) {
+                this.scroll = 0;
+              }
+            }, 30);
+          }
+        }">
+        <div
+          x-ref="track"
+          class="flex items-center gap-12"
+          :style="'transform: translateX(-' + scroll + 'px)'">
+          {# Duplicate logos for infinite scroll effect #}
+          {% for i in range(0, 2) %}
+            {% for brand in widget.blocks %}
+              {% if brand.data.link %}
+                <a href="{{ brand.data.link }}" class="flex-shrink-0">
+              {% else %}
+                <div class="flex-shrink-0">
+              {% endif %}
+                <img
+                  src="{{ brand.data.logo }}"
+                  alt="{{ brand.data.name | default('Brand') }}"
+                  class="h-12 md:h-16 w-auto object-contain transition-all {{ 'grayscale hover:grayscale-0' if widget.data.grayscale else '' }} opacity-60 hover:opacity-100"
+                  loading="lazy">
+              {% if brand.data.link %}
+                </a>
+              {% else %}
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+        </div>
+      </div>
+
+    {% else %}
+      {# Grid Layout #}
+      <div class="flex flex-wrap items-center justify-center gap-8 md:gap-12">
+        {% for brand in widget.blocks %}
+          {% if brand.data.link %}
+            <a href="{{ brand.data.link }}" class="block">
+          {% else %}
+            <div>
+          {% endif %}
+            <img
+              src="{{ brand.data.logo }}"
+              alt="{{ brand.data.name | default('Brand') }}"
+              class="h-10 md:h-14 w-auto object-contain transition-all {{ 'grayscale hover:grayscale-0' if widget.data.grayscale else '' }} opacity-60 hover:opacity-100"
+              loading="lazy">
+          {% if brand.data.link %}
+            </a>
+          {% else %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>

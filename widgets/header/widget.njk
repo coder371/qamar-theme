@@ -1,0 +1,100 @@
+<!-- Header Widget -->
+<div class="sticky top-0 z-50">
+
+  <!-- Top Bar -->
+  {% if widget.data.show_top_bar %}
+  <div class="bg-primary text-white">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between py-2 text-sm">
+        <div class="flex items-center gap-4">
+          <span class="flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+            </svg>
+            {{ widget.data.navbar_text }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Main Header -->
+  <header class="bg-white shadow-md border-b border-gray-100">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between py-4">
+
+        <!-- Mobile Menu Button -->
+        <button @click="toggleModal('sidebar')" class="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors" aria-label="القائمة">
+          <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+
+        <!-- Logo -->
+        <a href="/" class="flex-shrink-0">
+          {% if store.logo.fileUrl %}
+          <img src="{{ store.logo.fileUrl }}" alt="{{ store.name }}" class="h-12 md:h-16 w-auto object-contain">
+          {% else %}
+          <span class="text-2xl font-bold text-primary">{{ store.name }}</span>
+          {% endif %}
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden lg:flex items-center gap-6">
+          {% set menuItems = widget.data.header_menu or [] %}
+          {% for item in menuItems %}
+          {% if loop.index0 < 5 %}
+          <a href="{{ item.url | default('#') }}" class="text-gray-700 hover:text-primary font-medium transition-colors">
+            {{ item.title | default('رابط') }}
+          </a>
+          {% endif %}
+          {% endfor %}
+          {% if menuItems | length > 5 %}
+          <div class="relative group">
+            <button class="text-gray-700 hover:text-primary font-medium transition-colors">المزيد</button>
+            <div class="absolute top-full right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg py-2 min-w-[150px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+              {% for item in menuItems %}
+              {% if loop.index0 >= 5 %}
+              <a href="{{ item.url | default('#') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors">
+                {{ item.title | default('رابط') }}
+              </a>
+              {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+        </nav>
+
+        <!-- Actions -->
+        <div class="flex items-center gap-3">
+
+          <!-- Search Button -->
+          {% if widget.data.show_search %}
+          <button @click="toggleModal('search')" class="p-2 hover:bg-gray-100 rounded-lg transition-colors" aria-label="بحث">
+            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </button>
+          {% endif %}
+
+          <!-- Cart Button -->
+          {% if widget.data.show_cart %}
+          <button @click="toggleModal('cart')" class="relative p-2 hover:bg-gray-100 rounded-lg transition-colors" aria-label="سلة التسوق">
+            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
+            <span class="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center" data-cart-count>{{ cart.totalQuantity | default(0) }}</span>
+          </button>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+  </header>
+</div>
+
+<!-- Include UI Components -->
+{% ui "sidebar.njk", menu=widget.data.header_menu %}
+{% ui "search.njk" %}
+{% ui "cart.njk" %}

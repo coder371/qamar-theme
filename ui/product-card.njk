@@ -1,0 +1,130 @@
+{#
+  Product Card UI Component
+  Usage: {% ui "product-card.njk", product=product %}
+#}
+
+{% set product = product %}
+{% set hasDiscount = product.pricing.compareAtPrice and product.pricing.compareAtPrice > product.pricing.price %}
+{% set discountPercent = ((product.pricing.compareAtPrice - product.pricing.price) / product.pricing.compareAtPrice * 100) | round if hasDiscount else 0 %}
+{% set isNew = product.isNew | default(false) %}
+{% set isOutOfStock = product.quantity <= 0 %}
+
+<div class="product-card group" data-product-id="{{ product._id }}">
+  {# Image Container #}
+  <div class="product-image relative overflow-hidden bg-gray-100">
+    <a href="/product/{{ product.handle }}">
+      {% if product.images[0].fileUrl %}
+        <img
+          src="{{ product.images[0].fileUrl }}"
+          alt="{{ product.title }}"
+          class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          loading="lazy">
+        {# Second image on hover #}
+        {% if product.images[1].fileUrl %}
+          <img
+            src="{{ product.images[1].fileUrl }}"
+            alt="{{ product.title }}"
+            class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+            loading="lazy">
+        {% endif %}
+      {% else %}
+        <div class="w-full h-full flex items-center justify-center bg-gray-200">
+          <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+        </div>
+      {% endif %}
+    </a>
+
+    {# Badges #}
+    <div class="absolute top-3 start-3 flex flex-col gap-2 z-10">
+      {% if hasDiscount %}
+        <span class="badge badge-sale">-{{ discountPercent }}%</span>
+      {% endif %}
+      {% if isNew %}
+        <span class="badge badge-new">{{t("product.new")}}</span>
+      {% endif %}
+      {% if isOutOfStock %}
+        <span class="badge badge-sold-out">{{t("product.out_of_stock")}}</span>
+      {% endif %}
+    </div>
+
+    {# Wishlist Button #}
+    <button
+      data-wishlist-btn="{{ product._id }}"
+      @click="Qumra.wishlist.toggle('{{ product._id }}')"
+      class="wishlist-btn {% if product.inWishlist %}active{% endif %}"
+      aria-label="{{t('product.add_to_wishlist')}}">
+      <svg class="w-5 h-5" fill="{% if product.inWishlist %}currentColor{% else %}none{% endif %}" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+      </svg>
+    </button>
+
+    {# Quick Actions (shown on hover) #}
+    <div class="product-actions">
+      {% if not isOutOfStock %}
+        <button
+          @click="Qumra.cart.add('{{ product._id }}')"
+          class="btn btn-sm bg-white text-gray-900 hover:bg-primary hover:text-white">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+          </svg>
+          {{t("product.add_to_cart")}}
+        </button>
+      {% endif %}
+    </div>
+  </div>
+
+  {# Product Info #}
+  <div class="p-4">
+    {# Title #}
+    <h3 class="font-medium text-gray-900 mb-2 line-clamp-2 min-h-[2.5rem]">
+      <a href="/product/{{ product.handle }}" class="hover:text-primary transition-colors">
+        {{ product.title }}
+      </a>
+    </h3>
+
+    {# Rating #}
+    {% if product.rating %}
+      <div class="star-rating mb-2">
+        {% for i in range(1, 6) %}
+          <svg class="{% if i <= product.rating %}star-filled{% else %}star-empty{% endif %}">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        {% endfor %}
+        {% if product.reviewsCount %}
+          <span class="text-xs text-gray-500 ms-1">({{ product.reviewsCount }})</span>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {# Price #}
+    <div class="price">
+      <span class="price-current" data-money="{{ product.pricing.price }}">{{ product.pricing.price | money }}</span>
+      {% if hasDiscount %}
+        <span class="price-compare" data-money="{{ product.pricing.compareAtPrice }}">{{ product.pricing.compareAtPrice | money }}</span>
+      {% endif %}
+    </div>
+
+    {# Color Variants Preview #}
+    {% if product.options and product.options.length > 0 %}
+      {% set colorOption = product.options | selectattr("name", "equalto", "اللون") | first %}
+      {% if colorOption and colorOption.values %}
+        <div class="flex gap-1 mt-3">
+          {% for color in colorOption.values | slice(0, 5) %}
+            <span
+              class="w-5 h-5 rounded-full border border-gray-200"
+              style="background-color: {{ color.color | default('#ccc') }}"
+              title="{{ color.name }}">
+            </span>
+          {% endfor %}
+          {% if colorOption.values | length > 5 %}
+            <span class="w-5 h-5 rounded-full bg-gray-100 text-xs flex items-center justify-center text-gray-500">
+              +{{ colorOption.values | length - 5 }}
+            </span>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>

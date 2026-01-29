@@ -1,0 +1,15 @@
+{
+  "layout": "layout",
+  "widgets": [
+    {
+      "name": "سلة التسوق",
+      "widget": "cart-page",
+      "settings": {
+        "show_product_image": true,
+        "show_coupon": true,
+        "show_shipping_estimate": true,
+        "continue_shopping_url": "/products"
+      }
+    }
+  ]
+}

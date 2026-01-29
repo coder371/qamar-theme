@@ -1,0 +1,23 @@
+{
+  "title": "Header Group",
+  "allowAdd": false,
+  "allowRemove": false,
+  "allowReorder": false,
+  "widgets": [
+    {
+      "name": "announcement",
+      "widget": "announcement-bar",
+      "settings": {
+        "text": "شحن مجاني للطلبات فوق 200 ريال | استخدمي كود WELCOME للحصول على خصم 10%",
+        "background_color": "#9C27B0",
+        "text_color": "#FFFFFF",
+        "show_close_button": true
+      }
+    },
+    {
+      "name": "header",
+      "widget": "header",
+      "settings": {}
+    }
+  ]
+}

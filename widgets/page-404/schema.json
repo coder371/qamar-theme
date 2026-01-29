@@ -1,0 +1,36 @@
+{
+  "name": "Page 404",
+  "settings": {
+    "title": {
+      "type": "string",
+      "label": "العنوان",
+      "default": "الصفحة غير موجودة"
+    },
+    "message": {
+      "type": "text",
+      "label": "الرسالة",
+      "default": "عذراً، الصفحة التي تبحث عنها غير موجودة أو تم نقلها."
+    },
+    "button_text": {
+      "type": "string",
+      "label": "نص الزر",
+      "default": "العودة للرئيسية"
+    },
+    "button_link": {
+      "type": "string",
+      "label": "رابط الزر",
+      "default": "/"
+    },
+    "show_search": {
+      "type": "boolean",
+      "label": "إظهار حقل البحث",
+      "default": true
+    }
+  },
+  "presets": [
+    {
+      "category": "Pages",
+      "name": "Page 404"
+    }
+  ]
+}

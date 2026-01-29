@@ -1,0 +1,114 @@
+{
+  "name": "Banner Grid",
+  "settings": {
+    "layout": {
+      "type": "select",
+      "label": "تخطيط الشبكة",
+      "default": "2",
+      "options": [
+        {
+          "value": "2",
+          "label": "2 بانر"
+        },
+        {
+          "value": "3",
+          "label": "3 بانرات"
+        },
+        {
+          "value": "4",
+          "label": "4 بانرات"
+        }
+      ]
+    },
+    "gap": {
+      "type": "select",
+      "label": "المسافة بين البانرات",
+      "default": "4",
+      "options": [
+        {
+          "value": "2",
+          "label": "صغيرة"
+        },
+        {
+          "value": "4",
+          "label": "متوسطة"
+        },
+        {
+          "value": "6",
+          "label": "كبيرة"
+        }
+      ]
+    },
+    "aspect_ratio": {
+      "type": "select",
+      "label": "نسبة العرض للارتفاع",
+      "default": "3/2",
+      "options": [
+        {
+          "value": "1/1",
+          "label": "مربع"
+        },
+        {
+          "value": "3/2",
+          "label": "3:2"
+        },
+        {
+          "value": "16/9",
+          "label": "16:9"
+        }
+      ]
+    }
+  },
+  "blocks": {
+    "banner": {
+      "name": "بانر",
+      "settings": {
+        "image": {
+          "type": "image",
+          "label": "الصورة"
+        },
+        "title": {
+          "type": "string",
+          "label": "العنوان"
+        },
+        "subtitle": {
+          "type": "string",
+          "label": "العنوان الفرعي"
+        },
+        "link": {
+          "type": "string",
+          "label": "الرابط"
+        },
+        "overlay_opacity": {
+          "type": "select",
+          "label": "شفافية الطبقة",
+          "default": "30",
+          "options": [
+            {
+              "value": "0",
+              "label": "بدون"
+            },
+            {
+              "value": "20",
+              "label": "خفيفة"
+            },
+            {
+              "value": "30",
+              "label": "متوسطة"
+            },
+            {
+              "value": "50",
+              "label": "داكنة"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "presets": [
+    {
+      "category": "Marketing",
+      "name": "Banner Grid"
+    }
+  ]
+}

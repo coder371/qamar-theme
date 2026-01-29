@@ -1,0 +1,56 @@
+{
+  "name": "Collection Products",
+  "settings": {
+    "products_per_page": {
+      "type": "number",
+      "label": "عدد المنتجات في الصفحة",
+      "default": 12,
+      "min": 8,
+      "max": 24
+    },
+    "columns_desktop": {
+      "type": "select",
+      "label": "عدد الأعمدة (سطح المكتب)",
+      "default": "4",
+      "options": [
+        { "value": "3", "label": "3 أعمدة" },
+        { "value": "4", "label": "4 أعمدة" }
+      ]
+    },
+    "columns_mobile": {
+      "type": "select",
+      "label": "عدد الأعمدة (موبايل)",
+      "default": "2",
+      "options": [
+        { "value": "1", "label": "عمود واحد" },
+        { "value": "2", "label": "2 أعمدة" }
+      ]
+    },
+    "show_filters": {
+      "type": "boolean",
+      "label": "إظهار الفلاتر",
+      "default": true
+    },
+    "show_sort": {
+      "type": "boolean",
+      "label": "إظهار الترتيب",
+      "default": true
+    },
+    "filter_position": {
+      "type": "select",
+      "label": "موضع الفلاتر",
+      "default": "sidebar",
+      "options": [
+        { "value": "sidebar", "label": "جانبي" },
+        { "value": "top", "label": "أعلى" },
+        { "value": "drawer", "label": "قائمة منسدلة" }
+      ]
+    }
+  },
+  "presets": [
+    {
+      "category": "Collection",
+      "name": "Collection Products"
+    }
+  ]
+}

@@ -1,0 +1,198 @@
+<!-- Cart Sidebar -->
+<div x-cloak x-show="modal.open && modal.type === 'cart'" class="fixed inset-0 z-50">
+
+  <!-- Overlay -->
+  <div @click="closeModal()"
+       x-show="modal.open && modal.type === 'cart'"
+       x-transition:enter="transition-opacity ease-out duration-300"
+       x-transition:enter-start="opacity-0"
+       x-transition:enter-end="opacity-100"
+       x-transition:leave="transition-opacity ease-in duration-300"
+       x-transition:leave-start="opacity-100"
+       x-transition:leave-end="opacity-0"
+       class="absolute inset-0 bg-black/50 backdrop-blur-sm">
+  </div>
+
+  <!-- Panel -->
+  <div class="absolute top-0 left-0 bg-white w-4/5 max-w-md h-full shadow-2xl flex flex-col"
+       x-show="modal.open && modal.type === 'cart'"
+       x-transition:enter="transition ease-in-out duration-300 transform"
+       x-transition:enter-start="-translate-x-full"
+       x-transition:enter-end="translate-x-0"
+       x-transition:leave="transition ease-in-out duration-300 transform"
+       x-transition:leave-start="translate-x-0"
+       x-transition:leave-end="-translate-x-full"
+       data-cart-container>
+
+    <!-- Header -->
+    <div class="flex items-center justify-between p-4 border-b border-gray-200">
+      <div class="flex items-center gap-3">
+        <h2 class="text-lg font-bold text-gray-800">
+          {{t("cart.title")}}
+        </h2>
+        <span class="bg-primary text-white text-xs font-bold px-2 py-1 rounded-full" data-cart-count>
+          {{ cart.totalQuantity | default(0) }}
+        </span>
+      </div>
+      <div class="flex items-center gap-2">
+        {% if cart.items | length > 0 %}
+          <!-- Clear Cart Button -->
+          <button
+            onclick="Qumra.cart.clear()"
+            class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+            title="{{t('wishlist.clear')}}">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+            </svg>
+          </button>
+        {% endif %}
+        <!-- Close Button -->
+        <button @click="closeModal()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+          <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Cart Items -->
+    <div class="flex-1 overflow-y-auto">
+      {% if cart.items | length > 0 %}
+        <!-- Cart Items List -->
+        <div class="p-4 space-y-4">
+          {% for item in cart.items %}
+            <div class="cart-item flex gap-4 p-3 bg-gray-50 rounded-xl relative group" data-cart-item="{{ item._id }}">
+
+              <!-- Loading Overlay -->
+              <div class="cart-item-loading absolute inset-0 bg-white/80 rounded-xl flex items-center justify-center z-10 opacity-0 pointer-events-none transition-opacity">
+                <svg class="w-6 h-6 text-primary animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+              </div>
+
+              <!-- Product Image -->
+              <a href="/products/{{ item.productData.handle | default(item.productId) }}" class="flex-shrink-0">
+                <img
+                  src="{{ item.productData.image.fileUrl | default('/placeholder.jpg') }}"
+                  alt="{{ item.productData.title }}"
+                  class="w-20 h-20 object-cover rounded-lg">
+              </a>
+
+              <!-- Product Info -->
+              <div class="flex-1 min-w-0">
+                <a href="/products/{{ item.productData.handle | default(item.productId) }}" class="block">
+                  <h4 class="font-medium text-gray-800 line-clamp-2 hover:text-primary transition-colors">
+                    {{ item.productData.title }}
+                  </h4>
+                </a>
+
+                <!-- Price -->
+                <div class="flex items-center gap-2 mt-2">
+                  <span class="text-primary font-bold" data-money="{{ item.price }}">{{ item.price | money }}</span>
+                  {% if item.compareAtPrice and item.compareAtPrice > item.price %}
+                    <span class="text-gray-400 text-sm line-through" data-money="{{ item.compareAtPrice }}">{{ item.compareAtPrice | money }}</span>
+                  {% endif %}
+                </div>
+
+                <!-- Quantity Controls -->
+                <div class="flex items-center justify-between mt-3">
+                  <div class="flex items-center border border-gray-200 rounded-lg bg-white">
+                    <!-- Decrement -->
+                    <button
+                      onclick="Qumra.cart.decrement('{{ item._id }}')"
+                      class="decrement-btn w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-r-lg transition-colors"
+                      data-item-decrement="{{ item._id }}"
+                      title="تقليل">
+                      <!-- Trash Icon (shown when qty <= 1) -->
+                      <svg class="w-4 h-4 text-red-500 icon-trash {% if item.quantity > 1 %}hidden{% endif %}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                      </svg>
+                      <!-- Minus Icon (shown when qty > 1) -->
+                      <svg class="w-4 h-4 icon-minus {% if item.quantity <= 1 %}hidden{% endif %}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                      </svg>
+                    </button>
+
+                    <!-- Quantity Display -->
+                    <span class="w-10 text-center font-medium text-gray-800" data-item-qty="{{ item._id }}">
+                      {{ item.quantity }}
+                    </span>
+
+                    <!-- Increment -->
+                    <button
+                      onclick="Qumra.cart.increment('{{ item._id }}')"
+                      class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-l-lg transition-colors"
+                      title="زيادة">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                      </svg>
+                    </button>
+                  </div>
+
+                  <!-- Item Total -->
+                  <span class="text-sm font-medium text-gray-600" data-item-total="{{ item._id }}" data-money="{{ item.totalPrice }}">{{ item.totalPrice | money }}</span>
+                </div>
+              </div>
+
+              <!-- Remove Button -->
+              <button
+                onclick="Qumra.cart.remove('{{ item._id }}')"
+                class="absolute top-2 left-2 p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
+                title="{{t('cart.remove_item')}}">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+          {% endfor %}
+        </div>
+
+      {% else %}
+        <!-- Empty Cart -->
+        <div class="flex flex-col items-center justify-center h-full text-center p-8">
+          <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6">
+            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-gray-800 mb-2">{{t("cart.empty")}}</h3>
+          <p class="text-gray-500 mb-6">{{t("cart.empty_message")}}</p>
+          <a href="/products" @click="closeModal()" class="px-6 py-3 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 transition-colors">
+            {{t("cart.continue_shopping")}}
+          </a>
+        </div>
+      {% endif %}
+    </div>
+
+    {% if cart.items | length > 0 %}
+      <!-- Footer -->
+      <div class="border-t border-gray-200 bg-gray-50 p-4 space-y-4">
+
+        <!-- Total -->
+        <div class="flex items-center justify-between">
+          <span class="text-lg font-bold text-gray-800">{{t("cart.total")}}</span>
+          <span class="text-xl font-bold text-primary" data-cart-total data-money="{{ cart.totalPrice }}">{{ cart.totalPrice | money }}</span>
+        </div>
+
+        <!-- Actions -->
+        <div class="space-y-3">
+          <!-- Checkout Button -->
+          <a href="/checkout" class="flex items-center justify-center gap-2 w-full py-3 px-6 bg-primary hover:bg-primary/90 text-white rounded-xl font-medium transition-colors">
+            <span>{{t("cart.checkout")}}</span>
+            <svg class="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+            </svg>
+          </a>
+
+          <!-- Continue Shopping -->
+          <button @click="closeModal()" class="w-full py-3 px-6 border border-gray-200 hover:bg-gray-100 text-gray-700 rounded-xl font-medium transition-colors">
+            {{t("cart.continue_shopping")}}
+          </button>
+        </div>
+
+      </div>
+    {% endif %}
+  </div>
+</div>
+

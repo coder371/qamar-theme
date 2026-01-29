@@ -1,0 +1,41 @@
+{
+  "name": "Product Info",
+  "settings": {
+    "show_sku": {
+      "type": "boolean",
+      "label": "إظهار رمز المنتج",
+      "default": true
+    },
+    "show_vendor": {
+      "type": "boolean",
+      "label": "إظهار الماركة",
+      "default": true
+    },
+    "show_rating": {
+      "type": "boolean",
+      "label": "إظهار التقييم",
+      "default": true
+    },
+    "show_stock": {
+      "type": "boolean",
+      "label": "إظهار حالة التوفر",
+      "default": true
+    },
+    "show_share": {
+      "type": "boolean",
+      "label": "إظهار أزرار المشاركة",
+      "default": true
+    },
+    "sticky_add_to_cart": {
+      "type": "boolean",
+      "label": "زر الإضافة الثابت (موبايل)",
+      "default": true
+    }
+  },
+  "presets": [
+    {
+      "category": "Product",
+      "name": "Product Info"
+    }
+  ]
+}

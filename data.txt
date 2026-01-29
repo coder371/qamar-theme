@@ -1,0 +1,482 @@
+store
+{
+  "_id": "69678e56f4d5891763dd379d",
+  "name": "minikid1",
+  "subdomain": "bmzcfgpu",
+  "platformId": "66845abcfdcb516dedc985e7",
+  "description": "",
+  "mode": "development",
+  "deleted": false,
+  "devStore": true,
+  "susbended": false,
+  "loginRequired": false,
+  "active": true,
+  "generalSettings": {
+    "country": {
+      "_id": "66b1fe03bf96c2af004f4eeb",
+      "name": "الكويت",
+      "image": {
+        "image": "kwait.png",
+        "_id": "66b1fe03bf96c2af004f4eec",
+        "createdAt": "2024-08-06T10:42:11.232Z",
+        "updatedAt": "2024-08-06T10:42:11.232Z",
+        "id": "66b1fe03bf96c2af004f4eec",
+        "imageUrl": "https://cdn.qumra.cloud/system/assets/kwait.png"
+      },
+      "code": "KW",
+      "continent": "Asia",
+      "capital": "الكويت",
+      "active": true,
+      "deleted": false,
+      "__v": 0,
+      "createdAt": "2024-08-06T10:42:11.232Z",
+      "updatedAt": "2024-08-06T10:42:11.232Z",
+      "currency": {
+        "_id": "66dd78944d592b12e6201cb7",
+        "title": "دينار كويتي ( د.ك )",
+        "currencyCode": "KWD",
+        "currencySymbol": "د.ك",
+        "deleted": false
+      },
+      "phonekey": "+965",
+      "id": "66b1fe03bf96c2af004f4eeb"
+    },
+    "currency": {
+      "_id": "66dd78944d592b12e6201cb7",
+      "title": "دينار كويتي ( د.ك )",
+      "currencyCode": "KWD",
+      "currencySymbol": "د.ك",
+      "deleted": false
+    },
+    "_id": "69678e56f4d5891763dd379e",
+    "id": "69678e56f4d5891763dd379e"
+  },
+  "hasPlan": false,
+  "freeTire": false,
+  "createdAt": "2026-01-14T12:38:46.297Z",
+  "updatedAt": "2026-01-26T13:20:13.752Z",
+  "__v": 0,
+  "logo": {
+    "_id": "696fa9441e3817d435c34bfb",
+    "file": "1768925507890-455613606.webp",
+    "path": "app/69678e56f4d5891763dd379d/media/1768925507890-455613606.webp",
+    "sizeInKB": 25.6641,
+    "sizeInMB": 0.0251,
+    "compressedSizeInKB": 27.084,
+    "compressedSizeInMB": 0.0264,
+    "app": "69678e56f4d5891763dd379d",
+    "deleted": false,
+    "mimetype": "image",
+    "title": "1767551207118-163678174",
+    "createdAt": "2026-01-20T16:11:48.083Z",
+    "updatedAt": "2026-01-20T16:11:48.083Z",
+    "__v": 0,
+    "id": "696fa9441e3817d435c34bfb",
+    "fileUrl": "https://cdn.qumra.cloud/media/69678e56f4d5891763dd379d/1768925507890-455613606.webp"
+  },
+  "url": "https://bmzcfgpu.qumra.store",
+  "id": "69678e56f4d5891763dd379d"
+}
+cart
+{
+  "_id": "69729a063a0a43c10261b29d",
+  "app": "69678e56f4d5891763dd379d",
+  "account": null,
+  "deviceId": "36f51450-a2ad-4bc6-8fbc-0f78b801f5a5",
+  "status": "ACTIVE",
+  "totalQuantity": 30,
+  "totalPrice": 255500,
+  "totalCompareAtPrice": 1484000,
+  "totalSavings": 1228500,
+  "isFastOrder": false,
+  "items": [
+    {
+      "_id": "69729a063a0a43c10261b2a6",
+      "cart": "69729a063a0a43c10261b29d",
+      "productId": "696fa9251e3817d435c34b9d",
+      "variantId": null,
+      "productData": {
+        "title": "Rolex Oyster Perpetual Submariner",
+        "slug": "rolex-oyster-perpetual-submariner-1",
+        "app": "69678e56f4d5891763dd379d",
+        "image": {
+          "_id": "696fa9441e3817d435c34bfb",
+          "fileUrl": "https://cdn.qumra.cloud/media/69678e56f4d5891763dd379d/1768925507890-455613606.webp"
+        },
+        "price": 15500,
+        "_id": "69729a063a0a43c10261b2a7"
+      },
+      "quantity": 7,
+      "price": 15500,
+      "compareAtPrice": 20000,
+      "totalPrice": 108500,
+      "totalCompareAtPrice": 140000,
+      "totalSavings": 31500,
+      "originalPrice": 0,
+      "totalOriginalPrice": 0,
+      "lastSyncAt": "2026-01-22T21:43:34.304Z",
+      "createdAt": "2026-01-22T21:43:34.305Z",
+      "updatedAt": "2026-01-23T12:27:32.488Z",
+      "__v": 0,
+      "originalTotalPrice": 0,
+      "displayPrice": 15500,
+      "displayTotalPrice": 108500,
+      "itemOfferDiscount": 0
+    },
+    {
+      "_id": "6973645c7971e325a7aaaec3",
+      "cart": "69729a063a0a43c10261b29d",
+      "productId": "696fa9fb1e3817d435c350c3",
+      "variantId": "6972a8dc3a0a43c10261ce53",
+      "productData": {
+        "title": "Tudor",
+        "slug": "tudor-1",
+        "app": "69678e56f4d5891763dd379d",
+        "image": {
+          "_id": "696faa061e3817d435c35120",
+          "fileUrl": "https://cdn.qumra.cloud/media/69678e56f4d5891763dd379d/1768925702050-479164504.webp"
+        },
+        "price": 3000,
+        "_id": "6973645c7971e325a7aaaec4"
+      },
+      "variantData": {
+        "sku": "",
+        "price": 4000,
+        "compareAtPrice": 5000,
+        "options": [
+          {
+            "_id": "6972a8dc3a0a43c10261ce4a",
+            "option": {
+              "_id": "6972a8dc3a0a43c10261ce48",
+              "product": "696fa9fb1e3817d435c350c3",
+              "name": "فثسف",
+              "type": "text",
+              "createdAt": "2026-01-22T22:46:52.882Z",
+              "updatedAt": "2026-01-22T22:46:52.882Z",
+              "__v": 0
+            },
+            "label": "فثسف"
+          },
+          {
+            "_id": "6972a8e43a0a43c10261ce64",
+            "option": {
+              "_id": "6972a8e43a0a43c10261ce62",
+              "product": "696fa9fb1e3817d435c350c3",
+              "name": "يسلي",
+              "type": "text",
+              "createdAt": "2026-01-22T22:47:00.167Z",
+              "updatedAt": "2026-01-22T22:47:00.167Z",
+              "__v": 0
+            },
+            "label": "يبليبل"
+          }
+        ],
+        "_id": "6973645c7971e325a7aaaec5"
+      },
+      "quantity": 8,
+      "price": 3000,
+      "compareAtPrice": 5000,
+      "totalPrice": 24000,
+      "totalCompareAtPrice": 40000,
+      "totalSavings": 16000,
+      "originalPrice": 2500,
+      "totalOriginalPrice": 5000,
+      "lastSyncAt": "2026-01-23T12:06:52.552Z",
+      "createdAt": "2026-01-23T12:06:52.553Z",
+      "updatedAt": "2026-01-23T12:27:17.885Z",
+      "__v": 0,
+      "originalTotalPrice": 20000,
+      "displayPrice": 3000,
+      "displayTotalPrice": 24000,
+      "itemOfferDiscount": 0
+    },
+    {
+      "_id": "6973691528bbb4d709f58178",
+      "cart": "69729a063a0a43c10261b29d",
+      "productId": "696faa4e1e3817d435c352be",
+      "variantId": null,
+      "productData": {
+        "title": "IWC Schaffhausen",
+        "slug": "iwc-schaffhausen-2",
+        "app": "69678e56f4d5891763dd379d",
+        "image": {
+          "_id": "696faa611e3817d435c3532d",
+          "fileUrl": "https://cdn.qumra.cloud/media/69678e56f4d5891763dd379d/1768925793728-118481230.webp"
+        },
+        "price": 8000,
+        "_id": "6973691528bbb4d709f58179"
+      },
+      "quantity": 6,
+      "price": 8000,
+      "compareAtPrice": 9000,
+      "totalPrice": 48000,
+      "totalCompareAtPrice": 54000,
+      "totalSavings": 6000,
+      "originalPrice": 454,
+      "totalOriginalPrice": 454,
+      "lastSyncAt": "2026-01-23T12:27:01.019Z",
+      "createdAt": "2026-01-23T12:27:01.020Z",
+      "updatedAt": "2026-01-23T12:27:17.336Z",
+      "__v": 0,
+      "originalTotalPrice": 2724,
+      "displayPrice": 8000,
+      "displayTotalPrice": 48000,
+      "itemOfferDiscount": 0
+    },
+    {
+      "_id": "6973691528bbb4d709f58190",
+      "cart": "69729a063a0a43c10261b29d",
+      "productId": "696faa8b1e3817d435c35422",
+      "variantId": null,
+      "productData": {
+        "title": "3-in-1 Magnetic Wireless Charging Travel Pad with Qi2 15W",
+        "slug": "3-in-1-magnetic-wireless-charging-travel-pad-with-qi2-15w-1",
+        "app": "69678e56f4d5891763dd379d",
+        "image": {
+          "_id": "696faaaa1e3817d435c354a5",
+          "fileUrl": "https://cdn.qumra.cloud/media/69678e56f4d5891763dd379d/1768925866532-756429369.webp"
+        },
+        "price": 0,
+        "_id": "6973691528bbb4d709f58191"
+      },
+      "quantity": 4,
+      "price": 0,
+      "compareAtPrice": 0,
+      "totalPrice": 0,
+      "totalCompareAtPrice": 0,
+      "totalSavings": 0,
+      "originalPrice": 0,
+      "totalOriginalPrice": 0,
+      "lastSyncAt": "2026-01-23T12:27:01.371Z",
+      "createdAt": "2026-01-23T12:27:01.371Z",
+      "updatedAt": "2026-01-23T12:27:22.404Z",
+      "__v": 0,
+      "originalTotalPrice": 0,
+      "displayPrice": 0,
+      "displayTotalPrice": 0,
+      "itemOfferDiscount": 0
+    },
+    {
+      "_id": "6973691928bbb4d709f581bd",
+      "cart": "69729a063a0a43c10261b29d",
+      "productId": "696fa98f1e3817d435c34dae",
+      "variantId": null,
+      "productData": {
+        "title": "Rolex Day-Date 36mm Yellow Gold Midsize Watch",
+        "slug": "rolex-day-date-36mm-yellow-gold-midsize-watch-1",
+        "app": "69678e56f4d5891763dd379d",
+        "image": {
+          "_id": "696fa9c21e3817d435c34f4b",
+          "fileUrl": "https://cdn.qumra.cloud/media/69678e56f4d5891763dd379d/1768925634488-84159311.webp"
+        },
+        "price": 15000,
+        "_id": "6973691928bbb4d709f581be"
+      },
+      "quantity": 5,
+      "price": 15000,
+      "compareAtPrice": 250000,
+      "totalPrice": 75000,
+      "totalCompareAtPrice": 1250000,
+      "totalSavings": 1175000,
+      "originalPrice": 2500,
+      "totalOriginalPrice": 2500,
+      "lastSyncAt": "2026-01-23T12:27:05.383Z",
+      "createdAt": "2026-01-23T12:27:05.383Z",
+      "updatedAt": "2026-01-23T12:27:21.651Z",
+      "__v": 0,
+      "originalTotalPrice": 12500,
+      "displayPrice": 15000,
+      "displayTotalPrice": 75000,
+      "itemOfferDiscount": 0
+    }
+  ],
+  "couponApplied": false,
+  "couponDiscount": 0,
+  "createdAt": "2026-01-22T21:43:34.278Z",
+  "updatedAt": "2026-01-29T14:49:34.850Z",
+  "__v": 0,
+  "offers": {
+    "applied": [],
+    "totalsBefore": {
+      "totalPrice": 255500,
+      "totalCompareAtPrice": 1484000,
+      "totalSavings": 1228500,
+      "totalQuantity": 30
+    },
+    "totalsAfter": {
+      "totalPrice": 255500,
+      "totalCompareAtPrice": 1484000,
+      "totalSavings": 1228500,
+      "totalQuantity": 30
+    }
+  }
+}
+wishlist
+{
+  "success": true,
+  "count": 5,
+  "products": [
+    {
+      "_id": "696fa9251e3817d435c34b9d",
+      "title": "Rolex Oyster Perpetual Submariner",
+      "description": "<p dir=\"ltr\"><em>Rolex is a registered trademark of Rolex USA. Prestige Time LLC is not an authorized dealer for Rolex and is in NO WAY affiliated with Rolex SA or Rolex USA. All Rolex watches sold by Prestige Time LLC are in UNWORN condition.</em></p><ul><li><p dir=\"ltr\">Brushed stainless steel case with polished finished sides.</p></li><li><p dir=\"ltr\">Polished stainless steel Triplock crown .</p></li><li><p dir=\"ltr\">Bezel:</p><ul><li><p dir=\"ltr\">Uni-directional stainless steel bezel with knurled corners for enhanced grip.</p></li><li><p dir=\"ltr\">Black cerachrom bezel insert.</p></li><li><p dir=\"ltr\">Engraved 60 minute diving scale &amp; a luminous dot at the starting point.</p></li></ul></li></ul>",
+      "images": [
+        {
+          "_id": "696fa9441e3817d435c34bfb",
+          "file": "1768925507890-455613606.webp",
+          "app": "69678e56f4d5891763dd379d",
+          "id": "696fa9441e3817d435c34bfb",
+          "fileUrl": "https://cdn.qumra.cloud/media/69678e56f4d5891763dd379d/1768925507890-455613606.webp"
+        }
+      ],
+      "pricing": {
+        "price": 15500,
+        "compareAtPrice": 20000
+      },
+      "quantity": 4,
+      "reviewsCount": 0,
+      "averageRating": 0,
+      "createdAt": "2026-01-20T16:11:17.798Z",
+      "updatedAt": "2026-01-25T08:11:09.403Z"
+    },
+    {
+      "_id": "696fa98f1e3817d435c34dae",
+      "title": "Rolex Day-Date 36mm Yellow Gold Midsize Watch",
+      "description": "<p dir=\"ltr\"><em>for Rolex and is in NO WAY affiliated with Rolex SA or Rolex USA. All Rolex watches sold by Prestige Time LLC are in UNWORN condition.</em></p><p dir=\"ltr\"><span style=\"color: rgb(0, 0, 0);\">•</span><strong>Case:</strong><span style=\"color: rgb(0, 0, 0);\">18kt yellow gold - polished</span><br><span style=\"color: rgb(0, 0, 0);\">•</span><strong>Crown:</strong><span style=\"color: rgb(0, 0, 0);\">18kt yellow gold, Twinlock double waterproofness system</span><br><span style=\"color: rgb(0, 0, 0);\">•</span><strong>Bezel:</strong><span style=\"color: rgb(0, 0, 0);\">fixed, polished</span><br><span style=\"color: rgb(0, 0, 0);\">•</span><strong>Dial:</strong><span style=\"color: rgb(0, 0, 0);\">green - sunray, green to black gradient</span><br><span style=\"color: rgb(0, 0, 0);\">•</span><strong>Hour Markers:</strong><span style=\"color: rgb(0, 0, 0);\">applied, yellow gold, roman numerals &amp; index, polished</span><br><span style=\"color: rgb(0, 0, 0);\">•</span><strong>Hands:</strong><span style=\"color: rgb(0, 0, 0);\">polished, yellow gold</span><br><span style=\"color: rgb(0, 0, 0);\">•</span><strong>Seconds hand:</strong><span style=\"color: rgb(0, 0, 0);\">c</span></p>",
+      "images": [
+        {
+          "_id": "696fa9c21e3817d435c34f4b",
+          "file": "1768925634488-84159311.webp",
+          "app": "69678e56f4d5891763dd379d",
+          "id": "696fa9c21e3817d435c34f4b",
+          "fileUrl": "https://cdn.qumra.cloud/media/69678e56f4d5891763dd379d/1768925634488-84159311.webp"
+        }
+      ],
+      "pricing": {
+        "price": 15000,
+        "compareAtPrice": 250000
+      },
+      "quantity": 4,
+      "reviewsCount": 1,
+      "averageRating": 1,
+      "createdAt": "2026-01-20T16:13:03.987Z",
+      "updatedAt": "2026-01-27T11:17:00.784Z"
+    },
+    {
+      "_id": "696fa9fb1e3817d435c350c3",
+      "title": "Tudor",
+      "description": "<p dir=\"ltr\">TUDOR diver's watch, Pelagos 42 mm, titanium,. titanium bracelet, black dial with index, automatic, Cal. MT5612, centre seconds, sapphire-crystal, 50 atm, drehbare Keramiklünette Ref.:25600TN-95820T</p><p></p><p></p><p></p>",
+      "images": [
+        {
+          "_id": "696faa061e3817d435c35120",
+          "file": "1768925702050-479164504.webp",
+          "app": "69678e56f4d5891763dd379d",
+          "id": "696faa061e3817d435c35120",
+          "fileUrl": "https://cdn.qumra.cloud/media/69678e56f4d5891763dd379d/1768925702050-479164504.webp"
+        },
+        {
+          "_id": "696faa051e3817d435c35119",
+          "file": "1768925701185-183981715.webp",
+          "app": "69678e56f4d5891763dd379d",
+          "id": "696faa051e3817d435c35119",
+          "fileUrl": "https://cdn.qumra.cloud/media/69678e56f4d5891763dd379d/1768925701185-183981715.webp"
+        }
+      ],
+      "pricing": {
+        "price": 3000,
+        "compareAtPrice": 5000
+      },
+      "quantity": 0,
+      "reviewsCount": 0,
+      "averageRating": 0,
+      "createdAt": "2026-01-20T16:14:51.170Z",
+      "updatedAt": "2026-01-28T06:13:15.648Z"
+    },
+    {
+      "_id": "696faa8b1e3817d435c35422",
+      "title": "3-in-1 Magnetic Wireless Charging Travel Pad with Qi2 15W",
+      "description": "<p></p>",
+      "images": [
+        {
+          "_id": "696faaaa1e3817d435c354a5",
+          "file": "1768925866532-756429369.webp",
+          "app": "69678e56f4d5891763dd379d",
+          "id": "696faaaa1e3817d435c354a5",
+          "fileUrl": "https://cdn.qumra.cloud/media/69678e56f4d5891763dd379d/1768925866532-756429369.webp"
+        },
+        {
+          "_id": "696faaaa1e3817d435c3549c",
+          "file": "1768925865878-231293989.webp",
+          "app": "69678e56f4d5891763dd379d",
+          "id": "696faaaa1e3817d435c3549c",
+          "fileUrl": "https://cdn.qumra.cloud/media/69678e56f4d5891763dd379d/1768925865878-231293989.webp"
+        }
+      ],
+      "pricing": {
+        "price": 0,
+        "compareAtPrice": 0
+      },
+      "quantity": 4,
+      "reviewsCount": 0,
+      "averageRating": 0,
+      "createdAt": "2026-01-20T16:17:15.888Z",
+      "updatedAt": "2026-01-24T17:41:46.075Z"
+    },
+    {
+      "_id": "696faa4e1e3817d435c352be",
+      "title": "IWC Schaffhausen",
+      "description": "<p dir=\"ltr\"><span style=\"color: rgb(72, 84, 97);\">INTERNATIONAL WATCH &amp; CO chronograph, Portugieser 41 mm, steel,. alligator leather strap, with folding clasp, beige dial with arabic, automatic, Cal. 69355, small second indication, sapphire-crystal, 3 atm, Ref.:IW371624</span></p>",
+      "images": [
+        {
+          "_id": "696faa611e3817d435c3532d",
+          "file": "1768925793728-118481230.webp",
+          "app": "69678e56f4d5891763dd379d",
+          "id": "696faa611e3817d435c3532d",
+          "fileUrl": "https://cdn.qumra.cloud/media/69678e56f4d5891763dd379d/1768925793728-118481230.webp"
+        }
+      ],
+      "pricing": {
+        "price": 8000,
+        "compareAtPrice": 9000
+      },
+      "quantity": 4,
+      "reviewsCount": 0,
+      "averageRating": 0,
+      "createdAt": "2026-01-20T16:16:14.134Z",
+      "updatedAt": "2026-01-28T23:17:02.691Z"
+    }
+  ],
+  "createdAt": "2026-01-22T21:43:43.331Z",
+  "updatedAt": "2026-01-24T11:10:08.195Z"
+}
+localization
+{
+  "market": {
+    "app": "69678e56f4d5891763dd379d",
+    "exchangeRate": 1,
+    "targetCurrencyId": {
+      "_id": "66dd78944d592b12e6201cc4",
+      "title": "دولار أمريكي ( $ )",
+      "currencyCode": "USD",
+      "currencySymbol": "$",
+      "deleted": false
+    },
+    "targetCurrencyCode": "KWD",
+    "isDefault": true,
+    "fxMode": "manual",
+    "enableRounding": false
+  },
+  "language": "en",
+  "currency": {
+    "_id": "66dd78944d592b12e6201cc4",
+    "title": "دولار أمريكي ( $ )",
+    "currencyCode": "USD",
+    "currencySymbol": "$",
+    "deleted": false
+  },
+  "availableLanguages": [
+    "ar",
+    "en",
+    "fr"
+  ]
+}

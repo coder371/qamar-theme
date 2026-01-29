@@ -1,0 +1,31 @@
+{
+  "name": "Cart Page",
+  "settings": {
+    "show_product_image": {
+      "type": "boolean",
+      "label": "إظهار صور المنتجات",
+      "default": true
+    },
+    "show_coupon": {
+      "type": "boolean",
+      "label": "إظهار حقل الكوبون",
+      "default": true
+    },
+    "show_shipping_estimate": {
+      "type": "boolean",
+      "label": "إظهار تقدير الشحن",
+      "default": true
+    },
+    "continue_shopping_url": {
+      "type": "string",
+      "label": "رابط متابعة التسوق",
+      "default": "/products"
+    }
+  },
+  "presets": [
+    {
+      "category": "Cart",
+      "name": "Cart Page"
+    }
+  ]
+}

@@ -1,0 +1,144 @@
+<!-- Search Modal -->
+<div x-cloak x-show="modal.open && modal.type === 'search'" class="fixed inset-0 z-50"
+     x-data="{
+       query: '',
+       suggestions: [],
+       loading: false,
+
+       async search() {
+         if (!this.query.trim()) {
+           this.suggestions = [];
+           return;
+         }
+         this.loading = true;
+         Qumra.search.suggest(this.query, (results) => {
+           this.suggestions = results;
+           this.loading = false;
+         });
+       },
+
+       submit() {
+         if (this.query.trim()) {
+           window.location.href = '/search?q=' + encodeURIComponent(this.query.trim());
+         }
+       }
+     }">
+
+  <!-- Overlay -->
+  <div @click="closeModal()"
+       x-show="modal.open && modal.type === 'search'"
+       x-transition:enter="transition-opacity ease-out duration-300"
+       x-transition:enter-start="opacity-0"
+       x-transition:enter-end="opacity-100"
+       x-transition:leave="transition-opacity ease-in duration-300"
+       x-transition:leave-start="opacity-100"
+       x-transition:leave-end="opacity-0"
+       class="absolute inset-0 bg-black/50 backdrop-blur-sm">
+  </div>
+
+  <!-- Panel -->
+  <div class="absolute top-0 left-0 right-0 bg-white shadow-2xl max-h-[80vh] overflow-y-auto"
+       x-show="modal.open && modal.type === 'search'"
+       x-transition:enter="transition ease-out duration-300 transform"
+       x-transition:enter-start="-translate-y-full"
+       x-transition:enter-end="translate-y-0"
+       x-transition:leave="transition ease-in duration-300 transform"
+       x-transition:leave-start="translate-y-0"
+       x-transition:leave-end="-translate-y-full">
+
+    <div class="container mx-auto px-4 py-6">
+
+      <!-- Search Input -->
+      <div class="flex items-center gap-4">
+        <div class="flex-1 flex items-center gap-3 bg-gray-100 rounded-xl py-3 px-4">
+          <svg class="w-6 h-6 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+          <input x-model="query"
+                 @input.debounce.300ms="search()"
+                 @keydown.enter.prevent="submit()"
+                 @keydown.esc.prevent="closeModal()"
+                 type="text"
+                 placeholder="{{t('search.placeholder')}}"
+                 class="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400 text-lg"
+                 autofocus>
+          <template x-if="loading">
+            <svg class="w-5 h-5 text-primary animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+            </svg>
+          </template>
+          <button @click="query = ''; suggestions = []" x-show="query && !loading" class="p-1 hover:bg-gray-200 rounded-full transition-colors">
+            <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        <button @click="closeModal()" class="p-3 hover:bg-gray-100 rounded-xl transition-colors">
+          <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Search Suggestions -->
+      <template x-if="suggestions.length > 0">
+        <div class="mt-4">
+          <p class="text-sm text-gray-500 mb-3">{{t('search.results')}}:</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <template x-for="product in suggestions" :key="product._id">
+              <a :href="'/product/' + product.handle"
+                 @click="closeModal()"
+                 class="flex items-center gap-3 p-3 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors">
+                <img :src="product.images[0]?.fileUrl || '/placeholder.jpg'"
+                     :alt="product.title"
+                     class="w-14 h-14 object-cover rounded-lg flex-shrink-0">
+                <div class="flex-1 min-w-0">
+                  <h4 x-text="product.title" class="font-medium text-gray-800 line-clamp-1"></h4>
+                  <p x-text="Qumra.utils.formatMoney(product.pricing.price)" class="text-primary font-bold text-sm mt-1"></p>
+                </div>
+              </a>
+            </template>
+          </div>
+          <button @click="submit()"
+                  class="w-full mt-4 py-3 px-6 bg-primary hover:bg-primary/90 text-white rounded-xl font-medium transition-colors">
+            {{t('common.view_all')}} {{t('search.results')}}
+          </button>
+        </div>
+      </template>
+
+      <!-- No Results -->
+      <template x-if="query && !loading && suggestions.length === 0">
+        <div class="mt-6 text-center py-8">
+          <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+          <p class="text-gray-500">{{t('search.no_results')}}</p>
+          <p class="text-sm text-gray-400 mt-1">{{t('search.try_different')}}</p>
+        </div>
+      </template>
+
+      <!-- Quick Links (shown when no query) -->
+      <template x-if="!query">
+        <div class="mt-6">
+          <p class="text-sm text-gray-500 mb-3">{{t('search.start_searching')}}:</p>
+          <div class="flex flex-wrap gap-2">
+            <button @click="query = '{{t('product.new')}}'; search()"
+                    class="px-4 py-2 bg-gray-100 hover:bg-primary hover:text-white text-gray-700 rounded-full text-sm transition-colors">
+              {{t('product.new')}}
+            </button>
+            <button @click="query = '{{t('product.sale')}}'; search()"
+                    class="px-4 py-2 bg-gray-100 hover:bg-primary hover:text-white text-gray-700 rounded-full text-sm transition-colors">
+              {{t('product.sale')}}
+            </button>
+            <button @click="query = '{{t('sections.best_sellers')}}'; search()"
+                    class="px-4 py-2 bg-gray-100 hover:bg-primary hover:text-white text-gray-700 rounded-full text-sm transition-colors">
+              {{t('sections.best_sellers')}}
+            </button>
+          </div>
+        </div>
+      </template>
+
+    </div>
+  </div>
+</div>

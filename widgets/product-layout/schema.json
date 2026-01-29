@@ -1,0 +1,95 @@
+{
+  "name": "Product Layout",
+  "settings": {
+    "gallery_position": {
+      "type": "select",
+      "label": "موضع المعرض",
+      "default": "start",
+      "options": [
+        { "value": "start", "label": "يسار/يمين (RTL)" },
+        { "value": "end", "label": "يمين/يسار (RTL)" }
+      ]
+    },
+    "enable_zoom": {
+      "type": "boolean",
+      "label": "تفعيل التكبير",
+      "default": true
+    },
+    "enable_lightbox": {
+      "type": "boolean",
+      "label": "تفعيل العرض الكامل",
+      "default": true
+    },
+    "thumbnails_position": {
+      "type": "select",
+      "label": "موضع الصور المصغرة",
+      "default": "bottom",
+      "options": [
+        { "value": "bottom", "label": "أسفل" },
+        { "value": "side", "label": "جانبي" }
+      ]
+    },
+    "show_sku": {
+      "type": "boolean",
+      "label": "إظهار رمز المنتج",
+      "default": true
+    },
+    "show_vendor": {
+      "type": "boolean",
+      "label": "إظهار الماركة",
+      "default": true
+    },
+    "show_rating": {
+      "type": "boolean",
+      "label": "إظهار التقييم",
+      "default": true
+    },
+    "show_stock": {
+      "type": "boolean",
+      "label": "إظهار حالة التوفر",
+      "default": true
+    },
+    "show_share": {
+      "type": "boolean",
+      "label": "إظهار أزرار المشاركة",
+      "default": true
+    },
+    "sticky_add_to_cart": {
+      "type": "boolean",
+      "label": "زر الإضافة الثابت (موبايل)",
+      "default": true
+    },
+    "show_tabs": {
+      "type": "boolean",
+      "label": "إظهار التبويبات",
+      "default": true
+    },
+    "tabs_style": {
+      "type": "select",
+      "label": "نمط التبويبات",
+      "default": "tabs",
+      "options": [
+        { "value": "tabs", "label": "تبويبات" },
+        { "value": "accordion", "label": "أكورديون" }
+      ]
+    },
+    "show_related": {
+      "type": "boolean",
+      "label": "إظهار المنتجات ذات الصلة",
+      "default": true
+    },
+    "related_count": {
+      "type": "number",
+      "label": "عدد المنتجات ذات الصلة",
+      "default": 4,
+      "min": 2,
+      "max": 8
+    }
+  },
+  "presets": [
+    {
+      "category": "Product",
+      "name": "Product Layout"
+    }
+  ]
+}

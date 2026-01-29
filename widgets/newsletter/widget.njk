@@ -1,0 +1,93 @@
+{# Newsletter Widget #}
+
+{% set bgClasses = {
+  'gradient': 'bg-gradient-to-r from-primary to-secondary text-white',
+  'solid': 'bg-primary text-white',
+  'white': 'bg-white text-gray-900'
+}[widget.data.background_style] | default('bg-gradient-to-r from-primary to-secondary text-white') %}
+
+{% set isLight = widget.data.background_style == 'white' %}
+
+<section class="newsletter-section py-12 md:py-16 {{ bgClasses }}">
+  <div class="container mx-auto px-4">
+    <div
+      class="max-w-2xl mx-auto text-center"
+      x-data="{
+        email: '',
+        loading: false,
+        success: false,
+        error: '',
+
+        async subscribe() {
+          if (!this.email.trim()) return;
+          this.loading = true;
+          this.error = '';
+
+          try {
+            const response = await fetch('/api/newsletter/subscribe', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email: this.email })
+            });
+
+            if (response.ok) {
+              this.success = true;
+              this.email = '';
+            } else {
+              const data = await response.json();
+              this.error = data.message || '{{t('newsletter.error')}}';
+            }
+          } catch (e) {
+            this.error = '{{t('newsletter.error')}}';
+          }
+
+          this.loading = false;
+        }
+      }">
+
+      {# Icon #}
+      <div class="mb-6">
+        <svg class="w-16 h-16 mx-auto {{ 'text-primary' if isLight else 'text-white/80' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+        </svg>
+      </div>
+
+      {# Title #}
+      {% if widget.data.title %}
+        <h2 class="text-2xl md:text-3xl font-bold mb-3">{{ widget.data.title }}</h2>
+      {% endif %}
+
+      {% if widget.data.subtitle %}
+        <p class="{{ 'text-gray-600' if isLight else 'opacity-90' }} mb-8">{{ widget.data.subtitle }}</p>
+      {% endif %}
+
+      {# Form #}
+      <form @submit.prevent="subscribe()" x-show="!success" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+        <input
+          type="email"
+          x-model="email"
+          placeholder="{{ widget.data.placeholder | default('أدخل بريدك الإلكتروني') }}"
+          required
+          class="flex-1 px-5 py-3 rounded-full {{ 'bg-white/20 placeholder-white/70 text-white border border-white/30 focus:border-white' if not isLight else 'bg-gray-100 border border-gray-200 focus:border-primary' }} outline-none transition-colors">
+        <button
+          type="submit"
+          :disabled="loading"
+          class="px-8 py-3 rounded-full font-medium transition-colors {{ 'bg-white text-primary hover:bg-gray-100' if not isLight else 'bg-primary text-white hover:bg-primary-dark' }}">
+          <span x-show="!loading">{{ widget.data.button_text | default('اشتراك') }}</span>
+          <span x-show="loading" class="loading-spinner w-5 h-5"></span>
+        </button>
+      </form>
+
+      {# Error #}
+      <p x-show="error" x-text="error" class="text-red-300 mt-3 text-sm"></p>
+
+      {# Success #}
+      <div x-show="success" class="flex items-center justify-center gap-3">
+        <svg class="w-8 h-8 {{ 'text-green-500' if isLight else 'text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <span class="text-lg font-medium">{{ widget.data.success_message | default('شكراً لاشتراكك!') }}</span>
+      </div>
+    </div>
+  </div>
+</section>

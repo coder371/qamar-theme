@@ -1,0 +1,67 @@
+{# Collection Banner Widget - Uses collection variable from context #}
+
+{% set heights = {
+  'small': 'h-48 md:h-56',
+  'medium': 'h-56 md:h-72',
+  'large': 'h-72 md:h-96'
+} %}
+{% set heightClass = heights[widget.data.height] | default(heights.medium) %}
+{% set overlayOpacity = widget.data.overlay_opacity | default(50) %}
+
+<section class="collection-banner relative {{ heightClass }} overflow-hidden">
+  {# Background Image #}
+  {% if widget.data.show_image and collection.image.fileUrl %}
+    <img
+      src="{{ collection.image.fileUrl }}"
+      alt="{{ collection.title }}"
+      class="absolute inset-0 w-full h-full object-cover">
+  {% else %}
+    {# Gradient fallback #}
+    <div class="absolute inset-0 bg-gradient-to-br from-primary to-secondary"></div>
+  {% endif %}
+
+  {# Overlay #}
+  <div
+    class="absolute inset-0 bg-black"
+    style="opacity: {{ overlayOpacity / 100 }}">
+  </div>
+
+  {# Content #}
+  <div class="relative z-10 h-full flex items-center">
+    <div class="container mx-auto px-4 text-white text-center">
+      {# Breadcrumb #}
+      <nav class="mb-4">
+        <ol class="flex items-center justify-center gap-2 text-sm">
+          <li>
+            <a href="/" class="hover:underline opacity-80">{{t("common.home")}}</a>
+          </li>
+          <li class="opacity-60">/</li>
+          <li>
+            <a href="/collections" class="hover:underline opacity-80">{{t("common.categories")}}</a>
+          </li>
+          <li class="opacity-60">/</li>
+          <li class="font-medium">{{ collection.title }}</li>
+        </ol>
+      </nav>
+
+      {# Title #}
+      <h1 class="text-3xl md:text-5xl font-bold mb-3">
+        {{ collection.title }}
+      </h1>
+
+      {# Description #}
+      {% if widget.data.show_description and collection.description %}
+        <p class="text-lg md:text-xl opacity-90 max-w-2xl mx-auto mb-4">
+          {{ collection.description }}
+        </p>
+      {% endif %}
+
+      {# Products Count #}
+      {% if widget.data.show_products_count %}
+        <p class="text-sm opacity-80">
+          {{ collection.productsCount | default(0) }} {{t("collection.products_count")}}
+        </p>
+      {% endif %}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,15 @@
+{
+  "layout": "layout",
+  "widgets": [
+    {
+      "name": "نتائج البحث",
+      "widget": "search-page",
+      "settings": {
+        "columns_desktop": "4",
+        "products_per_page": "12",
+        "show_filters": true,
+        "show_sort": true
+      }
+    }
+  ]
+}

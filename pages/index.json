@@ -1,0 +1,277 @@
+{
+  "layout": "layout",
+  "widgets": [
+    {
+      "name": "سلايدر الرئيسية",
+      "widget": "hero-slider",
+      "settings": {
+        "autoplay": true,
+        "interval": 5,
+        "show_arrows": true,
+        "show_dots": true,
+        "height": "large"
+      },
+      "blocks": [
+        {
+          "name": "شريحة المجموعة الجديدة",
+          "block": "slide",
+          "settings": {
+            "title": "مجموعة الصيف الجديدة",
+            "subtitle": "اكتشفي أحدث صيحات الموضة والجمال لهذا الموسم",
+            "button_text": "تسوقي الآن",
+            "button_url": "/products",
+            "text_position": "center",
+            "text_color": "#FFFFFF",
+            "overlay_color": "#000000",
+            "overlay_opacity": 40
+          }
+        },
+        {
+          "name": "شريحة العروض",
+          "block": "slide",
+          "settings": {
+            "title": "عروض حصرية",
+            "subtitle": "خصومات تصل إلى 50% على أفضل الماركات",
+            "button_text": "اكتشفي العروض",
+            "button_url": "/collections/sale",
+            "text_position": "center",
+            "text_color": "#FFFFFF",
+            "overlay_color": "#9C27B0",
+            "overlay_opacity": 60
+          }
+        }
+      ]
+    },
+    {
+      "name": "التصنيفات",
+      "widget": "collection-grid",
+      "settings": {
+        "title": "تسوقي حسب التصنيف",
+        "subtitle": "اكتشفي مجموعاتنا المتنوعة",
+        "layout": "circle",
+        "columns": "6",
+        "show_products_count": true
+      },
+      "blocks": [
+        {
+          "name": "تصنيف المكياج",
+          "block": "collection",
+          "settings": {
+            "title": "مكياج",
+            "url": "/collection/makeup",
+            "products_count": 120
+          }
+        },
+        {
+          "name": "تصنيف العناية بالبشرة",
+          "block": "collection",
+          "settings": {
+            "title": "عناية بالبشرة",
+            "url": "/collection/skincare",
+            "products_count": 85
+          }
+        },
+        {
+          "name": "تصنيف العطور",
+          "block": "collection",
+          "settings": {
+            "title": "عطور",
+            "url": "/collection/perfumes",
+            "products_count": 60
+          }
+        },
+        {
+          "name": "تصنيف الشعر",
+          "block": "collection",
+          "settings": {
+            "title": "شعر",
+            "url": "/collection/haircare",
+            "products_count": 45
+          }
+        },
+        {
+          "name": "تصنيف الإكسسوارات",
+          "block": "collection",
+          "settings": {
+            "title": "إكسسوارات",
+            "url": "/collection/accessories",
+            "products_count": 90
+          }
+        },
+        {
+          "name": "تصنيف الأزياء",
+          "block": "collection",
+          "settings": {
+            "title": "أزياء",
+            "url": "/collection/fashion",
+            "products_count": 150
+          }
+        }
+      ]
+    },
+    {
+      "name": "المنتجات المميزة",
+      "widget": "featured-products",
+      "settings": {
+        "title": "منتجات مميزة",
+        "subtitle": "اكتشفي أفضل منتجاتنا المختارة بعناية",
+        "products_count": 8,
+        "columns_desktop": "4",
+        "columns_mobile": "2",
+        "show_view_all": true,
+        "view_all_url": "/products"
+      }
+    },
+    {
+      "name": "بانر العروض",
+      "widget": "promo-banner",
+      "settings": {
+        "title": "عرض خاص لفترة محدودة",
+        "subtitle": "خصم 30% على جميع منتجات العناية بالبشرة",
+        "show_countdown": true,
+        "countdown_date": "2026-02-28T23:59:59",
+        "button_text": "تسوقي الآن",
+        "button_link": "/collection/skincare",
+        "background_color": "#9C27B0",
+        "text_color": "white"
+      }
+    },
+    {
+      "name": "شبكة البانرات",
+      "widget": "banner-grid",
+      "settings": {
+        "layout": "2",
+        "gap": "4",
+        "aspect_ratio": "3/2"
+      },
+      "blocks": [
+        {
+          "name": "بانر المكياج",
+          "block": "banner",
+          "settings": {
+            "title": "مكياج فاخر",
+            "subtitle": "أفضل الماركات العالمية",
+            "link": "/collection/makeup",
+            "overlay_opacity": "30"
+          }
+        },
+        {
+          "name": "بانر العطور",
+          "block": "banner",
+          "settings": {
+            "title": "عطور أصلية",
+            "subtitle": "روائح تدوم طويلاً",
+            "link": "/collection/perfumes",
+            "overlay_opacity": "30"
+          }
+        }
+      ]
+    },
+    {
+      "name": "آراء العملاء",
+      "widget": "testimonials",
+      "settings": {
+        "title": "ماذا قالت عميلاتنا",
+        "subtitle": "آراء حقيقية من عميلات سعيدات",
+        "layout": "slider",
+        "autoplay": true
+      },
+      "blocks": [
+        {
+          "name": "تقييم سارة",
+          "block": "testimonial",
+          "settings": {
+            "content": "تجربة تسوق رائعة! المنتجات أصلية 100% والتوصيل سريع جداً. سأعود للتسوق مرة أخرى بالتأكيد.",
+            "author_name": "سارة أحمد",
+            "author_title": "عميلة منذ 2023",
+            "rating": "5"
+          }
+        },
+        {
+          "name": "تقييم نورة",
+          "block": "testimonial",
+          "settings": {
+            "content": "أحب تشكيلة المنتجات المتنوعة والأسعار المناسبة. خدمة العملاء ممتازة ويردون بسرعة على الاستفسارات.",
+            "author_name": "نورة محمد",
+            "author_title": "عميلة مميزة",
+            "rating": "5"
+          }
+        },
+        {
+          "name": "تقييم هند",
+          "block": "testimonial",
+          "settings": {
+            "content": "وصلني الطلب في نفس اليوم! التغليف أنيق جداً والمنتجات بحالة ممتازة. شكراً لكم.",
+            "author_name": "هند العلي",
+            "author_title": "عميلة منذ 2024",
+            "rating": "5"
+          }
+        }
+      ]
+    },
+    {
+      "name": "الماركات",
+      "widget": "brand-logos",
+      "settings": {
+        "title": "ماركات موثوقة",
+        "layout": "slider",
+        "grayscale": true,
+        "background": "white"
+      },
+      "blocks": [
+        {
+          "name": "ماركة MAC",
+          "block": "brand",
+          "settings": {
+            "name": "MAC",
+            "link": "/collection/mac"
+          }
+        },
+        {
+          "name": "ماركة Maybelline",
+          "block": "brand",
+          "settings": {
+            "name": "Maybelline",
+            "link": "/collection/maybelline"
+          }
+        },
+        {
+          "name": "ماركة L'Oreal",
+          "block": "brand",
+          "settings": {
+            "name": "L'Oreal",
+            "link": "/collection/loreal"
+          }
+        },
+        {
+          "name": "ماركة Dior",
+          "block": "brand",
+          "settings": {
+            "name": "Dior",
+            "link": "/collection/dior"
+          }
+        },
+        {
+          "name": "ماركة Chanel",
+          "block": "brand",
+          "settings": {
+            "name": "Chanel",
+            "link": "/collection/chanel"
+          }
+        }
+      ]
+    },
+    {
+      "name": "النشرة البريدية",
+      "widget": "newsletter",
+      "settings": {
+        "title": "اشتركي في نشرتنا البريدية",
+        "subtitle": "احصلي على أحدث العروض والمنتجات الجديدة مباشرة في بريدك",
+        "placeholder": "أدخلي بريدك الإلكتروني",
+        "button_text": "اشتراك",
+        "background_style": "gradient",
+        "success_message": "شكراً لاشتراكك! سنرسل لك أحدث العروض قريباً."
+      }
+    }
+  ]
+}

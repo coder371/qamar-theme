@@ -1,0 +1,14 @@
+{
+  "layout": "layout",
+  "widgets": [
+    {
+      "name": "قائمة المفضلة",
+      "widget": "wishlist-page",
+      "settings": {
+        "columns_desktop": "4",
+        "show_add_all_button": true,
+        "show_clear_button": true
+      }
+    }
+  ]
+}

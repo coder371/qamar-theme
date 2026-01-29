@@ -1,0 +1,36 @@
+{
+  "name": "Announcement Bar",
+  "settings": {
+    "text": {
+      "type": "string",
+      "label": "نص الإعلان",
+      "default": "شحن مجاني للطلبات فوق 200 ريال"
+    },
+    "link_url": {
+      "type": "string",
+      "label": "رابط الإعلان",
+      "default": ""
+    },
+    "background_color": {
+      "type": "color",
+      "label": "لون الخلفية",
+      "default": "#9C27B0"
+    },
+    "text_color": {
+      "type": "color",
+      "label": "لون النص",
+      "default": "#FFFFFF"
+    },
+    "show_close_button": {
+      "type": "boolean",
+      "label": "إظهار زر الإغلاق",
+      "default": true
+    }
+  },
+  "presets": [
+    {
+      "category": "Header",
+      "name": "Announcement Bar"
+    }
+  ]
+}

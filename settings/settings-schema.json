@@ -1,0 +1,151 @@
+[
+  {
+    "label": {
+      "ar": "الألوان",
+      "en": "Colors"
+    },
+    "settings": {
+      "primaryColor": {
+        "type": "color",
+        "label": "اللون الأساسي",
+        "default": "#9C27B0"
+      },
+      "primaryColorLight": {
+        "type": "color",
+        "label": "اللون الأساسي الفاتح",
+        "default": "#CE93D8"
+      },
+      "primaryColorDark": {
+        "type": "color",
+        "label": "اللون الأساسي الغامق",
+        "default": "#7B1FA2"
+      },
+      "secondaryColor": {
+        "type": "color",
+        "label": "اللون الثانوي",
+        "default": "#F48FB1"
+      },
+      "secondaryColorLight": {
+        "type": "color",
+        "label": "اللون الثانوي الفاتح",
+        "default": "#FBBAD7"
+      },
+      "backgroundColor": {
+        "type": "color",
+        "label": "لون الخلفية",
+        "default": "#FFFFFF"
+      },
+      "surfaceColor": {
+        "type": "color",
+        "label": "لون السطح",
+        "default": "#FAFAFA"
+      },
+      "textColor": {
+        "type": "color",
+        "label": "لون النص",
+        "default": "#212121"
+      },
+      "textSecondaryColor": {
+        "type": "color",
+        "label": "لون النص الثانوي",
+        "default": "#757575"
+      },
+      "borderColor": {
+        "type": "color",
+        "label": "لون الحدود",
+        "default": "#E0E0E0"
+      }
+    }
+  },
+  {
+    "label": {
+      "ar": "الخطوط",
+      "en": "Fonts"
+    },
+    "settings": {
+      "fontArabic": {
+        "type": "select",
+        "label": "الخط العربي",
+        "default": "Tajawal",
+        "options": [
+          {
+            "value": "Tajawal",
+            "label": "Tajawal"
+          },
+          {
+            "value": "Cairo",
+            "label": "Cairo"
+          },
+          {
+            "value": "Almarai",
+            "label": "Almarai"
+          },
+          {
+            "value": "IBM Plex Sans Arabic",
+            "label": "IBM Plex Arabic"
+          }
+        ]
+      },
+      "fontEnglish": {
+        "type": "select",
+        "label": "الخط الإنجليزي",
+        "default": "Poppins",
+        "options": [
+          {
+            "value": "Poppins",
+            "label": "Poppins"
+          },
+          {
+            "value": "Inter",
+            "label": "Inter"
+          },
+          {
+            "value": "Playfair Display",
+            "label": "Playfair Display"
+          },
+          {
+            "value": "Montserrat",
+            "label": "Montserrat"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "label": {
+      "ar": "إعدادات عامة",
+      "en": "General Settings"
+    },
+    "settings": {
+      "showAnnouncementBar": {
+        "type": "boolean",
+        "label": "إظهار شريط الإعلانات",
+        "default": true
+      },
+      "enableQuickView": {
+        "type": "boolean",
+        "label": "تفعيل العرض السريع",
+        "default": true
+      },
+      "productsPerRow": {
+        "type": "select",
+        "label": "عدد المنتجات في الصف",
+        "default": "4",
+        "options": [
+          {
+            "value": "2",
+            "label": "2 منتجات"
+          },
+          {
+            "value": "3",
+            "label": "3 منتجات"
+          },
+          {
+            "value": "4",
+            "label": "4 منتجات"
+          }
+        ]
+      }
+    }
+  }
+]

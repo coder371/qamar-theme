@@ -1,0 +1,42 @@
+{
+  "name": "Contact Form",
+  "settings": {
+    "title": {
+      "type": "string",
+      "label": "العنوان",
+      "default": "تواصل معنا"
+    },
+    "subtitle": {
+      "type": "string",
+      "label": "العنوان الفرعي"
+    },
+    "show_contact_info": {
+      "type": "boolean",
+      "label": "إظهار معلومات التواصل",
+      "default": true
+    },
+    "phone": {
+      "type": "string",
+      "label": "رقم الهاتف"
+    },
+    "email": {
+      "type": "string",
+      "label": "البريد الإلكتروني"
+    },
+    "address": {
+      "type": "text",
+      "label": "العنوان"
+    },
+    "success_message": {
+      "type": "string",
+      "label": "رسالة النجاح",
+      "default": "تم إرسال رسالتك بنجاح!"
+    }
+  },
+  "presets": [
+    {
+      "category": "Pages",
+      "name": "Contact Form"
+    }
+  ]
+}

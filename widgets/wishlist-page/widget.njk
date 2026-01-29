@@ -1,0 +1,156 @@
+{# Wishlist Page Widget #}
+
+{% set desktopCols = {
+  '3': 'lg:grid-cols-3',
+  '4': 'lg:grid-cols-4'
+}[widget.data.columns_desktop] | default('lg:grid-cols-4') %}
+
+<div class="wishlist-page py-8" x-data="{
+  addingAll: false,
+
+  async addAllToCart() {
+    this.addingAll = true;
+    const products = {{ wishlist.products | dump | safe }};
+    for (const product of products) {
+      if (product.quantity > 0) {
+        await Qumra.cart.add(product._id);
+      }
+    }
+    this.addingAll = false;
+    Qumra.toast.success('تمت إضافة جميع المنتجات للسلة');
+  }
+}">
+  <div class="container mx-auto px-4">
+
+    {# Page Header #}
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-bold">{{t("wishlist.title")}}</h1>
+        <p class="text-gray-500 mt-1">{{ wishlist.count }} {{t("common.products")}}</p>
+      </div>
+
+      {% if wishlist.products and wishlist.products.length > 0 %}
+        <div class="flex gap-3">
+          {% if widget.data.show_add_all_button %}
+            <button
+              @click="addAllToCart()"
+              :disabled="addingAll"
+              class="btn btn-primary">
+              <template x-if="!addingAll">
+                <span class="flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                  </svg>
+                  {{t("wishlist.add_all_to_cart")}}
+                </span>
+              </template>
+              <template x-if="addingAll">
+                <span class="loading-spinner w-5 h-5"></span>
+              </template>
+            </button>
+          {% endif %}
+
+          {% if widget.data.show_clear_button %}
+            <button
+              @click="if(confirm('هل أنت متأكد من مسح كل المفضلة؟')) Qumra.wishlist.clear()"
+              class="btn btn-outline text-red-500 border-red-500 hover:bg-red-500 hover:text-white">
+              {{t("wishlist.clear")}}
+            </button>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+
+    {% if wishlist.products and wishlist.products.length > 0 %}
+      {# Products Grid #}
+      <div class="grid grid-cols-2 md:grid-cols-3 {{ desktopCols }} gap-4 md:gap-6">
+        {% for product in wishlist.products %}
+          <div class="relative">
+            {# Remove Button #}
+            <button
+              @click="Qumra.wishlist.remove('{{ product._id }}')"
+              class="absolute top-2 end-2 z-20 w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-colors"
+              title="{{t('wishlist.remove')}}">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+
+            {# Product Card #}
+            <div class="product-card">
+              <div class="product-image relative overflow-hidden bg-gray-100">
+                <a href="/product/{{ product.slug }}">
+                  <img
+                    src="{{ product.images[0].fileUrl | default('') }}"
+                    alt="{{ product.title }}"
+                    class="w-full aspect-square object-cover transition-transform duration-500 hover:scale-105"
+                    loading="lazy">
+                </a>
+
+                {# Badges #}
+                {% set hasDiscount = product.pricing.compareAtPrice and product.pricing.compareAtPrice > product.pricing.price %}
+                {% if hasDiscount %}
+                  {% set discount = ((product.pricing.compareAtPrice - product.pricing.price) / product.pricing.compareAtPrice * 100) | round %}
+                  <span class="badge badge-sale absolute top-2 start-2">-{{ discount }}%</span>
+                {% endif %}
+
+                {# Stock Badge #}
+                {% if product.quantity <= 0 %}
+                  <div class="absolute inset-0 bg-black/50 flex items-center justify-center">
+                    <span class="text-white font-medium">{{t("product.out_of_stock")}}</span>
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="p-4">
+                <h3 class="font-medium text-gray-900 mb-2 line-clamp-2">
+                  <a href="/product/{{ product.slug }}" class="hover:text-primary">
+                    {{ product.title }}
+                  </a>
+                </h3>
+
+                <div class="flex items-center gap-2 mb-3">
+                  <span class="text-lg font-bold text-primary" data-money="{{ product.pricing.price }}">{{ product.pricing.price | money }}</span>
+                  {% if hasDiscount %}
+                    <span class="text-sm text-gray-400 line-through" data-money="{{ product.pricing.compareAtPrice }}">{{ product.pricing.compareAtPrice | money }}</span>
+                  {% endif %}
+                </div>
+
+                {# Stock Status #}
+                {% if product.quantity > 0 %}
+                  <span class="text-sm text-green-600">{{t("product.in_stock")}}</span>
+                {% else %}
+                  <span class="text-sm text-red-500">{{t("product.out_of_stock")}}</span>
+                {% endif %}
+
+                {# Add to Cart #}
+                <button
+                  @click="Qumra.cart.add('{{ product._id }}')"
+                  class="w-full mt-3 btn btn-primary btn-sm"
+                  {% if product.quantity <= 0 %}disabled{% endif %}>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                  </svg>
+                  {{t("product.add_to_cart")}}
+                </button>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+    {% else %}
+      {# Empty Wishlist #}
+      <div class="max-w-md mx-auto text-center py-16">
+        <svg class="w-32 h-32 mx-auto text-gray-300 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+        </svg>
+        <h2 class="text-2xl font-bold text-gray-600 mb-2">{{t("wishlist.empty")}}</h2>
+        <p class="text-gray-400 mb-8">{{t("wishlist.empty_message")}}</p>
+        <a href="/products" class="btn btn-primary btn-lg">
+          {{t("common.products")}}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</div>

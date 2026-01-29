@@ -1,0 +1,30 @@
+{
+  "name": "Product Gallery",
+  "settings": {
+    "enable_zoom": {
+      "type": "boolean",
+      "label": "تفعيل التكبير",
+      "default": true
+    },
+    "enable_lightbox": {
+      "type": "boolean",
+      "label": "تفعيل العرض الكامل",
+      "default": true
+    },
+    "thumbnails_position": {
+      "type": "select",
+      "label": "موضع الصور المصغرة",
+      "default": "bottom",
+      "options": [
+        { "value": "bottom", "label": "أسفل" },
+        { "value": "side", "label": "جانبي" }
+      ]
+    }
+  },
+  "presets": [
+    {
+      "category": "Product",
+      "name": "Product Gallery"
+    }
+  ]
+}

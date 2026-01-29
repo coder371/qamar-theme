@@ -1,0 +1,95 @@
+{# FAQ Accordion Widget #}
+
+<section class="faq-section py-12 md:py-16">
+  <div class="container mx-auto px-4">
+
+    {# Header #}
+    {% if widget.data.title %}
+      <div class="text-center mb-10">
+        {% if widget.data.subtitle %}
+          <span class="text-primary text-sm font-medium mb-2 block">{{ widget.data.subtitle }}</span>
+        {% endif %}
+        <h2 class="text-2xl md:text-3xl font-bold">{{ widget.data.title }}</h2>
+      </div>
+    {% endif %}
+
+    <div
+      class="max-w-3xl mx-auto"
+      x-data="{
+        openItems: [],
+        allowMultiple: {{ widget.data.allow_multiple_open | default(false) | lower }},
+
+        toggle(index) {
+          if (this.allowMultiple) {
+            if (this.openItems.includes(index)) {
+              this.openItems = this.openItems.filter(i => i !== index);
+            } else {
+              this.openItems.push(index);
+            }
+          } else {
+            this.openItems = this.openItems.includes(index) ? [] : [index];
+          }
+        },
+
+        isOpen(index) {
+          return this.openItems.includes(index);
+        }
+      }">
+
+      {% if widget.data.layout == 'two-columns' %}
+        <div class="grid md:grid-cols-2 gap-4">
+          {% for item in widget.blocks %}
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+              <button
+                @click="toggle({{ loop.index0 }})"
+                class="w-full flex items-center justify-between p-5 text-start font-medium hover:bg-gray-50 transition-colors">
+                <span>{{ item.data.question }}</span>
+                <svg
+                  class="w-5 h-5 text-gray-400 transition-transform"
+                  :class="isOpen({{ loop.index0 }}) && 'rotate-180'"
+                  fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              <div
+                x-show="isOpen({{ loop.index0 }})"
+                x-collapse
+                class="px-5 pb-5">
+                <div class="text-gray-600 prose prose-sm max-w-none">
+                  {{ item.data.answer | safe }}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+      {% else %}
+        <div class="space-y-3">
+          {% for item in widget.blocks %}
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+              <button
+                @click="toggle({{ loop.index0 }})"
+                class="w-full flex items-center justify-between p-5 text-start font-medium hover:bg-gray-50 transition-colors">
+                <span>{{ item.data.question }}</span>
+                <svg
+                  class="w-5 h-5 text-gray-400 transition-transform flex-shrink-0 ms-4"
+                  :class="isOpen({{ loop.index0 }}) && 'rotate-180'"
+                  fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              <div
+                x-show="isOpen({{ loop.index0 }})"
+                x-collapse
+                class="px-5 pb-5">
+                <div class="text-gray-600 prose prose-sm max-w-none">
+                  {{ item.data.answer | safe }}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>

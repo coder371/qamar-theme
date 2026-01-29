@@ -1,0 +1,36 @@
+{
+  "name": "Wishlist Page",
+  "settings": {
+    "columns_desktop": {
+      "type": "select",
+      "label": "عدد الأعمدة (سطح المكتب)",
+      "default": "4",
+      "options": [
+        {
+          "value": "3",
+          "label": "3 أعمدة"
+        },
+        {
+          "value": "4",
+          "label": "4 أعمدة"
+        }
+      ]
+    },
+    "show_add_all_button": {
+      "type": "boolean",
+      "label": "إظهار زر إضافة الكل للسلة",
+      "default": true
+    },
+    "show_clear_button": {
+      "type": "boolean",
+      "label": "إظهار زر مسح الكل",
+      "default": true
+    }
+  },
+  "presets": [
+    {
+      "category": "Wishlist",
+      "name": "Wishlist Page"
+    }
+  ]
+}

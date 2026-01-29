@@ -1,0 +1,67 @@
+{# Page 404 Widget #}
+
+<section class="page-404 py-16 md:py-24">
+  <div class="container mx-auto px-4">
+    <div class="max-w-lg mx-auto text-center">
+
+      {# 404 Illustration #}
+      <div class="mb-8">
+        <div class="relative inline-block">
+          <span class="text-[150px] md:text-[200px] font-bold text-gray-100 select-none">404</span>
+          <svg class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+      </div>
+
+      {# Content #}
+      <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
+        {{ widget.data.title | default('الصفحة غير موجودة') }}
+      </h1>
+
+      <p class="text-gray-500 mb-8">
+        {{ widget.data.message | default('عذراً، الصفحة التي تبحث عنها غير موجودة أو تم نقلها.') }}
+      </p>
+
+      {# Search #}
+      {% if widget.data.show_search %}
+        <form action="/search" method="get" class="mb-8">
+          <div class="relative max-w-sm mx-auto">
+            <input
+              type="search"
+              name="q"
+              placeholder="{{t('search.placeholder')}}"
+              class="w-full py-3 px-5 pe-12 border-2 border-gray-200 rounded-full focus:border-primary focus:outline-none transition-colors">
+            <button
+              type="submit"
+              class="absolute top-1/2 end-4 -translate-y-1/2 text-gray-400 hover:text-primary transition-colors">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+              </svg>
+            </button>
+          </div>
+        </form>
+      {% endif %}
+
+      {# CTA Button #}
+      <a
+        href="{{ widget.data.button_link | default('/') }}"
+        class="btn btn-primary btn-lg inline-flex items-center gap-2">
+        <svg class="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+        {{ widget.data.button_text | default('العودة للرئيسية') }}
+      </a>
+
+      {# Quick Links #}
+      <div class="mt-12 pt-8 border-t">
+        <p class="text-sm text-gray-500 mb-4">{{t("404.quick_links")}}</p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="/" class="text-primary hover:underline">{{t("common.home")}}</a>
+          <a href="/products" class="text-primary hover:underline">{{t("common.products")}}</a>
+          <a href="/contact" class="text-primary hover:underline">{{t("common.contact")}}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

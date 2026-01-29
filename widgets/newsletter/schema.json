@@ -1,0 +1,46 @@
+{
+  "name": "Newsletter",
+  "settings": {
+    "title": {
+      "type": "string",
+      "label": "العنوان",
+      "default": "اشترك في النشرة البريدية"
+    },
+    "subtitle": {
+      "type": "string",
+      "label": "العنوان الفرعي",
+      "default": "احصل على أحدث العروض والمنتجات"
+    },
+    "placeholder": {
+      "type": "string",
+      "label": "نص الحقل",
+      "default": "أدخل بريدك الإلكتروني"
+    },
+    "button_text": {
+      "type": "string",
+      "label": "نص الزر",
+      "default": "اشتراك"
+    },
+    "background_style": {
+      "type": "select",
+      "label": "نمط الخلفية",
+      "default": "gradient",
+      "options": [
+        { "value": "gradient", "label": "تدرج لوني" },
+        { "value": "solid", "label": "لون واحد" },
+        { "value": "white", "label": "أبيض" }
+      ]
+    },
+    "success_message": {
+      "type": "string",
+      "label": "رسالة النجاح",
+      "default": "شكراً لاشتراكك!"
+    }
+  },
+  "presets": [
+    {
+      "category": "Marketing",
+      "name": "Newsletter"
+    }
+  ]
+}

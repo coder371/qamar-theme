@@ -1,0 +1,6 @@
+sync =>  assets files
+
+"type": "slide" => "block": "slide" | اصلح ده في الدوكس
+اضف ان كل ويدجت له name في عند استخدامه داخل الصفحات
+
+

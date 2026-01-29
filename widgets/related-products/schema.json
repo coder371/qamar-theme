@@ -1,0 +1,28 @@
+{
+  "name": "Related Products",
+  "settings": {
+    "title": {
+      "type": "string",
+      "label": "العنوان",
+      "default": "منتجات ذات صلة"
+    },
+    "products_count": {
+      "type": "number",
+      "label": "عدد المنتجات",
+      "default": 4,
+      "min": 2,
+      "max": 8
+    },
+    "show_as_slider": {
+      "type": "boolean",
+      "label": "عرض كسلايدر",
+      "default": true
+    }
+  },
+  "presets": [
+    {
+      "category": "Product",
+      "name": "Related Products"
+    }
+  ]
+}

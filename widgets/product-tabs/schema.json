@@ -1,0 +1,45 @@
+{
+  "name": "Product Tabs",
+  "settings": {
+    "style": {
+      "type": "select",
+      "label": "نمط العرض",
+      "default": "tabs",
+      "options": [
+        { "value": "tabs", "label": "تبويبات" },
+        { "value": "accordion", "label": "أكورديون" }
+      ]
+    },
+    "show_description": {
+      "type": "boolean",
+      "label": "إظهار الوصف",
+      "default": true
+    },
+    "show_specifications": {
+      "type": "boolean",
+      "label": "إظهار المواصفات",
+      "default": true
+    },
+    "show_reviews": {
+      "type": "boolean",
+      "label": "إظهار التقييمات",
+      "default": true
+    },
+    "show_shipping": {
+      "type": "boolean",
+      "label": "إظهار معلومات الشحن",
+      "default": true
+    },
+    "shipping_text": {
+      "type": "text",
+      "label": "نص معلومات الشحن",
+      "default": "نوفر الشحن لجميع مناطق المملكة. التوصيل خلال 2-5 أيام عمل. الشحن مجاني للطلبات فوق 200 ريال."
+    }
+  },
+  "presets": [
+    {
+      "category": "Product",
+      "name": "Product Tabs"
+    }
+  ]
+}

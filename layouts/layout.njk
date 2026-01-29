@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="{{ localization.language | default('ar') }}" dir="{% if localization.language == 'en' %}ltr{% else %}rtl{% endif %}">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    {# ============================================
+       1. Google Fonts - أول شيء يتم تحميله
+       ============================================ #}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    {% seo %}
+    {% qumra_head %}
+
+    {# ============================================
+       Frontend Libraries - يجب استدعاؤها يدوياً
+       ============================================ #}
+
+    {# 2. Tailwind CSS #}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: 'var(--color-primary)',
+              'primary-light': 'var(--color-primary-light)',
+              'primary-dark': 'var(--color-primary-dark)',
+              secondary: 'var(--color-secondary)',
+              'secondary-light': 'var(--color-secondary-light)',
+              surface: 'var(--color-surface)',
+            },
+            fontFamily: {
+              sans: ['Tajawal', 'sans-serif'],
+              arabic: ['Tajawal', 'sans-serif'],
+              english: ['Poppins', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+
+    {# 3. Swiper.js - للسلايدرات #}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+    {# 4. GLightbox - لمعرض الصور #}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox@3/dist/css/glightbox.min.css">
+
+    {# 5. Animate.css - للحركات (اختياري) #}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4/animate.min.css">
+
+    <style>
+      :root {
+        {# Colors #}
+        --color-primary: {{ settings.primaryColor | default('#9C27B0') }};
+        --color-primary-light: {{ settings.primaryColorLight | default('#CE93D8') }};
+        --color-primary-dark: {{ settings.primaryColorDark | default('#7B1FA2') }};
+        --color-secondary: {{ settings.secondaryColor | default('#F48FB1') }};
+        --color-secondary-light: {{ settings.secondaryColorLight | default('#FBBAD7') }};
+        --color-background: {{ settings.backgroundColor | default('#FFFFFF') }};
+        --color-surface: {{ settings.surfaceColor | default('#FAFAFA') }};
+        --color-text: {{ settings.textColor | default('#212121') }};
+        --color-text-secondary: {{ settings.textSecondaryColor | default('#757575') }};
+        --color-border: {{ settings.borderColor | default('#E0E0E0') }};
+        --color-success: #4CAF50;
+        --color-error: #F44336;
+        --color-warning: #FF9800;
+
+        {# Swiper #}
+        --swiper-navigation-size: 25px;
+        --swiper-theme-color: var(--color-primary);
+      }
+
+      /* الخط الافتراضي - عربي */
+      html, body {
+        background-color: var(--color-background);
+        color: var(--color-text);
+      }
+
+      * {
+        font-family: 'Tajawal', sans-serif !important;
+      }
+
+      /* الخط الإنجليزي */
+      html[lang="en"] *,
+      html[dir="ltr"] * {
+        font-family: 'Poppins', sans-serif !important;
+      }
+    </style>
+
+    <link rel="stylesheet" href="{{ 'style.css' | assets }}"/>
+  </head>
+  <body class="min-h-screen flex flex-col" x-data="qumraApp()" @keydown.escape="closeModal()">
+
+    {# Header Template #}
+    {% template "header" %}
+
+    {# Main Content #}
+    <main class="flex-1">
+      {% content "" %}
+    </main>
+
+    {# Footer Template #}
+    {% template "footer" %}
+
+    {# Toast Container #}
+    <div id="toast-container" class="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 z-50 flex flex-col gap-2"></div>
+
+    {# ============================================
+       JavaScript Libraries - يجب استدعاؤها يدوياً
+       ============================================ #}
+
+    {# 1. Alpine.js - للتفاعل #}
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    {# 2. Swiper.js - للسلايدرات #}
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    {# 3. GLightbox - لمعرض الصور #}
+    <script src="https://cdn.jsdelivr.net/npm/glightbox@3/dist/js/glightbox.min.js"></script>
+
+    {# 4. Qumra Scripts #}
+    {% qumra_scripts %}
+
+    {# 5. Localization Config #}
+    <script>
+      window.QumraLocalization = {
+        language: '{{ localization.language | default("ar") }}',
+        currencyCode: '{{ localization.currency.currencyCode | default("SAR") }}',
+        currencySymbol: '{{ localization.currency.currencySymbol | default("ر.س") }}'
+      };
+    </script>
+
+    {# 6. Custom JS #}
+    <script src="{{ 'main.js' | assets }}"></script>
+
+    {# 6. Alpine.js App #}
+    <script>
+      function qumraApp() {
+        return {
+          modal: {
+            open: false,
+            type: null
+          },
+          search: '',
+
+          toggleModal(type) {
+            if (this.modal.open && this.modal.type === type) {
+              this.closeModal();
+            } else {
+              this.modal.open = true;
+              this.modal.type = type;
+              document.body.style.overflow = 'hidden';
+            }
+          },
+
+          closeModal() {
+            this.modal.open = false;
+            this.modal.type = null;
+            document.body.style.overflow = '';
+          },
+
+          setSearch(query) {
+            if (query && query.trim()) {
+              window.location.href = '/search?q=' + encodeURIComponent(query.trim());
+            }
+          },
+
+          init() {
+            console.log('Qamar Theme initialized');
+          }
+        }
+      }
+
+      // Initialize GLightbox
+      document.addEventListener('DOMContentLoaded', function() {
+        if (typeof GLightbox !== 'undefined') {
+          GLightbox({ selector: '.glightbox' });
+        }
+      });
+    </script>
+  </body>
+</html>

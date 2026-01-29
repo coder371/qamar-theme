@@ -1,0 +1,45 @@
+{
+  "name": "Collection Banner",
+  "settings": {
+    "show_image": {
+      "type": "boolean",
+      "label": "إظهار الصورة",
+      "default": true
+    },
+    "show_description": {
+      "type": "boolean",
+      "label": "إظهار الوصف",
+      "default": true
+    },
+    "show_products_count": {
+      "type": "boolean",
+      "label": "إظهار عدد المنتجات",
+      "default": true
+    },
+    "height": {
+      "type": "select",
+      "label": "ارتفاع البانر",
+      "default": "medium",
+      "options": [
+        { "value": "small", "label": "صغير" },
+        { "value": "medium", "label": "متوسط" },
+        { "value": "large", "label": "كبير" }
+      ]
+    },
+    "overlay_opacity": {
+      "type": "range",
+      "label": "شفافية التغطية",
+      "default": 50,
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "%"
+    }
+  },
+  "presets": [
+    {
+      "category": "Collection",
+      "name": "Collection Banner"
+    }
+  ]
+}

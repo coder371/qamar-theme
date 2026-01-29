@@ -1,0 +1,97 @@
+{# Grid columns classes #}
+{% set cols = {
+  '3': 'grid-cols-2 md:grid-cols-3',
+  '4': 'grid-cols-2 md:grid-cols-4',
+  '5': 'grid-cols-2 md:grid-cols-5',
+  '6': 'grid-cols-3 md:grid-cols-6'
+}[widget.data.columns] | default('grid-cols-2 md:grid-cols-4') %}
+
+{% set isCircle = widget.data.layout == 'circle' %}
+
+<section class="py-12">
+  <div class="container mx-auto px-4">
+    {# Section Header #}
+    {% if widget.data.title or widget.data.subtitle %}
+      <div class="text-center mb-8">
+        {% if widget.data.title %}
+          <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+            {{ widget.data.title }}
+          </h2>
+        {% endif %}
+        {% if widget.data.subtitle %}
+          <p class="text-gray-500">
+            {{ widget.data.subtitle }}
+          </p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {# Collections Grid #}
+    <div class="grid {{ cols }} gap-4 md:gap-6">
+      {% for block in widget.blocks %}
+        <a
+          href="{{ block.data.url | default('/collections') }}"
+          class="group relative block overflow-hidden {% if isCircle %}text-center{% endif %}">
+
+          {# Image #}
+          <div class="{% if isCircle %}w-32 h-32 md:w-40 md:h-40 mx-auto rounded-full{% else %}aspect-square rounded-xl{% endif %} overflow-hidden bg-gray-100">
+            {% if block.data.image.fileUrl %}
+              <img
+                src="{{ block.data.image.fileUrl }}"
+                alt="{{ block.data.title }}"
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                loading="lazy">
+            {% else %}
+              <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-secondary/20">
+                <svg class="w-12 h-12 text-primary/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                </svg>
+              </div>
+            {% endif %}
+
+            {# Overlay (for grid style) #}
+            {% if not isCircle %}
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+
+              {# Content on image #}
+              <div class="absolute inset-0 flex flex-col items-center justify-end p-4 text-white">
+                <h3 class="text-lg md:text-xl font-bold mb-1">
+                  {{ block.data.title | default('تصنيف') }}
+                </h3>
+                {% if widget.data.show_products_count and block.data.products_count %}
+                  <span class="text-sm opacity-80">
+                    {{ block.data.products_count }} {{t("collection.products_count")}}
+                  </span>
+                {% endif %}
+              </div>
+            {% endif %}
+          </div>
+
+          {# Title below (for circle style) #}
+          {% if isCircle %}
+            <div class="mt-4">
+              <h3 class="font-semibold text-gray-900 group-hover:text-primary transition-colors">
+                {{ block.data.title | default('تصنيف') }}
+              </h3>
+              {% if widget.data.show_products_count and block.data.products_count %}
+                <span class="text-sm text-gray-500">
+                  {{ block.data.products_count }} {{t("collection.products_count")}}
+                </span>
+              {% endif %}
+            </div>
+          {% endif %}
+        </a>
+      {% else %}
+        {# Placeholder collections if no blocks #}
+        {% for i in range(1, 5) %}
+          <div class="{% if isCircle %}text-center{% endif %}">
+            <div class="{% if isCircle %}w-32 h-32 md:w-40 md:h-40 mx-auto rounded-full{% else %}aspect-square rounded-xl{% endif %} bg-gray-200 animate-pulse"></div>
+            <div class="mt-4">
+              <div class="h-4 bg-gray-200 rounded w-2/3 mx-auto animate-pulse"></div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+</section>

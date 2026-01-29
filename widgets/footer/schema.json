@@ -1,0 +1,101 @@
+{
+  "name": "Footer",
+  "settings": {
+    "show_logo": {
+      "type": "boolean",
+      "label": "إظهار الشعار",
+      "default": true
+    },
+    "description": {
+      "type": "text",
+      "label": "وصف المتجر",
+      "default": "متجرك المفضل للتسوق الإلكتروني"
+    },
+    "footer_menu_1": {
+      "type": "menu",
+      "label": "القائمة الأولى",
+      "default": "footer-1"
+    },
+    "menu_1_title": {
+      "type": "string",
+      "label": "عنوان القائمة الأولى",
+      "default": "روابط سريعة"
+    },
+    "footer_menu_2": {
+      "type": "menu",
+      "label": "القائمة الثانية",
+      "default": "footer-2"
+    },
+    "menu_2_title": {
+      "type": "string",
+      "label": "عنوان القائمة الثانية",
+      "default": "خدمة العملاء"
+    },
+    "show_newsletter": {
+      "type": "boolean",
+      "label": "إظهار الاشتراك في النشرة",
+      "default": true
+    },
+    "newsletter_title": {
+      "type": "string",
+      "label": "عنوان النشرة",
+      "default": "اشترك في نشرتنا البريدية"
+    },
+    "newsletter_text": {
+      "type": "string",
+      "label": "نص النشرة",
+      "default": "احصل على آخر العروض والمنتجات الجديدة"
+    },
+    "show_social": {
+      "type": "boolean",
+      "label": "إظهار وسائل التواصل",
+      "default": true
+    },
+    "facebook_url": {
+      "type": "string",
+      "label": "رابط Facebook",
+      "default": ""
+    },
+    "instagram_url": {
+      "type": "string",
+      "label": "رابط Instagram",
+      "default": ""
+    },
+    "twitter_url": {
+      "type": "string",
+      "label": "رابط Twitter",
+      "default": ""
+    },
+    "tiktok_url": {
+      "type": "string",
+      "label": "رابط TikTok",
+      "default": ""
+    },
+    "snapchat_url": {
+      "type": "string",
+      "label": "رابط Snapchat",
+      "default": ""
+    },
+    "whatsapp_number": {
+      "type": "string",
+      "label": "رقم WhatsApp",
+      "default": ""
+    },
+    "copyright_text": {
+      "type": "string",
+      "label": "نص حقوق النشر",
+      "default": "جميع الحقوق محفوظة"
+    },
+    "background_color": {
+      "type": "color",
+      "label": "لون الخلفية",
+      "default": "#1a1a2e"
+    }
+  },
+  "presets": [
+    {
+      "category": "Footer",
+      "name": "Footer"
+    }
+  ]
+}

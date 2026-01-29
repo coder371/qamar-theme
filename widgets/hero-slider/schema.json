@@ -1,0 +1,108 @@
+{
+  "name": "Hero Slider",
+  "settings": {
+    "autoplay": {
+      "type": "boolean",
+      "label": "تشغيل تلقائي",
+      "default": true
+    },
+    "interval": {
+      "type": "number",
+      "label": "مدة العرض (ثانية)",
+      "default": 5,
+      "min": 3,
+      "max": 10
+    },
+    "show_arrows": {
+      "type": "boolean",
+      "label": "إظهار الأسهم",
+      "default": true
+    },
+    "show_dots": {
+      "type": "boolean",
+      "label": "إظهار النقاط",
+      "default": true
+    },
+    "height": {
+      "type": "select",
+      "label": "ارتفاع السلايدر",
+      "default": "large",
+      "options": [
+        { "value": "small", "label": "صغير (400px)" },
+        { "value": "medium", "label": "متوسط (500px)" },
+        { "value": "large", "label": "كبير (600px)" },
+        { "value": "full", "label": "كامل الشاشة" }
+      ]
+    }
+  },
+  "blocks": {
+    "slide": {
+      "name": "سلايد",
+      "settings": {
+        "image": {
+          "type": "media",
+          "label": "الصورة"
+        },
+        "mobile_image": {
+          "type": "media",
+          "label": "صورة الموبايل"
+        },
+        "title": {
+          "type": "string",
+          "label": "العنوان",
+          "default": "مجموعة جديدة"
+        },
+        "subtitle": {
+          "type": "text",
+          "label": "العنوان الفرعي",
+          "default": "اكتشفي أحدث صيحات الموضة"
+        },
+        "button_text": {
+          "type": "string",
+          "label": "نص الزر",
+          "default": "تسوقي الآن"
+        },
+        "button_url": {
+          "type": "string",
+          "label": "رابط الزر",
+          "default": "/products"
+        },
+        "text_position": {
+          "type": "select",
+          "label": "موضع النص",
+          "default": "center",
+          "options": [
+            { "value": "start", "label": "البداية" },
+            { "value": "center", "label": "الوسط" },
+            { "value": "end", "label": "النهاية" }
+          ]
+        },
+        "text_color": {
+          "type": "color",
+          "label": "لون النص",
+          "default": "#FFFFFF"
+        },
+        "overlay_color": {
+          "type": "color",
+          "label": "لون التغطية",
+          "default": "#000000"
+        },
+        "overlay_opacity": {
+          "type": "range",
+          "label": "شفافية التغطية",
+          "default": 30,
+          "min": 0,
+          "max": 100,
+          "step": 10,
+          "unit": "%"
+        }
+      }
+    }
+  },
+  "presets": [
+    {
+      "category": "Hero",
+      "name": "Hero Slider"
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "name": "Search Page",
+  "settings": {
+    "columns_desktop": {
+      "type": "select",
+      "label": "عدد الأعمدة (سطح المكتب)",
+      "default": "4",
+      "options": [
+        {
+          "value": "3",
+          "label": "3 أعمدة"
+        },
+        {
+          "value": "4",
+          "label": "4 أعمدة"
+        }
+      ]
+    },
+    "products_per_page": {
+      "type": "select",
+      "label": "عدد المنتجات في الصفحة",
+      "default": "12",
+      "options": [
+        {
+          "value": "8",
+          "label": "8 منتجات"
+        },
+        {
+          "value": "12",
+          "label": "12 منتج"
+        },
+        {
+          "value": "16",
+          "label": "16 منتج"
+        },
+        {
+          "value": "24",
+          "label": "24 منتج"
+        }
+      ]
+    },
+    "show_filters": {
+      "type": "boolean",
+      "label": "إظهار الفلاتر",
+      "default": true
+    },
+    "show_sort": {
+      "type": "boolean",
+      "label": "إظهار الترتيب",
+      "default": true
+    }
+  },
+  "presets": [
+    {
+      "category": "Search",
+      "name": "Search Page"
+    }
+  ]
+}

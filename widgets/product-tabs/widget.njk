@@ -1,0 +1,217 @@
+{# Product Tabs/Accordion Widget #}
+
+{% set isTabs = widget.data.style != 'accordion' %}
+
+<div class="product-tabs mt-12" x-data="{ activeTab: 'description' }">
+
+  {% if isTabs %}
+    {# Tabs Style #}
+    <div class="tabs border-b overflow-x-auto">
+      {% if widget.data.show_description %}
+        <button
+          @click="activeTab = 'description'"
+          :class="activeTab === 'description' ? 'active' : ''"
+          class="tab">
+          {{t("product.description")}}
+        </button>
+      {% endif %}
+
+      {% if widget.data.show_specifications and product.specifications %}
+        <button
+          @click="activeTab = 'specifications'"
+          :class="activeTab === 'specifications' ? 'active' : ''"
+          class="tab">
+          {{t("product.specifications")}}
+        </button>
+      {% endif %}
+
+      {% if widget.data.show_reviews %}
+        <button
+          @click="activeTab = 'reviews'"
+          :class="activeTab === 'reviews' ? 'active' : ''"
+          class="tab">
+          {{t("product.reviews")}}
+          {% if product.reviewsCount %}
+            <span class="ms-1 text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+              {{ product.reviewsCount }}
+            </span>
+          {% endif %}
+        </button>
+      {% endif %}
+
+      {% if widget.data.show_shipping %}
+        <button
+          @click="activeTab = 'shipping'"
+          :class="activeTab === 'shipping' ? 'active' : ''"
+          class="tab">
+          {{t("product.shipping_info")}}
+        </button>
+      {% endif %}
+    </div>
+
+    {# Tab Contents #}
+    <div class="py-6">
+      {# Description #}
+      {% if widget.data.show_description %}
+        <div x-show="activeTab === 'description'" x-transition class="tab-content prose prose-lg max-w-none">
+          {% if product.description %}
+            {{ product.description | safe }}
+          {% else %}
+            <p class="text-gray-500">{{t("product.no_description")}}</p>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {# Specifications #}
+      {% if widget.data.show_specifications %}
+        <div x-show="activeTab === 'specifications'" x-transition class="tab-content">
+          {% if product.specifications %}
+            <table class="w-full">
+              <tbody>
+                {% for spec in product.specifications %}
+                  <tr class="border-b">
+                    <td class="py-3 text-gray-500 w-1/3">{{ spec.name }}</td>
+                    <td class="py-3 font-medium">{{ spec.value }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% else %}
+            <p class="text-gray-500">لا توجد مواصفات متاحة</p>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {# Reviews #}
+      {% if widget.data.show_reviews %}
+        <div x-show="activeTab === 'reviews'" x-transition class="tab-content">
+          {% if product.reviews and product.reviews.length > 0 %}
+            <div class="space-y-6">
+              {% for review in product.reviews %}
+                <div class="border-b pb-6">
+                  <div class="flex items-center gap-3 mb-3">
+                    <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+                      {{ review.author | first | upper }}
+                    </div>
+                    <div>
+                      <p class="font-medium">{{ review.author }}</p>
+                      <div class="flex items-center gap-2">
+                        <div class="star-rating">
+                          {% for i in range(1, 6) %}
+                            <svg class="w-4 h-4 {% if i <= review.rating %}star-filled{% else %}star-empty{% endif %}" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                          {% endfor %}
+                        </div>
+                        <span class="text-sm text-gray-400">{{ review.date }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="text-gray-600">{{ review.content }}</p>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="text-center py-8">
+              <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+              </svg>
+              <p class="text-gray-500 mb-4">{{t("product.no_reviews")}}</p>
+              <button class="btn btn-outline">{{t("product.write_review")}}</button>
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {# Shipping Info #}
+      {% if widget.data.show_shipping %}
+        <div x-show="activeTab === 'shipping'" x-transition class="tab-content">
+          <div class="space-y-4">
+            <div class="flex items-start gap-4 p-4 bg-surface rounded-lg">
+              <svg class="w-6 h-6 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+              </svg>
+              <div>
+                <h4 class="font-medium mb-1">الشحن والتوصيل</h4>
+                <p class="text-gray-600 text-sm">{{ widget.data.shipping_text | default('نوفر الشحن لجميع مناطق المملكة. التوصيل خلال 2-5 أيام عمل.') }}</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4 p-4 bg-surface rounded-lg">
+              <svg class="w-6 h-6 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+              </svg>
+              <div>
+                <h4 class="font-medium mb-1">الإرجاع والاستبدال</h4>
+                <p class="text-gray-600 text-sm">يمكنك إرجاع أو استبدال المنتج خلال 14 يوم من تاريخ الاستلام.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+  {% else %}
+    {# Accordion Style #}
+    <div class="space-y-2">
+      {% if widget.data.show_description %}
+        <div class="accordion-item border rounded-lg" :class="activeTab === 'description' ? 'active' : ''">
+          <button
+            @click="activeTab = activeTab === 'description' ? '' : 'description'"
+            class="accordion-header w-full px-4">
+            <span>{{t("product.description")}}</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+          <div class="accordion-content px-4 pb-4">
+            <div class="prose max-w-none">
+              {{ product.description | safe | default('لا يوجد وصف متاح') }}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if widget.data.show_specifications and product.specifications %}
+        <div class="accordion-item border rounded-lg" :class="activeTab === 'specifications' ? 'active' : ''">
+          <button
+            @click="activeTab = activeTab === 'specifications' ? '' : 'specifications'"
+            class="accordion-header w-full px-4">
+            <span>{{t("product.specifications")}}</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+          <div class="accordion-content px-4 pb-4">
+            <table class="w-full">
+              <tbody>
+                {% for spec in product.specifications %}
+                  <tr class="border-b last:border-0">
+                    <td class="py-2 text-gray-500">{{ spec.name }}</td>
+                    <td class="py-2 font-medium">{{ spec.value }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if widget.data.show_shipping %}
+        <div class="accordion-item border rounded-lg" :class="activeTab === 'shipping' ? 'active' : ''">
+          <button
+            @click="activeTab = activeTab === 'shipping' ? '' : 'shipping'"
+            class="accordion-header w-full px-4">
+            <span>{{t("product.shipping_info")}}</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+          <div class="accordion-content px-4 pb-4">
+            <p class="text-gray-600">{{ widget.data.shipping_text | default('نوفر الشحن لجميع مناطق المملكة.') }}</p>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>

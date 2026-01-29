@@ -1,0 +1,61 @@
+{
+  "name": "Featured Products",
+  "settings": {
+    "title": {
+      "type": "string",
+      "label": "العنوان",
+      "default": "منتجات مميزة"
+    },
+    "subtitle": {
+      "type": "string",
+      "label": "العنوان الفرعي",
+      "default": "اكتشفي أفضل منتجاتنا"
+    },
+    "products": {
+      "type": "products",
+      "label": "المنتجات"
+    },
+    "products_count": {
+      "type": "number",
+      "label": "عدد المنتجات",
+      "default": 8,
+      "min": 4,
+      "max": 12
+    },
+    "columns_desktop": {
+      "type": "select",
+      "label": "عدد الأعمدة (سطح المكتب)",
+      "default": "4",
+      "options": [
+        { "value": "3", "label": "3 أعمدة" },
+        { "value": "4", "label": "4 أعمدة" },
+        { "value": "5", "label": "5 أعمدة" }
+      ]
+    },
+    "columns_mobile": {
+      "type": "select",
+      "label": "عدد الأعمدة (موبايل)",
+      "default": "2",
+      "options": [
+        { "value": "1", "label": "عمود واحد" },
+        { "value": "2", "label": "2 أعمدة" }
+      ]
+    },
+    "show_view_all": {
+      "type": "boolean",
+      "label": "إظهار زر عرض الكل",
+      "default": true
+    },
+    "view_all_url": {
+      "type": "string",
+      "label": "رابط عرض الكل",
+      "default": "/products"
+    }
+  },
+  "presets": [
+    {
+      "category": "Products",
+      "name": "Featured Products"
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "name": "Promo Banner",
+  "settings": {
+    "background_image": {
+      "type": "image",
+      "label": "صورة الخلفية"
+    },
+    "background_color": {
+      "type": "color",
+      "label": "لون الخلفية",
+      "default": "#9C27B0"
+    },
+    "title": {
+      "type": "string",
+      "label": "العنوان",
+      "default": "عرض خاص"
+    },
+    "subtitle": {
+      "type": "string",
+      "label": "العنوان الفرعي",
+      "default": "خصم 50% على جميع المنتجات"
+    },
+    "show_countdown": {
+      "type": "boolean",
+      "label": "إظهار العداد التنازلي",
+      "default": true
+    },
+    "countdown_date": {
+      "type": "string",
+      "label": "تاريخ انتهاء العرض",
+      "default": "2025-12-31T23:59:59"
+    },
+    "button_text": {
+      "type": "string",
+      "label": "نص الزر",
+      "default": "تسوق الآن"
+    },
+    "button_link": {
+      "type": "string",
+      "label": "رابط الزر",
+      "default": "/products"
+    },
+    "text_color": {
+      "type": "select",
+      "label": "لون النص",
+      "default": "white",
+      "options": [
+        { "value": "white", "label": "أبيض" },
+        { "value": "dark", "label": "داكن" }
+      ]
+    }
+  },
+  "presets": [
+    {
+      "category": "Marketing",
+      "name": "Promo Banner"
+    }
+  ]
+}

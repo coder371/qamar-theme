@@ -1,0 +1,103 @@
+{# Promo Banner Widget with Countdown #}
+
+{% set textColor = 'text-white' if widget.data.text_color == 'white' else 'text-gray-900' %}
+{% set buttonClass = 'bg-white text-primary hover:bg-gray-100' if widget.data.text_color == 'white' else 'btn-primary' %}
+
+<section
+  class="promo-banner py-12 md:py-20 relative overflow-hidden"
+  {% if not widget.data.background_image %}
+  style="background-color: {{ widget.data.background_color | default('#9C27B0') }}"
+  {% endif %}
+  x-data="{
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+    expired: false,
+
+    init() {
+      this.updateCountdown();
+      setInterval(() => this.updateCountdown(), 1000);
+    },
+
+    updateCountdown() {
+      const end = new Date('{{ widget.data.countdown_date | default('2025-12-31T23:59:59') }}').getTime();
+      const now = new Date().getTime();
+      const diff = end - now;
+
+      if (diff <= 0) {
+        this.expired = true;
+        return;
+      }
+
+      this.days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      this.hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      this.minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      this.seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    }
+  }">
+
+  {# Background Image #}
+  {% if widget.data.background_image %}
+    <img
+      src="{{ widget.data.background_image }}"
+      alt=""
+      class="absolute inset-0 w-full h-full object-cover">
+    <div class="absolute inset-0 bg-black/40"></div>
+  {% endif %}
+
+  <div class="container mx-auto px-4 relative z-10">
+    <div class="max-w-3xl mx-auto text-center {{ textColor }}">
+
+      {# Title #}
+      {% if widget.data.subtitle %}
+        <p class="text-lg md:text-xl opacity-90 mb-2">{{ widget.data.subtitle }}</p>
+      {% endif %}
+
+      {% if widget.data.title %}
+        <h2 class="text-3xl md:text-5xl font-bold mb-8">{{ widget.data.title }}</h2>
+      {% endif %}
+
+      {# Countdown Timer #}
+      {% if widget.data.show_countdown %}
+        <div class="flex justify-center gap-4 md:gap-6 mb-8" x-show="!expired">
+          <div class="text-center">
+            <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center bg-white/20 backdrop-blur rounded-xl">
+              <span class="text-2xl md:text-3xl font-bold" x-text="days">00</span>
+            </div>
+            <span class="text-sm mt-2 block opacity-75">{{t("promo.days")}}</span>
+          </div>
+          <div class="text-center">
+            <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center bg-white/20 backdrop-blur rounded-xl">
+              <span class="text-2xl md:text-3xl font-bold" x-text="hours">00</span>
+            </div>
+            <span class="text-sm mt-2 block opacity-75">{{t("promo.hours")}}</span>
+          </div>
+          <div class="text-center">
+            <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center bg-white/20 backdrop-blur rounded-xl">
+              <span class="text-2xl md:text-3xl font-bold" x-text="minutes">00</span>
+            </div>
+            <span class="text-sm mt-2 block opacity-75">{{t("promo.minutes")}}</span>
+          </div>
+          <div class="text-center">
+            <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center bg-white/20 backdrop-blur rounded-xl">
+              <span class="text-2xl md:text-3xl font-bold" x-text="seconds">00</span>
+            </div>
+            <span class="text-sm mt-2 block opacity-75">{{t("promo.seconds")}}</span>
+          </div>
+        </div>
+
+        <p x-show="expired" class="text-xl mb-8">{{t("promo.expired")}}</p>
+      {% endif %}
+
+      {# CTA Button #}
+      {% if widget.data.button_text %}
+        <a
+          href="{{ widget.data.button_link | default('/products') }}"
+          class="btn btn-lg {{ buttonClass }}">
+          {{ widget.data.button_text }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>

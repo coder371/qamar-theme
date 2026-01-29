@@ -1,0 +1,24 @@
+{
+  "title": "Footer Group",
+  "allowAdd": false,
+  "allowRemove": false,
+  "allowReorder": false,
+  "widgets": [
+    {
+      "name": "footer",
+      "widget": "footer",
+      "settings": {
+        "show_logo": true,
+        "description": "متجرك المفضل لمستحضرات التجميل والأزياء النسائية",
+        "menu_1_title": "روابط سريعة",
+        "menu_2_title": "خدمة العملاء",
+        "show_newsletter": true,
+        "newsletter_title": "اشتركي في نشرتنا البريدية",
+        "newsletter_text": "احصلي على آخر العروض والمنتجات الجديدة",
+        "show_social": true,
+        "copyright_text": "جميع الحقوق محفوظة",
+        "background_color": "#1a1a2e"
+      }
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "name": "Collection Grid",
+  "settings": {
+    "title": {
+      "type": "string",
+      "label": "العنوان",
+      "default": "تسوقي حسب التصنيف"
+    },
+    "subtitle": {
+      "type": "string",
+      "label": "العنوان الفرعي",
+      "default": "اكتشفي مجموعاتنا المتنوعة"
+    },
+    "layout": {
+      "type": "select",
+      "label": "شكل العرض",
+      "default": "grid",
+      "options": [
+        { "value": "grid", "label": "شبكة مربعة" },
+        { "value": "circle", "label": "دوائر" }
+      ]
+    },
+    "columns": {
+      "type": "select",
+      "label": "عدد الأعمدة",
+      "default": "4",
+      "options": [
+        { "value": "3", "label": "3 أعمدة" },
+        { "value": "4", "label": "4 أعمدة" },
+        { "value": "5", "label": "5 أعمدة" },
+        { "value": "6", "label": "6 أعمدة" }
+      ]
+    },
+    "show_products_count": {
+      "type": "boolean",
+      "label": "إظهار عدد المنتجات",
+      "default": true
+    }
+  },
+  "blocks": {
+    "collection": {
+      "name": "تصنيف",
+      "settings": {
+        "title": {
+          "type": "string",
+          "label": "العنوان"
+        },
+        "image": {
+          "type": "media",
+          "label": "الصورة"
+        },
+        "url": {
+          "type": "string",
+          "label": "الرابط",
+          "default": "/collection/"
+        },
+        "products_count": {
+          "type": "number",
+          "label": "عدد المنتجات",
+          "default": 0
+        }
+      }
+    }
+  },
+  "presets": [
+    {
+      "category": "Collections",
+      "name": "Collection Grid"
+    }
+  ]
+}

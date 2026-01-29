@@ -1,0 +1,215 @@
+{# Product Gallery Widget - Uses product variable from context #}
+
+{% set thumbnailsPosition = widget.data.thumbnails_position | default('bottom') %}
+{% set enableZoom = widget.data.enable_zoom | default(true) %}
+{% set enableLightbox = widget.data.enable_lightbox | default(true) %}
+
+<div
+  class="product-gallery"
+  x-data="{
+    currentImage: 0,
+    images: {{ product.images | dump | safe }},
+    lightbox: false,
+    zoom: false,
+    zoomX: 50,
+    zoomY: 50,
+
+    next() {
+      this.currentImage = (this.currentImage + 1) % this.images.length;
+    },
+    prev() {
+      this.currentImage = (this.currentImage - 1 + this.images.length) % this.images.length;
+    },
+    goTo(index) {
+      this.currentImage = index;
+    },
+    handleZoom(e) {
+      const rect = e.target.getBoundingClientRect();
+      this.zoomX = ((e.clientX - rect.left) / rect.width) * 100;
+      this.zoomY = ((e.clientY - rect.top) / rect.height) * 100;
+    }
+  }">
+
+  <div class="flex {% if thumbnailsPosition == 'side' %}flex-row gap-4{% else %}flex-col{% endif %}">
+
+    {# Thumbnails (Side position) #}
+    {% if thumbnailsPosition == 'side' %}
+      <div class="hidden md:flex flex-col gap-2 w-20 flex-shrink-0">
+        {% for image in product.images %}
+          <button
+            @click="goTo({{ loop.index0 }})"
+            :class="currentImage === {{ loop.index0 }} ? 'ring-2 ring-primary' : 'ring-1 ring-gray-200'"
+            class="w-20 h-20 rounded-lg overflow-hidden bg-gray-100 transition-all">
+            <img
+              src="{{ image.fileUrl }}"
+              alt="{{ product.title }} - {{ loop.index }}"
+              class="w-full h-full object-cover">
+          </button>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {# Main Image #}
+    <div class="flex-1">
+      <div
+        class="relative aspect-square rounded-xl overflow-hidden bg-gray-100 cursor-{% if enableZoom %}zoom-in{% else %}pointer{% endif %}"
+        {% if enableZoom %}
+        @mouseenter="zoom = true"
+        @mouseleave="zoom = false"
+        @mousemove="handleZoom($event)"
+        {% endif %}
+        {% if enableLightbox %}
+        @click="lightbox = true"
+        {% endif %}>
+
+        {# Current Image #}
+        <template x-for="(image, index) in images" :key="index">
+          <img
+            x-show="currentImage === index"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            :src="image.fileUrl"
+            :alt="'{{ product.title }} - ' + (index + 1)"
+            class="absolute inset-0 w-full h-full object-cover"
+            :style="zoom ? `transform-origin: ${zoomX}% ${zoomY}%; transform: scale(1.5)` : ''"
+            style="transition: transform 0.1s ease">
+        </template>
+
+        {# Fallback if no images #}
+        {% if not product.images or product.images.length == 0 %}
+          <div class="w-full h-full flex items-center justify-center bg-gray-200">
+            <svg class="w-24 h-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </div>
+        {% endif %}
+
+        {# Navigation Arrows #}
+        <template x-if="images.length > 1">
+          <div>
+            <button
+              @click.stop="prev()"
+              class="absolute top-1/2 -translate-y-1/2 start-2 z-10 w-10 h-10 bg-white/90 rounded-full flex items-center justify-center shadow-md hover:bg-white transition-colors">
+              <svg class="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+            </button>
+            <button
+              @click.stop="next()"
+              class="absolute top-1/2 -translate-y-1/2 end-2 z-10 w-10 h-10 bg-white/90 rounded-full flex items-center justify-center shadow-md hover:bg-white transition-colors">
+              <svg class="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+        </template>
+
+        {# Badges #}
+        <div class="absolute top-4 start-4 flex flex-col gap-2 z-10">
+          {% if product.pricing.compareAtPrice and product.pricing.compareAtPrice > product.pricing.price %}
+            {% set discount = ((product.pricing.compareAtPrice - product.pricing.price) / product.pricing.compareAtPrice * 100) | round %}
+            <span class="badge badge-sale">-{{ discount }}%</span>
+          {% endif %}
+          {% if product.isNew %}
+            <span class="badge badge-new">{{t("product.new")}}</span>
+          {% endif %}
+        </div>
+
+        {# Zoom indicator #}
+        {% if enableZoom %}
+          <div class="absolute bottom-4 end-4 z-10 bg-white/90 rounded-full p-2 shadow-md">
+            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/>
+            </svg>
+          </div>
+        {% endif %}
+      </div>
+
+      {# Thumbnails (Bottom position) #}
+      {% if thumbnailsPosition == 'bottom' and product.images | length > 1 %}
+        <div class="flex gap-2 mt-4 overflow-x-auto pb-2">
+          {% for image in product.images %}
+            <button
+              @click="goTo({{ loop.index0 }})"
+              :class="currentImage === {{ loop.index0 }} ? 'ring-2 ring-primary' : 'ring-1 ring-gray-200'"
+              class="w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0 transition-all">
+              <img
+                src="{{ image.fileUrl }}"
+                alt="{{ product.title }} - {{ loop.index }}"
+                class="w-full h-full object-cover">
+            </button>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {# Image counter for mobile #}
+      <div class="flex justify-center gap-1 mt-3 md:hidden" x-show="images.length > 1">
+        <template x-for="(_, index) in images" :key="index">
+          <button
+            @click="goTo(index)"
+            :class="currentImage === index ? 'bg-primary w-6' : 'bg-gray-300 w-2'"
+            class="h-2 rounded-full transition-all">
+          </button>
+        </template>
+      </div>
+    </div>
+  </div>
+
+  {# Lightbox Modal #}
+  {% if enableLightbox %}
+    <div
+      x-show="lightbox"
+      x-transition:enter="transition ease-out duration-300"
+      x-transition:enter-start="opacity-0"
+      x-transition:enter-end="opacity-100"
+      x-transition:leave="transition ease-in duration-200"
+      x-transition:leave-start="opacity-100"
+      x-transition:leave-end="opacity-0"
+      @click="lightbox = false"
+      @keydown.escape.window="lightbox = false"
+      class="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4">
+
+      {# Close button #}
+      <button
+        @click="lightbox = false"
+        class="absolute top-4 end-4 z-10 w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+
+      {# Navigation #}
+      <template x-if="images.length > 1">
+        <div>
+          <button
+            @click.stop="prev()"
+            class="absolute top-1/2 -translate-y-1/2 start-4 z-10 w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-colors">
+            <svg class="w-6 h-6 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+          </button>
+          <button
+            @click.stop="next()"
+            class="absolute top-1/2 -translate-y-1/2 end-4 z-10 w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-colors">
+            <svg class="w-6 h-6 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      </template>
+
+      {# Image #}
+      <img
+        :src="images[currentImage]?.fileUrl"
+        :alt="'{{ product.title }}'"
+        @click.stop
+        class="max-w-full max-h-full object-contain">
+
+      {# Counter #}
+      <div class="absolute bottom-4 left-1/2 -translate-x-1/2 text-white text-sm bg-black/50 px-4 py-2 rounded-full">
+        <span x-text="currentImage + 1"></span> / <span x-text="images.length"></span>
+      </div>
+    </div>
+  {% endif %}
+</div>
