@@ -61,7 +61,7 @@
                     </div>
                     <div>
                       <p class="text-sm opacity-75">{{t("contact.address")}}</p>
-                      <p class="font-medium">{{ widget.data.address }}</p>
+                      <p class="font-medium">{{ widget.data.address | safe }}</p>
                     </div>
                   </div>
                 {% endif %}

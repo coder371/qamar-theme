@@ -14,7 +14,7 @@
     "footer_menu_1": {
       "type": "menu",
       "label": "القائمة الأولى",
-      "default": "footer-1"
+      "default": "footer-menu"
     },
     "menu_1_title": {
       "type": "string",
@@ -24,7 +24,7 @@
     "footer_menu_2": {
       "type": "menu",
       "label": "القائمة الثانية",
-      "default": "footer-2"
+      "default": "footer-menu"
     },
     "menu_2_title": {
       "type": "string",

@@ -1,3 +1,4 @@
+{{widget.data.products | json}}
 {# Grid columns classes #}
 {% set desktopCols = {
   '3': 'lg:grid-cols-3',
@@ -41,8 +42,12 @@
 
     {# Products Grid #}
     <div class="grid {{ mobileCols }} md:grid-cols-3 {{ desktopCols }} gap-4 md:gap-6">
-      {% for product in widget.data.products | slice(0, widget.data.products_count | default(8)) %}
-        {% ui "product-card.njk", product=product %}
+      {% if widget.data.products and widget.data.products.length %}
+        {% for product in widget.data.products %}
+          {% if loop.index <= (widget.data.products_count | default(8)) %}
+            {% ui "product-card.njk", product=product %}
+          {% endif %}
+        {% endfor %}
       {% else %}
         {# Placeholder products if no products selected #}
         {% for i in range(1, (widget.data.products_count | default(8)) + 1) %}
@@ -57,7 +62,7 @@
             </div>
           </div>
         {% endfor %}
-      {% endfor %}
+      {% endif %}
     </div>
   </div>
 </section>

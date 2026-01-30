@@ -28,17 +28,17 @@
 
     {# Collections Grid #}
     <div class="grid {{ cols }} gap-4 md:gap-6">
-      {% for block in widget.blocks %}
+      {% for collection in widget.data.collections %}
         <a
-          href="{{ block.data.url | default('/collections') }}"
+          href="/collections/{{ collection.handle }}"
           class="group relative block overflow-hidden {% if isCircle %}text-center{% endif %}">
 
           {# Image #}
           <div class="{% if isCircle %}w-32 h-32 md:w-40 md:h-40 mx-auto rounded-full{% else %}aspect-square rounded-xl{% endif %} overflow-hidden bg-gray-100">
-            {% if block.data.image.fileUrl %}
+            {% if collection.image and collection.image.fileUrl %}
               <img
-                src="{{ block.data.image.fileUrl }}"
-                alt="{{ block.data.title }}"
+                src="{{ collection.image.fileUrl }}"
+                alt="{{ collection.title }}"
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 loading="lazy">
             {% else %}
@@ -56,11 +56,11 @@
               {# Content on image #}
               <div class="absolute inset-0 flex flex-col items-center justify-end p-4 text-white">
                 <h3 class="text-lg md:text-xl font-bold mb-1">
-                  {{ block.data.title | default('تصنيف') }}
+                  {{ collection.title }}
                 </h3>
-                {% if widget.data.show_products_count and block.data.products_count %}
+                {% if widget.data.show_products_count and collection.productsCount %}
                   <span class="text-sm opacity-80">
-                    {{ block.data.products_count }} {{t("collection.products_count")}}
+                    {{ collection.productsCount }} {{t("collection.products_count")}}
                   </span>
                 {% endif %}
               </div>
@@ -71,18 +71,18 @@
           {% if isCircle %}
             <div class="mt-4">
               <h3 class="font-semibold text-gray-900 group-hover:text-primary transition-colors">
-                {{ block.data.title | default('تصنيف') }}
+                {{ collection.title }}
               </h3>
-              {% if widget.data.show_products_count and block.data.products_count %}
+              {% if widget.data.show_products_count and collection.productsCount %}
                 <span class="text-sm text-gray-500">
-                  {{ block.data.products_count }} {{t("collection.products_count")}}
+                  {{ collection.productsCount }} {{t("collection.products_count")}}
                 </span>
               {% endif %}
             </div>
           {% endif %}
         </a>
       {% else %}
-        {# Placeholder collections if no blocks #}
+        {# Placeholder collections if empty #}
         {% for i in range(1, 5) %}
           <div class="{% if isCircle %}text-center{% endif %}">
             <div class="{% if isCircle %}w-32 h-32 md:w-40 md:h-40 mx-auto rounded-full{% else %}aspect-square rounded-xl{% endif %} bg-gray-200 animate-pulse"></div>

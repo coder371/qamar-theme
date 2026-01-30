@@ -14,7 +14,7 @@
     "header_menu": {
       "type": "menu",
       "label": "القائمة الرئيسية",
-      "default": "header"
+      "default": "header-menu"
     },
     "show_search": {
       "type": "boolean",

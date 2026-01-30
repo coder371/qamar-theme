@@ -33,6 +33,18 @@ ui/
 {% ui "modal.njk", id="search-modal", title="البحث" %}
 ```
 
+> **مهم:** داخل مكون UI، يجب الوصول للبيانات الممررة عبر كائن `data`.
+>
+> مثال: عند تمرير `product=item`، يتم الوصول إليه داخل المكون عبر `data.product`:
+> ```nunjucks
+> {# في الويدجت #}
+> {% ui "product-card.njk", product=item %}
+>
+> {# داخل product-card.njk #}
+> {% set product = data.product %}
+> {{ product.title }}
+> ```
+
 ---
 
 ## أمثلة المكونات

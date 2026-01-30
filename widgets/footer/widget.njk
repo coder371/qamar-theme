@@ -12,7 +12,7 @@
           {% endif %}
         {% endif %}
         <p class="text-gray-400 text-sm mb-4">
-          {{ widget.data.description | default(store.description) | default('متجرك المفضل للتسوق الإلكتروني') }}
+          {{ widget.data.description | default(store.description) | default('متجرك المفضل للتسوق الإلكتروني') | safe }}
         </p>
 
         {# Social Media #}

@@ -68,6 +68,11 @@ widgets/
 }
 ```
 
+> **مهم:** عند استخدام متغير من نوع `text` في ملف `.njk`، يجب إضافة فلتر `| safe` لعرض المحتوى بشكل صحيح:
+> ```nunjucks
+> {{ widget.data.description | safe }}
+> ```
+
 ### `number` - رقم
 
 ```json
@@ -158,10 +163,14 @@ widgets/
   "main_menu": {
     "type": "menu",
     "label": "القائمة الرئيسية",
-    "default": "header"
+    "default": "header-menu"
   }
 }
 ```
+
+> **مهم:** القيمة الافتراضية لنوع `menu` يجب أن تكون:
+> - `header-menu` للقوائم في الهيدر
+> - `footer-menu` للقوائم في الفوتر
 
 ### `products` - منتجات
 
@@ -585,6 +594,99 @@ widgets/
 | `media` | صورة/وسائط | — |
 | `menu` | قائمة روابط | — |
 | `products` | منتجات | — |
+| `collections` | مجموعات/تصنيفات | — |
+
+---
+
+## بيانات نوع `collections`
+
+عند استخدام نوع `collections` في السكيما، البيانات ترجع كمصفوفة بالشكل التالي:
+
+```json
+[
+  {
+    "_id": "696fd3dabebcd86b6155d718",
+    "title": "مجموعة 1",
+    "handle": "collection-1",
+    "image": {
+      "fileUrl": "https://cdn.qumra.cloud/media/.../image.webp"
+    }
+  },
+  {
+    "_id": "696fd3dabebcd86b6155d719",
+    "title": "مجموعة 2",
+    "handle": "collection-2",
+    "image": {
+      "fileUrl": "https://cdn.qumra.cloud/media/.../image2.webp"
+    }
+  }
+]
+```
+
+### استخدام في القالب
+
+```nunjucks
+{% for collection in widget.data.collections %}
+  <a href="/collections/{{ collection.handle }}">
+    <img src="{{ collection.image.fileUrl }}" alt="{{ collection.title }}">
+    <h3>{{ collection.title }}</h3>
+  </a>
+{% endfor %}
+```
+
+---
+
+## بيانات نوع `products`
+
+عند استخدام نوع `products` في السكيما، البيانات ترجع كمصفوفة بالشكل التالي:
+
+```json
+[
+  {
+    "_id": "697b196df00862d42edd51dd",
+    "title": "قميص قطني أبيض",
+    "slug": "قميص-قطني-أبيض-33",
+    "description": "قميص قطني عالي الجودة",
+    "tags": [],
+    "quantity": 50,
+    "status": "active",
+    "images": [
+      {
+        "fileUrl": "https://cdn.qumra.cloud/media/.../image.webp"
+      }
+    ],
+    "collections": [],
+    "pricing": {
+      "price": 120,
+      "compareAtPrice": 150
+    },
+    "views": 0,
+    "allowBackorder": false,
+    "trackQuantity": false,
+    "reviewsCount": 0,
+    "averageRating": 0,
+    "variantsCount": 0,
+    "options": []
+  }
+]
+```
+
+### استخدام في القالب
+
+```nunjucks
+{% for product in widget.data.products %}
+  <a href="/products/{{ product.slug }}">
+    {% if product.images | length %}
+      <img src="{{ product.images[0].fileUrl }}" alt="{{ product.title }}">
+    {% endif %}
+    <h3>{{ product.title }}</h3>
+    <p>{{ product.pricing.price | money }}</p>
+    {% if product.pricing.compareAtPrice %}
+      <del>{{ product.pricing.compareAtPrice | money }}</del>
+    {% endif %}
+  </a>
+{% endfor %}
+```
 
 ---
 

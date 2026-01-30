@@ -20,7 +20,7 @@
       </h1>
 
       <p class="text-gray-500 mb-8">
-        {{ widget.data.message | default('عذراً، الصفحة التي تبحث عنها غير موجودة أو تم نقلها.') }}
+        {{ widget.data.message | default('عذراً، الصفحة التي تبحث عنها غير موجودة أو تم نقلها.') | safe }}
       </p>
 
       {# Search #}

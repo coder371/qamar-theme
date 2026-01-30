@@ -11,6 +11,10 @@
       "label": "العنوان الفرعي",
       "default": "اكتشفي مجموعاتنا المتنوعة"
     },
+    "collections": {
+      "type": "collections",
+      "label": "المجموعات"
+    },
     "layout": {
       "type": "select",
       "label": "شكل العرض",
@@ -35,31 +39,6 @@
       "type": "boolean",
       "label": "إظهار عدد المنتجات",
       "default": true
-    }
-  },
-  "blocks": {
-    "collection": {
-      "name": "تصنيف",
-      "settings": {
-        "title": {
-          "type": "string",
-          "label": "العنوان"
-        },
-        "image": {
-          "type": "media",
-          "label": "الصورة"
-        },
-        "url": {
-          "type": "string",
-          "label": "الرابط",
-          "default": "/collection/"
-        },
-        "products_count": {
-          "type": "number",
-          "label": "عدد المنتجات",
-          "default": 0
-        }
-      }
     }
   },
   "presets": [

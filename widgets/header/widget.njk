@@ -42,7 +42,7 @@
 
         <!-- Desktop Navigation -->
         <nav class="hidden lg:flex items-center gap-6">
-          {% set menuItems = widget.data.header_menu or [] %}
+          {% set menuItems = widget.data.header_menu.items | default(widget.data.header_menu) | default([]) %}
           {% for item in menuItems %}
           {% if loop.index0 < 5 %}
           <a href="{{ item.url | default('#') }}" class="text-gray-700 hover:text-primary font-medium transition-colors">
@@ -95,6 +95,6 @@
 </div>
 
 <!-- Include UI Components -->
-{% ui "sidebar.njk", menu=widget.data.header_menu %}
+{% ui "sidebar.njk", menu=widget.data.header_menu.items | default(widget.data.header_menu) | default([]) %}
 {% ui "search.njk" %}
 {% ui "cart.njk" %}

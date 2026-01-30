@@ -373,9 +373,137 @@ const CartManager = BaseManager.create({
         onSuccess: (data) => {
           this.updateUI(data);
           EventBus.emit('cart:updated', data);
+          // Re-render cart items
+          this._renderCartItems(data);
+          // Open cart sidebar via Alpine
+          const appEl = document.body;
+          if (appEl._x_dataStack && appEl._x_dataStack[0]) {
+            appEl._x_dataStack[0].toggleModal('cart');
+          }
         }
       }
     );
+  },
+
+  /**
+   * Render cart items in sidebar
+   */
+  _renderCartItems(cart) {
+    const cartContainer = document.querySelector('[data-cart-container]');
+    if (!cartContainer) return;
+
+    const itemsContainer = cartContainer.querySelector('.flex-1.overflow-y-auto');
+    if (!itemsContainer) return;
+
+    if (!cart.items || cart.items.length === 0) {
+      // Show empty cart
+      itemsContainer.innerHTML = `
+        <div class="flex flex-col items-center justify-center h-full text-center p-8">
+          <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6">
+            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-gray-800 mb-2">السلة فارغة</h3>
+          <p class="text-gray-500 mb-6">لم تقم بإضافة أي منتجات بعد</p>
+          <a href="/products" class="inline-flex items-center justify-center px-6 py-3 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 transition-colors">
+            تصفح المنتجات
+          </a>
+        </div>
+      `;
+      // Remove footer
+      const footer = cartContainer.querySelector('.border-t.border-gray-200.bg-gray-50');
+      if (footer) footer.remove();
+      return;
+    }
+
+    // Build items HTML
+    const itemsHtml = cart.items.map(item => this._buildCartItemHtml(item)).join('');
+    itemsContainer.innerHTML = `<div class="p-4 space-y-4">${itemsHtml}</div>`;
+
+    // Ensure footer exists
+    let footer = cartContainer.querySelector('.border-t.border-gray-200.bg-gray-50');
+    if (!footer) {
+      footer = document.createElement('div');
+      footer.className = 'border-t border-gray-200 bg-gray-50 p-4 space-y-4';
+      footer.innerHTML = `
+        <div class="flex items-center justify-between">
+          <span class="text-lg font-bold text-gray-800">الإجمالي</span>
+          <span class="text-xl font-bold text-primary" data-cart-total data-money="${cart.totalPrice}">${this.formatMoney(cart.totalPrice)}</span>
+        </div>
+        <div class="space-y-3">
+          <a href="/checkout" class="flex items-center justify-center gap-2 w-full py-3 px-6 bg-primary hover:bg-primary/90 text-white rounded-xl font-medium transition-colors">
+            <span>إتمام الطلب</span>
+            <svg class="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+            </svg>
+          </a>
+          <button onclick="closeModal()" class="flex items-center justify-center w-full py-3 px-6 border border-gray-200 hover:bg-gray-100 text-gray-700 rounded-xl font-medium transition-colors">
+            متابعة التسوق
+          </button>
+        </div>
+      `;
+      cartContainer.appendChild(footer);
+    }
+  },
+
+  /**
+   * Build HTML for a single cart item
+   */
+  _buildCartItemHtml(item) {
+    const productData = item.productData || {};
+    const handle = productData.handle || item.productId;
+    const imageUrl = productData.image?.fileUrl || '/placeholder.jpg';
+    const title = productData.title || 'منتج';
+    const hasComparePrice = item.compareAtPrice && item.compareAtPrice > item.price;
+    const showTrash = item.quantity <= 1;
+
+    return `
+      <div class="cart-item flex gap-4 p-3 bg-gray-50 rounded-xl relative group" data-cart-item="${item._id}">
+        <div class="cart-item-loading absolute inset-0 bg-white/80 rounded-xl flex items-center justify-center z-10 opacity-0 pointer-events-none transition-opacity">
+          <svg class="w-6 h-6 text-primary animate-spin" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+          </svg>
+        </div>
+        <a href="/products/${handle}" class="flex-shrink-0">
+          <img src="${imageUrl}" alt="${title}" class="w-20 h-20 object-cover rounded-lg">
+        </a>
+        <div class="flex-1 min-w-0">
+          <a href="/products/${handle}" class="block">
+            <h4 class="font-medium text-gray-800 line-clamp-2 hover:text-primary transition-colors">${title}</h4>
+          </a>
+          <div class="flex items-center gap-2 mt-2">
+            <span class="text-primary font-bold" data-money="${item.price}">${this.formatMoney(item.price)}</span>
+            ${hasComparePrice ? `<span class="text-gray-400 text-sm line-through" data-money="${item.compareAtPrice}">${this.formatMoney(item.compareAtPrice)}</span>` : ''}
+          </div>
+          <div class="flex items-center justify-between mt-3">
+            <div class="flex items-center border border-gray-200 rounded-lg bg-white">
+              <button onclick="Qumra.cart.decrement('${item._id}')" class="decrement-btn w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-r-lg transition-colors" data-item-decrement="${item._id}" title="تقليل">
+                <svg class="w-4 h-4 text-red-500 icon-trash ${showTrash ? '' : 'hidden'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+                <svg class="w-4 h-4 icon-minus ${showTrash ? 'hidden' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                </svg>
+              </button>
+              <span class="w-10 text-center font-medium text-gray-800" data-item-qty="${item._id}">${item.quantity}</span>
+              <button onclick="Qumra.cart.increment('${item._id}')" class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-l-lg transition-colors" title="زيادة">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+              </button>
+            </div>
+            <span class="text-sm font-medium text-gray-600" data-item-total="${item._id}" data-money="${item.totalPrice}">${this.formatMoney(item.totalPrice)}</span>
+          </div>
+        </div>
+        <button onclick="Qumra.cart.remove('${item._id}')" class="absolute top-2 left-2 p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors opacity-0 group-hover:opacity-100" title="حذف">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    `;
   },
 
   /**
@@ -483,19 +611,20 @@ const CartManager = BaseManager.create({
         loadingSelector: `[data-cart-item="${itemId}"]`,
         successMessage: QumraConfig.messages.cart.removed,
         onSuccess: async (data) => {
-          // Animate removal
+          // Remove element from DOM with animation
           const itemEl = document.querySelector(`[data-cart-item="${itemId}"]`);
           if (itemEl) {
             itemEl.classList.add(QumraConfig.classes.removing);
             await this._delay(QumraConfig.defaults.animationDuration);
+            itemEl.remove();
           }
 
           this.updateUI(data);
           EventBus.emit('cart:updated', data);
 
-          // Reload if cart is empty
+          // Re-render if empty
           if (!data.items || data.items.length === 0) {
-            window.location.reload();
+            this._renderCartItems(data);
           }
         }
       }

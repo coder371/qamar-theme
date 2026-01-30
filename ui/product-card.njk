@@ -3,7 +3,7 @@
   Usage: {% ui "product-card.njk", product=product %}
 #}
 
-{% set product = product %}
+{% set product = data.product %}
 {% set hasDiscount = product.pricing.compareAtPrice and product.pricing.compareAtPrice > product.pricing.price %}
 {% set discountPercent = ((product.pricing.compareAtPrice - product.pricing.price) / product.pricing.compareAtPrice * 100) | round if hasDiscount else 0 %}
 {% set isNew = product.isNew | default(false) %}
@@ -12,7 +12,7 @@
 <div class="product-card group" data-product-id="{{ product._id }}">
   {# Image Container #}
   <div class="product-image relative overflow-hidden bg-gray-100">
-    <a href="/product/{{ product.handle }}">
+    <a href="/product/{{ product.slug }}">
       {% if product.images[0].fileUrl %}
         <img
           src="{{ product.images[0].fileUrl }}"
@@ -79,7 +79,7 @@
   <div class="p-4">
     {# Title #}
     <h3 class="font-medium text-gray-900 mb-2 line-clamp-2 min-h-[2.5rem]">
-      <a href="/product/{{ product.handle }}" class="hover:text-primary transition-colors">
+      <a href="/product/{{ product.slug }}" class="hover:text-primary transition-colors">
         {{ product.title }}
       </a>
     </h3>

@@ -133,7 +133,7 @@
               </svg>
               <div>
                 <h4 class="font-medium mb-1">الشحن والتوصيل</h4>
-                <p class="text-gray-600 text-sm">{{ widget.data.shipping_text | default('نوفر الشحن لجميع مناطق المملكة. التوصيل خلال 2-5 أيام عمل.') }}</p>
+                <p class="text-gray-600 text-sm">{{ widget.data.shipping_text | default('نوفر الشحن لجميع مناطق المملكة. التوصيل خلال 2-5 أيام عمل.') | safe }}</p>
               </div>
             </div>
 
@@ -208,7 +208,7 @@
             </svg>
           </button>
           <div class="accordion-content px-4 pb-4">
-            <p class="text-gray-600">{{ widget.data.shipping_text | default('نوفر الشحن لجميع مناطق المملكة.') }}</p>
+            <p class="text-gray-600">{{ widget.data.shipping_text | default('نوفر الشحن لجميع مناطق المملكة.') | safe }}</p>
           </div>
         </div>
       {% endif %}
