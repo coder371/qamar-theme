@@ -1,4 +1,21 @@
 {
   "layout": "layout",
-  "widgets": []
+  "allowAdd": true,
+  "allowRemove": true,
+  "allowReorder": true,
+  "widgets": [
+    {
+      "name": "أحدث المنتجات",
+      "widget": "featured-products",
+      "settings": {
+        "title": "أحدث المنتجات",
+        "subtitle": "اكتشفي آخر ما وصلنا",
+        "layout": "grid",
+        "columns_desktop": "4",
+        "columns_mobile": "2",
+        "show_view_all": false,
+        "view_all_url": "/products"
+      }
+    }
+  ]
 }

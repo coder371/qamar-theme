@@ -1,20 +1,20 @@
 {
-  "name": "Newsletter",
+  "name": "النشرة البريدية",
   "settings": {
     "title": {
       "type": "string",
       "label": "العنوان",
-      "default": "اشترك في النشرة البريدية"
+      "default": "اشتركي في نشرتنا البريدية"
     },
     "subtitle": {
       "type": "string",
       "label": "العنوان الفرعي",
-      "default": "احصل على أحدث العروض والمنتجات"
+      "default": "احصلي على أحدث العروض والمنتجات الجديدة"
     },
     "placeholder": {
       "type": "string",
       "label": "نص الحقل",
-      "default": "أدخل بريدك الإلكتروني"
+      "default": "أدخلي بريدك الإلكتروني"
     },
     "button_text": {
       "type": "string",
@@ -27,9 +27,18 @@
       "default": "gradient",
       "options": [
         { "value": "gradient", "label": "تدرج لوني" },
-        { "value": "solid", "label": "لون واحد" },
-        { "value": "white", "label": "أبيض" }
+        { "value": "solid", "label": "لون ثابت" },
+        { "value": "image", "label": "صورة" }
       ]
+    },
+    "background_color": {
+      "type": "color",
+      "label": "لون الخلفية",
+      "default": "#9C27B0"
+    },
+    "background_image": {
+      "type": "media",
+      "label": "صورة الخلفية"
     },
     "success_message": {
       "type": "string",
@@ -39,8 +48,8 @@
   },
   "presets": [
     {
-      "category": "Marketing",
-      "name": "Newsletter"
+      "category": "الصفحة الرئيسية",
+      "name": "النشرة البريدية"
     }
   ]
 }

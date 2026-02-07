@@ -1,5 +1,5 @@
 {
-  "name": "Hero Slider",
+  "name": "السلايدر الرئيسي",
   "settings": {
     "autoplay": {
       "type": "boolean",
@@ -15,12 +15,12 @@
     },
     "show_arrows": {
       "type": "boolean",
-      "label": "إظهار الأسهم",
+      "label": "إظهار أسهم التنقل",
       "default": true
     },
     "show_dots": {
       "type": "boolean",
-      "label": "إظهار النقاط",
+      "label": "إظهار نقاط التنقل",
       "default": true
     },
     "height": {
@@ -28,16 +28,16 @@
       "label": "ارتفاع السلايدر",
       "default": "large",
       "options": [
-        { "value": "small", "label": "صغير (400px)" },
-        { "value": "medium", "label": "متوسط (500px)" },
-        { "value": "large", "label": "كبير (600px)" },
+        { "value": "small", "label": "صغير" },
+        { "value": "medium", "label": "متوسط" },
+        { "value": "large", "label": "كبير" },
         { "value": "full", "label": "كامل الشاشة" }
       ]
     }
   },
   "blocks": {
     "slide": {
-      "name": "سلايد",
+      "name": "شريحة",
       "settings": {
         "image": {
           "type": "media",
@@ -72,9 +72,9 @@
           "label": "موضع النص",
           "default": "center",
           "options": [
-            { "value": "start", "label": "البداية" },
-            { "value": "center", "label": "الوسط" },
-            { "value": "end", "label": "النهاية" }
+            { "value": "start", "label": "بداية" },
+            { "value": "center", "label": "وسط" },
+            { "value": "end", "label": "نهاية" }
           ]
         },
         "text_color": {
@@ -82,14 +82,9 @@
           "label": "لون النص",
           "default": "#FFFFFF"
         },
-        "overlay_color": {
-          "type": "color",
-          "label": "لون التغطية",
-          "default": "#000000"
-        },
         "overlay_opacity": {
           "type": "range",
-          "label": "شفافية التغطية",
+          "label": "شفافية التعتيم",
           "default": 30,
           "min": 0,
           "max": 100,
@@ -102,7 +97,7 @@
   "presets": [
     {
       "category": "Hero",
-      "name": "Hero Slider"
+      "name": "السلايدر الرئيسي"
     }
   ]
 }

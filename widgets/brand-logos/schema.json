@@ -1,69 +1,51 @@
 {
-  "name": "Brand Logos",
+  "name": "شعارات الماركات",
   "settings": {
     "title": {
       "type": "string",
-      "label": "العنوان"
+      "label": "العنوان",
+      "default": "ماركات موثوقة"
     },
     "layout": {
       "type": "select",
-      "label": "التخطيط",
+      "label": "نمط العرض",
       "default": "slider",
       "options": [
-        {
-          "value": "slider",
-          "label": "سلايدر"
-        },
-        {
-          "value": "grid",
-          "label": "شبكة"
-        }
+        { "value": "slider", "label": "سلايدر" },
+        { "value": "grid", "label": "شبكة" }
       ]
     },
     "grayscale": {
       "type": "boolean",
-      "label": "تدرج رمادي",
+      "label": "تأثير رمادي",
       "default": true
-    },
-    "background": {
-      "type": "select",
-      "label": "لون الخلفية",
-      "default": "white",
-      "options": [
-        {
-          "value": "white",
-          "label": "أبيض"
-        },
-        {
-          "value": "gray",
-          "label": "رمادي"
-        }
-      ]
     }
   },
   "blocks": {
     "brand": {
-      "name": "علامة تجارية",
+      "name": "ماركة",
       "settings": {
-        "logo": {
-          "type": "image",
-          "label": "الشعار"
+        "image": {
+          "type": "media",
+          "label": "شعار الماركة"
         },
         "name": {
           "type": "string",
-          "label": "الاسم"
+          "label": "اسم الماركة",
+          "default": ""
         },
         "link": {
           "type": "string",
-          "label": "الرابط"
+          "label": "الرابط",
+          "default": ""
         }
       }
     }
   },
   "presets": [
     {
-      "category": "Social Proof",
-      "name": "Brand Logos"
+      "category": "الصفحة الرئيسية",
+      "name": "شعارات الماركات"
     }
   ]
 }

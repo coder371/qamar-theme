@@ -1,14 +1,17 @@
 {
   "layout": "layout",
+  "allowAdd": true,
+  "allowRemove": true,
+  "allowReorder": true,
   "widgets": [
     {
-      "name": "سلة التسوق",
+      "name": "صفحة السلة",
       "widget": "cart-page",
       "settings": {
-        "show_product_image": true,
         "show_coupon": true,
-        "show_shipping_estimate": true,
-        "continue_shopping_url": "/products"
+        "show_savings": true,
+        "continue_shopping_url": "/",
+        "checkout_url": "/checkout"
       }
     }
   ]

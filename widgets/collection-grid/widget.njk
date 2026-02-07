@@ -1,97 +1,85 @@
-{# Grid columns classes #}
-{% set cols = {
-  '3': 'grid-cols-2 md:grid-cols-3',
-  '4': 'grid-cols-2 md:grid-cols-4',
-  '5': 'grid-cols-2 md:grid-cols-5',
-  '6': 'grid-cols-3 md:grid-cols-6'
-}[widget.data.columns] | default('grid-cols-2 md:grid-cols-4') %}
+{% set layout = widget.data.layout | default('circle') %}
+{% set columns = widget.data.columns | default('6') %}
+{% set collections = widget.data.collections | default([]) %}
 
-{% set isCircle = widget.data.layout == 'circle' %}
-
-<section class="py-12">
+<section class="py-12 md:py-16">
   <div class="container mx-auto px-4">
+
     {# Section Header #}
     {% if widget.data.title or widget.data.subtitle %}
-      <div class="text-center mb-8">
+      <div class="text-center mb-10">
         {% if widget.data.title %}
-          <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-            {{ widget.data.title }}
-          </h2>
+          <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-3">{{ widget.data.title }}</h2>
         {% endif %}
         {% if widget.data.subtitle %}
-          <p class="text-gray-500">
-            {{ widget.data.subtitle }}
-          </p>
+          <p class="text-gray-500 text-lg">{{ widget.data.subtitle }}</p>
         {% endif %}
+        <div class="w-16 h-1 mx-auto mt-4 rounded-full" style="background-color: #9C27B0;"></div>
       </div>
     {% endif %}
 
     {# Collections Grid #}
-    <div class="grid {{ cols }} gap-4 md:gap-6">
-      {% for collection in widget.data.collections %}
-        <a
-          href="/collections/{{ collection.handle }}"
-          class="group relative block overflow-hidden {% if isCircle %}text-center{% endif %}">
+    {% if collections | length > 0 %}
+      <div class="grid grid-cols-2 gap-4 md:gap-6
+        {% if columns == '3' %} md:grid-cols-3
+        {% elif columns == '4' %} md:grid-cols-4
+        {% elif columns == '5' %} md:grid-cols-5
+        {% else %} md:grid-cols-6
+        {% endif %}">
 
-          {# Image #}
-          <div class="{% if isCircle %}w-32 h-32 md:w-40 md:h-40 mx-auto rounded-full{% else %}aspect-square rounded-xl{% endif %} overflow-hidden bg-gray-100">
-            {% if collection.image and collection.image.fileUrl %}
-              <img
-                src="{{ collection.image.fileUrl }}"
-                alt="{{ collection.title }}"
-                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                loading="lazy">
-            {% else %}
-              <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-secondary/20">
-                <svg class="w-12 h-12 text-primary/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                </svg>
-              </div>
-            {% endif %}
+        {% for collection in collections %}
+          <a href="/collections/{{ collection.handle }}" class="group block text-center">
 
-            {# Overlay (for grid style) #}
-            {% if not isCircle %}
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-
-              {# Content on image #}
-              <div class="absolute inset-0 flex flex-col items-center justify-end p-4 text-white">
-                <h3 class="text-lg md:text-xl font-bold mb-1">
-                  {{ collection.title }}
-                </h3>
-                {% if widget.data.show_products_count and collection.productsCount %}
-                  <span class="text-sm opacity-80">
-                    {{ collection.productsCount }} {{t("collection.products_count")}}
-                  </span>
+            {% if layout == 'circle' %}
+              <div class="aspect-square rounded-full overflow-hidden mx-auto mb-3 w-full max-w-[180px] border-2 border-transparent group-hover:border-[#F48FB1] transition-all duration-300">
+                {% if collection.image %}
+                  <img src="{{ collection.image.fileUrl }}" alt="{{ collection.title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+                {% else %}
+                  <div class="w-full h-full bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
+                    <svg class="w-10 h-10 text-[#9C27B0] opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                  </div>
                 {% endif %}
               </div>
-            {% endif %}
-          </div>
+              <h3 class="text-sm md:text-base font-semibold text-gray-700 group-hover:text-[#9C27B0] transition-colors duration-300">{{ collection.title }}</h3>
 
-          {# Title below (for circle style) #}
-          {% if isCircle %}
-            <div class="mt-4">
-              <h3 class="font-semibold text-gray-900 group-hover:text-primary transition-colors">
-                {{ collection.title }}
-              </h3>
-              {% if widget.data.show_products_count and collection.productsCount %}
-                <span class="text-sm text-gray-500">
-                  {{ collection.productsCount }} {{t("collection.products_count")}}
-                </span>
-              {% endif %}
-            </div>
-          {% endif %}
-        </a>
-      {% else %}
-        {# Placeholder collections if empty #}
-        {% for i in range(1, 5) %}
-          <div class="{% if isCircle %}text-center{% endif %}">
-            <div class="{% if isCircle %}w-32 h-32 md:w-40 md:h-40 mx-auto rounded-full{% else %}aspect-square rounded-xl{% endif %} bg-gray-200 animate-pulse"></div>
-            <div class="mt-4">
-              <div class="h-4 bg-gray-200 rounded w-2/3 mx-auto animate-pulse"></div>
-            </div>
-          </div>
+            {% elif layout == 'square' %}
+              <div class="aspect-square rounded-xl overflow-hidden relative">
+                {% if collection.image %}
+                  <img src="{{ collection.image.fileUrl }}" alt="{{ collection.title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+                {% else %}
+                  <div class="w-full h-full bg-gradient-to-br from-purple-100 to-pink-100"></div>
+                {% endif %}
+                <div class="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
+                  <h3 class="text-white text-sm md:text-lg font-bold">{{ collection.title }}</h3>
+                </div>
+              </div>
+
+            {% elif layout == 'card' %}
+              <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+                <div class="aspect-[4/3] overflow-hidden">
+                  {% if collection.image %}
+                    <img src="{{ collection.image.fileUrl }}" alt="{{ collection.title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+                  {% else %}
+                    <div class="w-full h-full bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
+                      <svg class="w-10 h-10 text-[#9C27B0] opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                      </svg>
+                    </div>
+                  {% endif %}
+                </div>
+                <div class="p-3 text-center">
+                  <h3 class="text-sm md:text-base font-semibold text-gray-700 group-hover:text-[#9C27B0] transition-colors duration-300">{{ collection.title }}</h3>
+                </div>
+              </div>
+            {% endif %}
+
+          </a>
         {% endfor %}
-      {% endfor %}
-    </div>
+
+      </div>
+    {% endif %}
+
   </div>
 </section>

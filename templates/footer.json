@@ -1,20 +1,17 @@
 {
   "title": "Footer Group",
-  "allowAdd": false,
-  "allowRemove": false,
-  "allowReorder": false,
+  "allowAdd": true,
+  "allowRemove": true,
+  "allowReorder": true,
   "widgets": [
     {
-      "name": "footer",
+      "name": "الفوتر الرئيسي",
       "widget": "footer",
       "settings": {
         "show_logo": true,
-        "description": "متجرك المفضل لمستحضرات التجميل والأزياء النسائية",
+        "description": "متجرك المفضل للتسوق الإلكتروني. نوفر لك أفضل المنتجات بأعلى جودة وأفضل الأسعار.",
         "menu_1_title": "روابط سريعة",
         "menu_2_title": "خدمة العملاء",
-        "show_newsletter": true,
-        "newsletter_title": "اشتركي في نشرتنا البريدية",
-        "newsletter_text": "احصلي على آخر العروض والمنتجات الجديدة",
         "show_social": true,
         "copyright_text": "جميع الحقوق محفوظة",
         "background_color": "#1a1a2e"

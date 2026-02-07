@@ -1,23 +1,14 @@
 {
-  "name": "Banner Grid",
+  "name": "شبكة البانرات",
   "settings": {
     "layout": {
       "type": "select",
-      "label": "تخطيط الشبكة",
+      "label": "عدد الأعمدة",
       "default": "2",
       "options": [
-        {
-          "value": "2",
-          "label": "2 بانر"
-        },
-        {
-          "value": "3",
-          "label": "3 بانرات"
-        },
-        {
-          "value": "4",
-          "label": "4 بانرات"
-        }
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
       ]
     },
     "gap": {
@@ -25,37 +16,9 @@
       "label": "المسافة بين البانرات",
       "default": "4",
       "options": [
-        {
-          "value": "2",
-          "label": "صغيرة"
-        },
-        {
-          "value": "4",
-          "label": "متوسطة"
-        },
-        {
-          "value": "6",
-          "label": "كبيرة"
-        }
-      ]
-    },
-    "aspect_ratio": {
-      "type": "select",
-      "label": "نسبة العرض للارتفاع",
-      "default": "3/2",
-      "options": [
-        {
-          "value": "1/1",
-          "label": "مربع"
-        },
-        {
-          "value": "3/2",
-          "label": "3:2"
-        },
-        {
-          "value": "16/9",
-          "label": "16:9"
-        }
+        { "value": "2", "label": "صغيرة" },
+        { "value": "4", "label": "متوسطة" },
+        { "value": "6", "label": "كبيرة" }
       ]
     }
   },
@@ -64,7 +27,7 @@
       "name": "بانر",
       "settings": {
         "image": {
-          "type": "image",
+          "type": "media",
           "label": "الصورة"
         },
         "title": {
@@ -80,35 +43,20 @@
           "label": "الرابط"
         },
         "overlay_opacity": {
-          "type": "select",
+          "type": "range",
           "label": "شفافية الطبقة",
-          "default": "30",
-          "options": [
-            {
-              "value": "0",
-              "label": "بدون"
-            },
-            {
-              "value": "20",
-              "label": "خفيفة"
-            },
-            {
-              "value": "30",
-              "label": "متوسطة"
-            },
-            {
-              "value": "50",
-              "label": "داكنة"
-            }
-          ]
+          "default": 30,
+          "min": 0,
+          "max": 100,
+          "step": 10
         }
       }
     }
   },
   "presets": [
     {
-      "category": "Marketing",
-      "name": "Banner Grid"
+      "category": "الصفحة الرئيسية",
+      "name": "شبكة البانرات"
     }
   ]
 }

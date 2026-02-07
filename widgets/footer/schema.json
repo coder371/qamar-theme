@@ -1,5 +1,5 @@
 {
-  "name": "Footer",
+  "name": "الفوتر الرئيسي",
   "settings": {
     "show_logo": {
       "type": "boolean",
@@ -9,7 +9,7 @@
     "description": {
       "type": "text",
       "label": "وصف المتجر",
-      "default": "متجرك المفضل للتسوق الإلكتروني"
+      "default": "متجرك المفضل للتسوق الإلكتروني. نوفر لك أفضل المنتجات بأعلى جودة وأفضل الأسعار."
     },
     "footer_menu_1": {
       "type": "menu",
@@ -31,54 +31,34 @@
       "label": "عنوان القائمة الثانية",
       "default": "خدمة العملاء"
     },
-    "show_newsletter": {
-      "type": "boolean",
-      "label": "إظهار الاشتراك في النشرة",
-      "default": true
-    },
-    "newsletter_title": {
-      "type": "string",
-      "label": "عنوان النشرة",
-      "default": "اشترك في نشرتنا البريدية"
-    },
-    "newsletter_text": {
-      "type": "string",
-      "label": "نص النشرة",
-      "default": "احصل على آخر العروض والمنتجات الجديدة"
-    },
     "show_social": {
       "type": "boolean",
-      "label": "إظهار وسائل التواصل",
+      "label": "إظهار التواصل الاجتماعي",
       "default": true
-    },
-    "facebook_url": {
-      "type": "string",
-      "label": "رابط Facebook",
-      "default": ""
     },
     "instagram_url": {
       "type": "string",
-      "label": "رابط Instagram",
+      "label": "Instagram",
       "default": ""
     },
     "twitter_url": {
       "type": "string",
-      "label": "رابط Twitter",
+      "label": "Twitter / X",
       "default": ""
     },
     "tiktok_url": {
       "type": "string",
-      "label": "رابط TikTok",
+      "label": "TikTok",
       "default": ""
     },
     "snapchat_url": {
       "type": "string",
-      "label": "رابط Snapchat",
+      "label": "Snapchat",
       "default": ""
     },
     "whatsapp_number": {
       "type": "string",
-      "label": "رقم WhatsApp",
+      "label": "WhatsApp",
       "default": ""
     },
     "copyright_text": {
@@ -94,8 +74,8 @@
   },
   "presets": [
     {
-      "category": "Footer",
-      "name": "Footer"
+      "category": "الفوتر",
+      "name": "الفوتر الرئيسي"
     }
   ]
 }

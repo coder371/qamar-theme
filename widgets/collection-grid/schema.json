@@ -1,5 +1,5 @@
 {
-  "name": "Collection Grid",
+  "name": "شبكة التصنيفات",
   "settings": {
     "title": {
       "type": "string",
@@ -9,42 +9,59 @@
     "subtitle": {
       "type": "string",
       "label": "العنوان الفرعي",
-      "default": "اكتشفي مجموعاتنا المتنوعة"
+      "default": ""
     },
     "collections": {
       "type": "collections",
-      "label": "المجموعات"
+      "label": "التصنيفات"
     },
     "layout": {
       "type": "select",
       "label": "شكل العرض",
-      "default": "grid",
+      "default": "circle",
       "options": [
-        { "value": "grid", "label": "شبكة مربعة" },
-        { "value": "circle", "label": "دوائر" }
+        {
+          "value": "circle",
+          "label": "دائري"
+        },
+        {
+          "value": "square",
+          "label": "مربع"
+        },
+        {
+          "value": "card",
+          "label": "بطاقة"
+        }
       ]
     },
     "columns": {
       "type": "select",
       "label": "عدد الأعمدة",
-      "default": "4",
+      "default": "6",
       "options": [
-        { "value": "3", "label": "3 أعمدة" },
-        { "value": "4", "label": "4 أعمدة" },
-        { "value": "5", "label": "5 أعمدة" },
-        { "value": "6", "label": "6 أعمدة" }
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
       ]
-    },
-    "show_products_count": {
-      "type": "boolean",
-      "label": "إظهار عدد المنتجات",
-      "default": true
     }
   },
   "presets": [
     {
-      "category": "Collections",
-      "name": "Collection Grid"
+      "category": "الصفحة الرئيسية",
+      "name": "شبكة التصنيفات"
     }
   ]
 }

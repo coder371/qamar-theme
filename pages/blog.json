@@ -1,4 +1,33 @@
 {
   "layout": "layout",
-  "widgets": []
+  "allowAdd": true,
+  "allowRemove": true,
+  "allowReorder": true,
+  "widgets": [
+    {
+      "name": "مقالات المدونة",
+      "widget": "blog-posts",
+      "settings": {
+        "title": "المدونة",
+        "subtitle": "مقالات ونصائح مفيدة",
+        "posts_count": 6,
+        "layout": "grid",
+        "show_date": true,
+        "show_excerpt": true
+      }
+    },
+    {
+      "name": "النشرة البريدية",
+      "widget": "newsletter",
+      "settings": {
+        "title": "لا تفوتي جديدنا",
+        "subtitle": "اشتركي في نشرتنا البريدية لتصلك أحدث المقالات والعروض",
+        "placeholder": "أدخلي بريدك الإلكتروني",
+        "button_text": "اشتراك",
+        "background_style": "gradient",
+        "background_color": "#9C27B0",
+        "success_message": "شكراً لاشتراكك!"
+      }
+    }
+  ]
 }

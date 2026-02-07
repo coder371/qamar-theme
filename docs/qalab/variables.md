@@ -112,7 +112,7 @@
   {% for item in cart.items %}
     <div class="cart-item">
       <img src="{{ item.productData.image.fileUrl }}" alt="{{ item.productData.title }}">
-      <a href="/products/{{ item.productData.handle }}">
+      <a href="/product/{{ item.productData.handle }}">
         {{ item.productData.title }}
       </a>
       <span>{{ item.price | money }} × {{ item.quantity }}</span>
@@ -336,7 +336,7 @@
 
 ```nunjucks
 {# للروابط #}
-<a href="/products/{{ product.handle }}">
+<a href="/product/{{ product.handle }}">
 
 {# للـ API #}
 <button onclick="CartManager.add('{{ product._id }}')">

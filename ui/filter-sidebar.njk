@@ -1,0 +1,114 @@
+{# Shared Filter Sidebar (Desktop) - Used inside collectionFilter() Alpine scope #}
+{# Params: show_sort, filters, hasFilters #}
+
+{# Sort Section #}
+{% if show_sort %}
+  <div class="bg-white rounded-2xl border border-gray-100 p-5">
+    <h3 class="font-semibold text-gray-800 text-sm mb-3 flex items-center gap-2">
+      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"/>
+      </svg>
+      {{t('collection.sort')}}
+    </h3>
+    <div class="space-y-1">
+      <button @click="sortBy('')"
+              class="w-full text-start px-3 py-2 text-sm rounded-lg transition-colors"
+              :class="!currentSort ? 'bg-primary/10 text-primary font-medium' : 'text-gray-600 hover:bg-gray-50'">
+        {{t('collection.all_products')}}
+      </button>
+      <button @click="sortBy('newest')"
+              class="w-full text-start px-3 py-2 text-sm rounded-lg transition-colors"
+              :class="currentSort === 'newest' ? 'bg-primary/10 text-primary font-medium' : 'text-gray-600 hover:bg-gray-50'">
+        {{t('search.newest')}}
+      </button>
+      <button @click="sortBy('price_asc')"
+              class="w-full text-start px-3 py-2 text-sm rounded-lg transition-colors"
+              :class="currentSort === 'price_asc' ? 'bg-primary/10 text-primary font-medium' : 'text-gray-600 hover:bg-gray-50'">
+        {{t('search.price_low_high')}}
+      </button>
+      <button @click="sortBy('price_desc')"
+              class="w-full text-start px-3 py-2 text-sm rounded-lg transition-colors"
+              :class="currentSort === 'price_desc' ? 'bg-primary/10 text-primary font-medium' : 'text-gray-600 hover:bg-gray-50'">
+        {{t('search.price_high_low')}}
+      </button>
+    </div>
+  </div>
+{% endif %}
+
+{# Filters Section #}
+{% if hasFilters %}
+  <div class="bg-white rounded-2xl border border-gray-100 p-5">
+    <h3 class="font-semibold text-gray-800 text-sm mb-4 flex items-center gap-2">
+      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+      </svg>
+      {{t('collection.filter')}}
+    </h3>
+    <div class="space-y-4">
+      {% for filter in filters %}
+        {# Price Range Filter #}
+        {% if filter.inputType == 'range' %}
+          <div x-data="{ open: true }">
+            <button @click="open = !open" class="w-full flex items-center justify-between text-sm font-medium text-gray-700 mb-2">
+              <span>{{ filter.name[localization.language] | default(filter.name.ar) }}</span>
+              <svg class="w-3.5 h-3.5 text-gray-400 transition-transform" :class="open && 'rotate-180'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+            <div x-show="open" x-cloak dir="ltr">
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-xs font-semibold bg-gray-50 text-gray-700 px-2.5 py-1 rounded-lg tabular-nums"
+                      x-text="(+(priceMin) || {{ filter.range.min }}).toLocaleString()"></span>
+                <span class="text-xs text-gray-300">—</span>
+                <span class="text-xs font-semibold bg-gray-50 text-gray-700 px-2.5 py-1 rounded-lg tabular-nums"
+                      x-text="(+(priceMax) || {{ filter.range.max }}).toLocaleString()"></span>
+              </div>
+              <div class="price-slider">
+                <div class="slider-track"></div>
+                <div class="slider-range"
+                     :style="`left: ${((+(priceMin) || {{ filter.range.min }}) - {{ filter.range.min }}) / ({{ filter.range.max }} - {{ filter.range.min }}) * 100}%; right: ${100 - ((+(priceMax) || {{ filter.range.max }}) - {{ filter.range.min }}) / ({{ filter.range.max }} - {{ filter.range.min }}) * 100}%`"></div>
+                <input type="range"
+                       min="{{ filter.range.min }}" max="{{ filter.range.max }}" step="{{ filter.range.step | default(1) }}"
+                       :value="+(priceMin) || {{ filter.range.min }}"
+                       @input="priceMin = Math.min(+$event.target.value, +(priceMax) || {{ filter.range.max }}); $event.target.value = priceMin; _debouncedApplyPrice()">
+                <input type="range"
+                       min="{{ filter.range.min }}" max="{{ filter.range.max }}" step="{{ filter.range.step | default(1) }}"
+                       :value="+(priceMax) || {{ filter.range.max }}"
+                       @input="priceMax = Math.max(+$event.target.value, +(priceMin) || {{ filter.range.min }}); $event.target.value = priceMax; _debouncedApplyPrice()">
+              </div>
+            </div>
+          </div>
+
+        {# Select Filter #}
+        {% elif filter.inputType == 'select' %}
+          <div x-data="{ open: true }">
+            <button @click="open = !open" class="w-full flex items-center justify-between text-sm font-medium text-gray-700 mb-2">
+              <span>{{ filter.name[localization.language] | default(filter.name.ar) }}</span>
+              <svg class="w-3.5 h-3.5 text-gray-400 transition-transform" :class="open && 'rotate-180'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+            <div x-show="open" x-cloak class="space-y-1">
+              {% for item in filter.items %}
+                <label class="flex items-center gap-2.5 py-1 cursor-pointer group">
+                  <input type="checkbox"
+                         :checked="isActive('{{ filter.handle }}', '{{ item.value }}')"
+                         @change="toggleFilter('{{ filter.handle }}', '{{ item.value }}')"
+                         class="w-4 h-4 rounded border-gray-300"
+                         style="accent-color: var(--color-primary);">
+                  <span class="text-sm text-gray-600 group-hover:text-gray-800 transition-colors">
+                    {{ item.label[localization.language] | default(item.label.ar) | default(item.value) }}
+                  </span>
+                </label>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+
+        {% if not loop.last %}
+          <div class="border-t border-gray-100"></div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}

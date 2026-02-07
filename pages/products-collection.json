@@ -1,4 +1,31 @@
 {
   "layout": "layout",
-  "widgets": []
+  "allowAdd": true,
+  "allowRemove": true,
+  "allowReorder": true,
+  "widgets": [
+    {
+      "name": "بانر التصنيف",
+      "widget": "collection-banner",
+      "settings": {
+        "show_description": true,
+        "show_breadcrumb": true,
+        "show_count": true,
+        "height": "small",
+        "overlay_color": "#1a1a2e",
+        "overlay_opacity": 50
+      }
+    },
+    {
+      "name": "منتجات التصنيف",
+      "widget": "collection-products",
+      "settings": {
+        "columns_desktop": "4",
+        "columns_mobile": "2",
+        "show_sort": true,
+        "pagination_type": "pagination",
+        "products_per_page": 12
+      }
+    }
+  ]
 }

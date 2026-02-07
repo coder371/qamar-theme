@@ -1,23 +1,28 @@
 {
   "title": "Header Group",
-  "allowAdd": false,
-  "allowRemove": false,
-  "allowReorder": false,
+  "allowAdd": true,
+  "allowRemove": true,
+  "allowReorder": true,
   "widgets": [
     {
-      "name": "announcement",
+      "name": "شريط الإعلانات",
       "widget": "announcement-bar",
       "settings": {
-        "text": "شحن مجاني للطلبات فوق 200 ريال | استخدمي كود WELCOME للحصول على خصم 10%",
+        "text": "شحن مجاني للطلبات فوق 200 ريال 🎉",
+        "link": "",
+        "show_close": true,
         "background_color": "#9C27B0",
-        "text_color": "#FFFFFF",
-        "show_close_button": true
+        "text_color": "#FFFFFF"
       }
     },
     {
-      "name": "header",
+      "name": "الهيدر الرئيسي",
       "widget": "header",
-      "settings": {}
+      "settings": {
+        "show_search": true,
+        "show_cart": true,
+        "sticky": true
+      }
     }
   ]
 }

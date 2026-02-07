@@ -1,0 +1,46 @@
+{
+  "name": "صفحة التصنيفات",
+  "settings": {
+    "title": {
+      "type": "string",
+      "label": "العنوان",
+      "default": "جميع التصنيفات"
+    },
+    "subtitle": {
+      "type": "string",
+      "label": "العنوان الفرعي",
+      "default": ""
+    },
+    "layout": {
+      "type": "select",
+      "label": "شكل العرض",
+      "default": "card",
+      "options": [
+        { "value": "card", "label": "بطاقة" },
+        { "value": "overlay", "label": "تراكب" },
+        { "value": "minimal", "label": "بسيط" }
+      ]
+    },
+    "columns": {
+      "type": "select",
+      "label": "عدد الأعمدة",
+      "default": "3",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ]
+    },
+    "show_count": {
+      "type": "boolean",
+      "label": "إظهار عدد المنتجات",
+      "default": true
+    }
+  },
+  "presets": [
+    {
+      "category": "صفحة التصنيفات",
+      "name": "صفحة التصنيفات"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "name": "مقالات المدونة",
+  "settings": {
+    "title": {
+      "type": "string",
+      "label": "العنوان",
+      "default": "من مدونتنا"
+    },
+    "subtitle": {
+      "type": "string",
+      "label": "العنوان الفرعي",
+      "default": ""
+    },
+    "posts_count": {
+      "type": "number",
+      "label": "عدد المقالات",
+      "default": 3,
+      "min": 2,
+      "max": 6
+    },
+    "layout": {
+      "type": "select",
+      "label": "نمط العرض",
+      "default": "grid",
+      "options": [
+        { "value": "grid", "label": "شبكة" },
+        { "value": "slider", "label": "سلايدر" }
+      ]
+    },
+    "show_date": {
+      "type": "boolean",
+      "label": "إظهار التاريخ",
+      "default": true
+    },
+    "show_excerpt": {
+      "type": "boolean",
+      "label": "إظهار المقتطف",
+      "default": true
+    }
+  },
+  "blocks": {
+    "post": {
+      "name": "مقالة",
+      "settings": {
+        "image": {
+          "type": "media",
+          "label": "صورة المقالة"
+        },
+        "title": {
+          "type": "string",
+          "label": "عنوان المقالة",
+          "default": ""
+        },
+        "excerpt": {
+          "type": "text",
+          "label": "مقتطف المقالة",
+          "default": ""
+        },
+        "url": {
+          "type": "string",
+          "label": "رابط المقالة",
+          "default": ""
+        },
+        "date": {
+          "type": "string",
+          "label": "تاريخ النشر",
+          "default": ""
+        }
+      }
+    }
+  },
+  "presets": [
+    {
+      "category": "الصفحة الرئيسية",
+      "name": "مقالات المدونة"
+    }
+  ]
+}

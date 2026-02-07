@@ -1,31 +1,26 @@
 {
-  "name": "Cart Page",
+  "name": "صفحة السلة",
   "settings": {
-    "show_product_image": {
+    "show_savings": {
       "type": "boolean",
-      "label": "إظهار صور المنتجات",
-      "default": true
-    },
-    "show_coupon": {
-      "type": "boolean",
-      "label": "إظهار حقل الكوبون",
-      "default": true
-    },
-    "show_shipping_estimate": {
-      "type": "boolean",
-      "label": "إظهار تقدير الشحن",
+      "label": "إظهار التوفير",
       "default": true
     },
     "continue_shopping_url": {
       "type": "string",
       "label": "رابط متابعة التسوق",
-      "default": "/products"
+      "default": "/"
+    },
+    "checkout_url": {
+      "type": "string",
+      "label": "رابط إتمام الطلب",
+      "default": "/checkout"
     }
   },
   "presets": [
     {
-      "category": "Cart",
-      "name": "Cart Page"
+      "category": "صفحات",
+      "name": "صفحة السلة"
     }
   ]
 }

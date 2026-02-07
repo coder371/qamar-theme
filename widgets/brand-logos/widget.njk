@@ -1,77 +1,72 @@
-{# Brand Logos Widget #}
-
-{% set bgClass = 'bg-gray-50' if widget.data.background == 'gray' else 'bg-white' %}
-
-<section class="brand-logos py-10 {{ bgClass }}">
+<section class="py-10 md:py-14">
   <div class="container mx-auto px-4">
-
-    {# Title #}
+    {# Section Header #}
     {% if widget.data.title %}
-      <h2 class="text-center text-lg font-medium text-gray-500 mb-8">{{ widget.data.title }}</h2>
+      <div class="text-center mb-8">
+        <h2 class="text-xl md:text-2xl font-bold text-gray-900">{{ widget.data.title }}</h2>
+      </div>
     {% endif %}
 
-    {% if widget.data.layout == 'slider' %}
-      {# Slider Layout #}
-      <div
-        class="brands-slider overflow-hidden"
-        x-data="{
-          scroll: 0,
-          init() {
-            setInterval(() => {
-              this.scroll += 1;
-              if (this.scroll >= this.$refs.track.scrollWidth / 2) {
-                this.scroll = 0;
-              }
-            }, 30);
-          }
-        }">
-        <div
-          x-ref="track"
-          class="flex items-center gap-12"
-          :style="'transform: translateX(-' + scroll + 'px)'">
-          {# Duplicate logos for infinite scroll effect #}
-          {% for i in range(0, 2) %}
-            {% for brand in widget.blocks %}
-              {% if brand.data.link %}
-                <a href="{{ brand.data.link }}" class="flex-shrink-0">
-              {% else %}
-                <div class="flex-shrink-0">
-              {% endif %}
-                <img
-                  src="{{ brand.data.logo }}"
-                  alt="{{ brand.data.name | default('Brand') }}"
-                  class="h-12 md:h-16 w-auto object-contain transition-all {{ 'grayscale hover:grayscale-0' if widget.data.grayscale else '' }} opacity-60 hover:opacity-100"
-                  loading="lazy">
-              {% if brand.data.link %}
-                </a>
-              {% else %}
-                </div>
-              {% endif %}
-            {% endfor %}
-          {% endfor %}
-        </div>
+    {% set blocks = widget.blocks | default([]) %}
+    {% set grayscaleClass = 'grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300' if widget.data.grayscale else '' %}
+
+    {% if widget.data.layout == 'grid' %}
+      {# Grid Layout #}
+      <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-6 items-center">
+        {% for block in blocks %}
+          <a href="{{ block.settings.link | default('#') }}"
+             class="flex items-center justify-center p-4 group"
+             {% if block.settings.link %}target="_blank" rel="noopener"{% endif %}>
+            {% if block.settings.image %}
+              <img src="{{ block.settings.image.fileUrl }}"
+                   alt="{{ block.settings.name }}"
+                   class="max-h-12 w-auto object-contain {{ grayscaleClass }}">
+            {% else %}
+              <span class="text-sm text-gray-400 font-medium">{{ block.settings.name }}</span>
+            {% endif %}
+          </a>
+        {% endfor %}
       </div>
 
     {% else %}
-      {# Grid Layout #}
-      <div class="flex flex-wrap items-center justify-center gap-8 md:gap-12">
-        {% for brand in widget.blocks %}
-          {% if brand.data.link %}
-            <a href="{{ brand.data.link }}" class="block">
-          {% else %}
-            <div>
-          {% endif %}
-            <img
-              src="{{ brand.data.logo }}"
-              alt="{{ brand.data.name | default('Brand') }}"
-              class="h-10 md:h-14 w-auto object-contain transition-all {{ 'grayscale hover:grayscale-0' if widget.data.grayscale else '' }} opacity-60 hover:opacity-100"
-              loading="lazy">
-          {% if brand.data.link %}
-            </a>
-          {% else %}
+      {# Slider Layout #}
+      <div class="swiper" x-data x-init="$nextTick(() => {
+        var slideCount = $el.querySelectorAll('.swiper-slide').length;
+        new Swiper($el, {
+          slidesPerView: 3,
+          spaceBetween: 20,
+          loop: slideCount > 7,
+          speed: 3000,
+          autoplay: {
+            delay: 0,
+            disableOnInteraction: false
+          },
+          freeMode: true,
+          breakpoints: {
+            480: { slidesPerView: 4 },
+            768: { slidesPerView: 5 },
+            1024: { slidesPerView: 6 },
+            1280: { slidesPerView: 7 }
+          }
+        });
+      })">
+        <div class="swiper-wrapper items-center">
+          {% for block in blocks %}
+            <div class="swiper-slide">
+              <a href="{{ block.settings.link | default('#') }}"
+                 class="flex items-center justify-center p-4 h-20"
+                 {% if block.settings.link %}target="_blank" rel="noopener"{% endif %}>
+                {% if block.settings.image %}
+                  <img src="{{ block.settings.image.fileUrl }}"
+                       alt="{{ block.settings.name }}"
+                       class="max-h-12 w-auto object-contain {{ grayscaleClass }}">
+                {% else %}
+                  <span class="text-sm text-gray-400 font-medium">{{ block.settings.name }}</span>
+                {% endif %}
+              </a>
             </div>
-          {% endif %}
-        {% endfor %}
+          {% endfor %}
+        </div>
       </div>
     {% endif %}
   </div>

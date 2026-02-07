@@ -1,67 +1,66 @@
-{# Page 404 Widget #}
-
-<section class="page-404 py-16 md:py-24">
+{# 404 Page Widget - Qamar Theme #}
+<section class="py-16 md:py-24 lg:py-32">
   <div class="container mx-auto px-4">
-    <div class="max-w-lg mx-auto text-center">
+    <div class="max-w-2xl mx-auto text-center">
 
-      {# 404 Illustration #}
-      <div class="mb-8">
-        <div class="relative inline-block">
-          <span class="text-[150px] md:text-[200px] font-bold text-gray-100 select-none">404</span>
-          <svg class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-        </div>
+      {# Decorative 404 Number #}
+      <div class="mb-8 select-none" aria-hidden="true">
+        <span class="text-[120px] sm:text-[160px] md:text-[200px] font-black leading-none
+                     bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent
+                     drop-shadow-sm">
+          404
+        </span>
       </div>
 
-      {# Content #}
-      <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
-        {{ widget.data.title | default('الصفحة غير موجودة') }}
+      {# Decorative SVG Illustration #}
+      <div class="mb-8 flex justify-center" aria-hidden="true">
+        <svg class="w-48 h-48 md:w-56 md:h-56 text-primary/10" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          {# Shopping bag with question mark #}
+          <rect x="50" y="60" width="100" height="110" rx="8" stroke="currentColor" stroke-width="4" fill="currentColor" fill-opacity="0.3"/>
+          <path d="M75 60V45C75 31.2 86.2 20 100 20C113.8 20 125 31.2 125 45V60" stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <text x="100" y="135" text-anchor="middle" fill="currentColor" font-size="50" font-weight="bold" opacity="0.6">?</text>
+        </svg>
+      </div>
+
+      {# Title #}
+      <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        {{ widget.data.title | default(t('404.title')) }}
       </h1>
 
-      <p class="text-gray-500 mb-8">
-        {{ widget.data.message | default('عذراً، الصفحة التي تبحث عنها غير موجودة أو تم نقلها.') | safe }}
+      {# Message #}
+      <p class="text-gray-500 text-base md:text-lg leading-relaxed mb-10 max-w-lg mx-auto">
+        {{ widget.data.message | default(t('404.message')) | safe }}
       </p>
 
-      {# Search #}
-      {% if widget.data.show_search %}
-        <form action="/search" method="get" class="mb-8">
-          <div class="relative max-w-sm mx-auto">
-            <input
-              type="search"
-              name="q"
-              placeholder="{{t('search.placeholder')}}"
-              class="w-full py-3 px-5 pe-12 border-2 border-gray-200 rounded-full focus:border-primary focus:outline-none transition-colors">
-            <button
-              type="submit"
-              class="absolute top-1/2 end-4 -translate-y-1/2 text-gray-400 hover:text-primary transition-colors">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-              </svg>
-            </button>
-          </div>
-        </form>
-      {% endif %}
+      {# Action Buttons #}
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        {# Back to Home Button #}
+        <a href="{{ widget.data.home_url | default('/') }}"
+           class="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white
+                  font-medium px-8 py-3.5 rounded-xl transition-all duration-300
+                  hover:shadow-lg hover:-translate-y-0.5 w-full sm:w-auto justify-center">
+          <svg class="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+          </svg>
+          {{t('404.back_home')}}
+        </a>
 
-      {# CTA Button #}
-      <a
-        href="{{ widget.data.button_link | default('/') }}"
-        class="btn btn-primary btn-lg inline-flex items-center gap-2">
-        <svg class="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-        </svg>
-        {{ widget.data.button_text | default('العودة للرئيسية') }}
-      </a>
-
-      {# Quick Links #}
-      <div class="mt-12 pt-8 border-t">
-        <p class="text-sm text-gray-500 mb-4">{{t("404.quick_links")}}</p>
-        <div class="flex flex-wrap justify-center gap-4">
-          <a href="/" class="text-primary hover:underline">{{t("common.home")}}</a>
-          <a href="/products" class="text-primary hover:underline">{{t("common.products")}}</a>
-          <a href="/contact" class="text-primary hover:underline">{{t("common.contact")}}</a>
-        </div>
+        {# Search Button #}
+        {% if widget.data.show_search_button %}
+          <button type="button"
+                  @click="$store.modal.toggle('search')"
+                  class="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700
+                         font-medium px-8 py-3.5 rounded-xl border border-gray-200
+                         transition-all duration-300 hover:shadow-md hover:-translate-y-0.5
+                         w-full sm:w-auto justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            {{t('404.search')}}
+          </button>
+        {% endif %}
       </div>
+
     </div>
   </div>
 </section>

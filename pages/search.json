@@ -1,13 +1,14 @@
 {
   "layout": "layout",
+  "allowAdd": true,
+  "allowRemove": true,
+  "allowReorder": true,
   "widgets": [
     {
-      "name": "نتائج البحث",
+      "name": "صفحة البحث",
       "widget": "search-page",
       "settings": {
         "columns_desktop": "4",
-        "products_per_page": "12",
-        "show_filters": true,
         "show_sort": true
       }
     }

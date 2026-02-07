@@ -1,0 +1,55 @@
+{
+  "name": "شريط المميزات",
+  "settings": {
+    "background_color": {
+      "type": "color",
+      "label": "لون الخلفية",
+      "default": "#FAFAFA"
+    },
+    "layout": {
+      "type": "select",
+      "label": "نمط العرض",
+      "default": "row",
+      "options": [
+        { "value": "row", "label": "صف أفقي" },
+        { "value": "grid", "label": "شبكة" }
+      ]
+    }
+  },
+  "blocks": {
+    "feature": {
+      "name": "ميزة",
+      "settings": {
+        "icon": {
+          "type": "select",
+          "label": "الأيقونة",
+          "default": "truck",
+          "options": [
+            { "value": "truck", "label": "شاحنة شحن" },
+            { "value": "shield", "label": "درع حماية" },
+            { "value": "refresh", "label": "إرجاع" },
+            { "value": "headset", "label": "دعم فني" },
+            { "value": "gift", "label": "هدية" },
+            { "value": "star", "label": "نجمة" }
+          ]
+        },
+        "title": {
+          "type": "string",
+          "label": "العنوان",
+          "default": "شحن مجاني"
+        },
+        "description": {
+          "type": "string",
+          "label": "الوصف",
+          "default": "للطلبات فوق 200 ريال"
+        }
+      }
+    }
+  },
+  "presets": [
+    {
+      "category": "الصفحة الرئيسية",
+      "name": "شريط المميزات"
+    }
+  ]
+}

@@ -1,67 +1,78 @@
-{# Collection Banner Widget - Uses collection variable from context #}
+{% set show_description = widget.data.show_description | default(true) %}
+{% set show_breadcrumb = widget.data.show_breadcrumb | default(true) %}
+{% set show_count = widget.data.show_count | default(true) %}
+{% set height = widget.data.height | default('small') %}
+{% set overlay_color = widget.data.overlay_color | default('#1a1a2e') %}
+{% set overlay_opacity = widget.data.overlay_opacity | default(50) %}
 
-{% set heights = {
-  'small': 'h-48 md:h-56',
-  'medium': 'h-56 md:h-72',
-  'large': 'h-72 md:h-96'
-} %}
-{% set heightClass = heights[widget.data.height] | default(heights.medium) %}
-{% set overlayOpacity = widget.data.overlay_opacity | default(50) %}
+{# Determine background image: widget setting fallback to collection image #}
+{% set bg_image = widget.data.background_image.fileUrl | default(collection.image.fileUrl) %}
 
-<section class="collection-banner relative {{ heightClass }} overflow-hidden">
+<section class="relative overflow-hidden
+  {% if height == 'small' %} py-10 md:py-14
+  {% elif height == 'medium' %} py-16 md:py-24
+  {% else %} py-24 md:py-36
+  {% endif %}">
+
   {# Background Image #}
-  {% if widget.data.show_image and collection.image.fileUrl %}
-    <img
-      src="{{ collection.image.fileUrl }}"
-      alt="{{ collection.title }}"
-      class="absolute inset-0 w-full h-full object-cover">
+  {% if bg_image %}
+    <div class="absolute inset-0">
+      <img src="{{ bg_image }}"
+           alt="{{ collection.title }}"
+           class="w-full h-full object-cover">
+    </div>
+    {# Overlay #}
+    <div class="absolute inset-0" style="background-color: {{ overlay_color }}; opacity: {{ overlay_opacity / 100 }};"></div>
   {% else %}
-    {# Gradient fallback #}
-    <div class="absolute inset-0 bg-gradient-to-br from-primary to-secondary"></div>
+    {# Solid background fallback #}
+    <div class="absolute inset-0" style="background-color: {{ overlay_color }};"></div>
   {% endif %}
 
-  {# Overlay #}
-  <div
-    class="absolute inset-0 bg-black"
-    style="opacity: {{ overlayOpacity / 100 }}">
-  </div>
-
   {# Content #}
-  <div class="relative z-10 h-full flex items-center">
-    <div class="container mx-auto px-4 text-white text-center">
-      {# Breadcrumb #}
-      <nav class="mb-4">
-        <ol class="flex items-center justify-center gap-2 text-sm">
+  <div class="container mx-auto px-4 relative z-10">
+
+    {# Breadcrumb #}
+    {% if show_breadcrumb %}
+      <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="flex items-center gap-2 text-sm {% if bg_image %}text-white/70{% else %}text-white/70{% endif %}">
           <li>
-            <a href="/" class="hover:underline opacity-80">{{t("common.home")}}</a>
+            <a href="/" class="hover:text-white transition-colors">
+              {{t('common.home')}}
+            </a>
           </li>
-          <li class="opacity-60">/</li>
           <li>
-            <a href="/collections" class="hover:underline opacity-80">{{t("common.categories")}}</a>
+            <svg class="w-3.5 h-3.5 rtl:rotate-180 inline-block opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
           </li>
-          <li class="opacity-60">/</li>
-          <li class="font-medium">{{ collection.title }}</li>
+          <li class="text-white font-medium">
+            {{ collection.title }}
+          </li>
         </ol>
       </nav>
+    {% endif %}
 
-      {# Title #}
-      <h1 class="text-3xl md:text-5xl font-bold mb-3">
-        {{ collection.title }}
-      </h1>
+    {# Collection Title #}
+    <h1 class="text-2xl md:text-4xl font-bold text-white mb-3">
+      {{ collection.title }}
+    </h1>
 
-      {# Description #}
-      {% if widget.data.show_description and collection.description %}
-        <p class="text-lg md:text-xl opacity-90 max-w-2xl mx-auto mb-4">
-          {{ collection.description }}
-        </p>
-      {% endif %}
+    {# Description #}
+    {% if show_description and collection.description %}
+      <div class="text-white/80 text-sm md:text-base max-w-2xl mb-4 leading-relaxed line-clamp-3">
+        {{ collection.description | safe }}
+      </div>
+    {% endif %}
 
-      {# Products Count #}
-      {% if widget.data.show_products_count %}
-        <p class="text-sm opacity-80">
-          {{ collection.productsCount | default(0) }} {{t("collection.products_count")}}
-        </p>
-      {% endif %}
-    </div>
+    {# Products Count #}
+    {% if show_count and collection.products | length %}
+      <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-full px-4 py-1.5 text-sm text-white">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+        </svg>
+        <span>{{ collection.products | length }} {{t('collection.products | length')}}</span>
+      </div>
+    {% endif %}
+
   </div>
 </section>

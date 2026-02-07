@@ -1,0 +1,143 @@
+{# Collection Showcase Widget - Qamar Theme #}
+{% set layout = widget.data.layout | default('grid') %}
+{% set columns_desktop = widget.data.columns_desktop | default('4') %}
+{% set columns_mobile = widget.data.columns_mobile | default('2') %}
+{% set autoplay = widget.data.autoplay | default(false) %}
+{% set autoplay_speed = widget.data.autoplay_speed | default('5') %}
+{% set show_arrows = widget.data.show_arrows if widget.data.show_arrows is defined else true %}
+
+{# Card display settings (resolved to avoid passing undefined) #}
+{% set _cs_rating = widget.data.card_show_rating if widget.data.card_show_rating is defined else true %}
+{% set _cs_options = widget.data.card_show_options if widget.data.card_show_options is defined else true %}
+{% set _cs_badge = widget.data.card_show_badge if widget.data.card_show_badge is defined else true %}
+{% set _cs_button = widget.data.card_show_button if widget.data.card_show_button is defined else true %}
+{% set _cs_compare = widget.data.card_show_compare_price if widget.data.card_show_compare_price is defined else true %}
+{% set _cs_wishlist = widget.data.card_show_wishlist | default(false) %}
+{% set _cs_ratio = widget.data.card_image_ratio | default('square') %}
+{% set _cs_lines = widget.data.card_title_lines | default('2') %}
+{% set _cs_fit = widget.data.card_image_fit | default('contain') %}
+{% set _cs_hover = widget.data.card_hover_effect | default('zoom') %}
+{% set _cs_radius = widget.data.card_border_radius | default('lg') %}
+
+{% if widget.data.products | length > 0 %}
+<section class="py-12 md:py-16">
+  <div class="container mx-auto px-4">
+
+    {# Section Header #}
+    <div class="flex items-center justify-between mb-10">
+      <div>
+        {% if widget.data.title %}
+          <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">{{ widget.data.title }}</h2>
+        {% endif %}
+        {% if widget.data.subtitle %}
+          <p class="text-gray-500 text-lg">{{ widget.data.subtitle }}</p>
+        {% endif %}
+      </div>
+      {% if widget.data.show_view_all and widget.data.view_all_url %}
+        <a href="{{ widget.data.view_all_url }}"
+           class="hidden md:inline-flex items-center gap-1 text-sm font-semibold text-primary transition-colors duration-300 hover:opacity-80">
+          {{t('common.view_all')}}
+          <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+      {% endif %}
+    </div>
+
+    {# Grid Layout #}
+    {% if layout == 'grid' %}
+      <div class="grid gap-4 md:gap-6
+        {% if columns_mobile == '1' %} grid-cols-1 {% else %} grid-cols-2 {% endif %}
+        {% if columns_desktop == '2' %} md:grid-cols-2
+        {% elif columns_desktop == '3' %} md:grid-cols-3
+        {% else %} md:grid-cols-4
+        {% endif %}">
+        {% for product in widget.data.products %}
+          {% ui "product-card.njk", product=product, show_rating=_cs_rating, show_options=_cs_options, show_badge=_cs_badge, image_ratio=_cs_ratio, show_button=_cs_button, show_compare_price=_cs_compare, title_lines=_cs_lines, image_fit=_cs_fit, hover_effect=_cs_hover, show_wishlist=_cs_wishlist, border_radius=_cs_radius %}
+        {% endfor %}
+      </div>
+
+    {# Slider Layout #}
+    {% elif layout == 'slider' %}
+      <div class="product-swiper-wrap relative">
+        <div class="swiper swiper-outside-pagination" x-data x-init="$nextTick(() => {
+          new Swiper($el, {
+            slidesPerView: {{ columns_mobile }},
+            spaceBetween: 16,
+            loop: {{ 'true' if widget.data.products | length > (columns_desktop | int) else 'false' }},
+            {% if autoplay %}
+            autoplay: {
+              delay: {{ autoplay_speed }}000,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: true
+            },
+            {% endif %}
+            pagination: {
+              el: $el.querySelector('.swiper-pagination'),
+              clickable: true
+            },
+            {% if show_arrows %}
+            navigation: {
+              nextEl: $el.closest('.product-swiper-wrap').querySelector('.swiper-nav-next'),
+              prevEl: $el.closest('.product-swiper-wrap').querySelector('.swiper-nav-prev')
+            },
+            {% endif %}
+            breakpoints: {
+              640: { slidesPerView: 2, spaceBetween: 16 },
+              768: { slidesPerView: 3, spaceBetween: 20 },
+              1024: { slidesPerView: {{ columns_desktop }}, spaceBetween: 24 }
+            }
+          });
+        })">
+          <div class="swiper-wrapper">
+            {% for product in widget.data.products %}
+              <div class="swiper-slide">
+                {% ui "product-card.njk", product=product, show_rating=_cs_rating, show_options=_cs_options, show_badge=_cs_badge, image_ratio=_cs_ratio, show_button=_cs_button, show_compare_price=_cs_compare, title_lines=_cs_lines, image_fit=_cs_fit, hover_effect=_cs_hover, show_wishlist=_cs_wishlist, border_radius=_cs_radius %}
+              </div>
+            {% endfor %}
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+
+        {# Navigation Arrows #}
+        {% if show_arrows %}
+          <button class="swiper-nav-prev absolute top-[35%] -translate-y-1/2 -start-3 md:-start-5 z-10
+                         w-10 h-10 rounded-full bg-white shadow-md border border-gray-100
+                         flex items-center justify-center text-gray-500
+                         hover:text-primary hover:shadow-lg transition-all
+                         hidden md:flex"
+                  aria-label="{{t('common.back')}}">
+            <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+            </svg>
+          </button>
+          <button class="swiper-nav-next absolute top-[35%] -translate-y-1/2 -end-3 md:-end-5 z-10
+                         w-10 h-10 rounded-full bg-white shadow-md border border-gray-100
+                         flex items-center justify-center text-gray-500
+                         hover:text-primary hover:shadow-lg transition-all
+                         hidden md:flex"
+                  aria-label="{{t('common.continue')}}">
+            <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+            </svg>
+          </button>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {# Mobile View All Link #}
+    {% if widget.data.show_view_all and widget.data.view_all_url %}
+      <div class="mt-8 text-center md:hidden">
+        <a href="{{ widget.data.view_all_url }}"
+           class="inline-flex items-center gap-1 text-sm font-semibold text-primary transition-colors duration-300 hover:opacity-80">
+          {{t('common.view_all')}}
+          <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endif %}

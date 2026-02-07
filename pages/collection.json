@@ -1,27 +1,16 @@
 {
   "layout": "layout",
+  "allowAdd": true,
+  "allowRemove": true,
+  "allowReorder": true,
   "widgets": [
     {
-      "name": "بانر التصنيف",
-      "widget": "collection-banner",
+      "name": "صفحة التصنيف",
+      "widget": "collection-page",
       "settings": {
-        "show_image": true,
+        "columns_desktop": "3",
         "show_description": true,
-        "show_products_count": true,
-        "height": "medium",
-        "overlay_opacity": 50
-      }
-    },
-    {
-      "name": "منتجات التصنيف",
-      "widget": "collection-products",
-      "settings": {
-        "products_per_page": 12,
-        "columns_desktop": "4",
-        "columns_mobile": "2",
-        "show_filters": true,
-        "show_sort": true,
-        "filter_position": "sidebar"
+        "show_sort": true
       }
     }
   ]

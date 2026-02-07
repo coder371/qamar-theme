@@ -1,0 +1,192 @@
+{# Shared Mobile Filter UI - Used inside collectionFilter() Alpine scope #}
+{# Params: show_sort, filters, hasFilters, hasSidebar #}
+
+{# ===== Mobile Toolbar ===== #}
+{% if hasSidebar %}
+  <div class="md:hidden flex items-center gap-3 mb-5">
+    {% if hasFilters %}
+      <button @click="filtersOpen = true"
+              class="flex-1 flex items-center justify-center gap-2 text-sm border border-gray-200 rounded-xl px-4 py-2.5 bg-white hover:border-gray-300 transition-colors">
+        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+        </svg>
+        <span>{{t('collection.filter')}}</span>
+        <template x-if="activeCount > 0">
+          <span class="bg-primary text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center" x-text="activeCount"></span>
+        </template>
+      </button>
+    {% endif %}
+    {% if show_sort %}
+      <button @click="sortOpen = true"
+              class="flex-1 flex items-center justify-center gap-2 text-sm border border-gray-200 rounded-xl px-4 py-2.5 bg-white hover:border-gray-300 transition-colors">
+        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"/>
+        </svg>
+        <span>{{t('collection.sort')}}</span>
+      </button>
+    {% endif %}
+  </div>
+{% endif %}
+
+{# ===== Mobile Sort Bottom Sheet ===== #}
+{% if show_sort %}
+  <div x-show="sortOpen" x-cloak class="fixed inset-0 z-50 md:hidden" @keydown.escape.window="sortOpen = false">
+    <div class="absolute inset-0 bg-black/40" @click="sortOpen = false"
+         x-show="sortOpen"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+    </div>
+    <div class="absolute bottom-0 inset-x-0 bg-white rounded-t-3xl max-h-[80vh] overflow-y-auto"
+         x-show="sortOpen"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="translate-y-full" x-transition:enter-end="translate-y-0"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="translate-y-0" x-transition:leave-end="translate-y-full">
+      <div class="flex justify-center pt-3 pb-2">
+        <div class="w-10 h-1 bg-gray-200 rounded-full"></div>
+      </div>
+      <div class="flex items-center justify-between px-5 pb-4 border-b border-gray-100">
+        <h3 class="font-bold text-gray-900">{{t('collection.sort')}}</h3>
+        <button @click="sortOpen = false" class="text-gray-400 hover:text-gray-600 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="p-5 space-y-1">
+        <button @click="sortBy('')"
+                class="w-full text-start px-4 py-3 text-sm rounded-xl transition-colors flex items-center justify-between"
+                :class="!currentSort ? 'bg-primary/10 text-primary font-medium' : 'text-gray-600 hover:bg-gray-50'">
+          <span>{{t('collection.all_products')}}</span>
+          <svg x-show="!currentSort" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+          </svg>
+        </button>
+        <button @click="sortBy('newest')"
+                class="w-full text-start px-4 py-3 text-sm rounded-xl transition-colors flex items-center justify-between"
+                :class="currentSort === 'newest' ? 'bg-primary/10 text-primary font-medium' : 'text-gray-600 hover:bg-gray-50'">
+          <span>{{t('search.newest')}}</span>
+          <svg x-show="currentSort === 'newest'" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+          </svg>
+        </button>
+        <button @click="sortBy('price_asc')"
+                class="w-full text-start px-4 py-3 text-sm rounded-xl transition-colors flex items-center justify-between"
+                :class="currentSort === 'price_asc' ? 'bg-primary/10 text-primary font-medium' : 'text-gray-600 hover:bg-gray-50'">
+          <span>{{t('search.price_low_high')}}</span>
+          <svg x-show="currentSort === 'price_asc'" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+          </svg>
+        </button>
+        <button @click="sortBy('price_desc')"
+                class="w-full text-start px-4 py-3 text-sm rounded-xl transition-colors flex items-center justify-between"
+                :class="currentSort === 'price_desc' ? 'bg-primary/10 text-primary font-medium' : 'text-gray-600 hover:bg-gray-50'">
+          <span>{{t('search.price_high_low')}}</span>
+          <svg x-show="currentSort === 'price_desc'" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{# ===== Mobile Filters Bottom Sheet ===== #}
+{% if hasFilters %}
+  <div x-show="filtersOpen" x-cloak class="fixed inset-0 z-50 md:hidden" @keydown.escape.window="filtersOpen = false">
+    <div class="absolute inset-0 bg-black/40" @click="filtersOpen = false"
+         x-show="filtersOpen"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+    </div>
+    <div class="absolute bottom-0 inset-x-0 bg-white rounded-t-3xl max-h-[85vh] overflow-y-auto"
+         x-show="filtersOpen"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="translate-y-full" x-transition:enter-end="translate-y-0"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="translate-y-0" x-transition:leave-end="translate-y-full">
+      <div class="flex justify-center pt-3 pb-2">
+        <div class="w-10 h-1 bg-gray-200 rounded-full"></div>
+      </div>
+      <div class="flex items-center justify-between px-5 pb-4 border-b border-gray-100">
+        <h3 class="font-bold text-gray-900">{{t('collection.filter')}}</h3>
+        <div class="flex items-center gap-3">
+          <template x-if="activeCount > 0">
+            <button @click="clearFilters()" class="text-xs text-red-500 font-medium">
+              {{t('collection.clear_filters')}}
+            </button>
+          </template>
+          <button @click="filtersOpen = false" class="text-gray-400 hover:text-gray-600 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="p-5 space-y-5">
+        {% for filter in filters %}
+          {# Price Range #}
+          {% if filter.inputType == 'range' %}
+            <div>
+              <h4 class="text-sm font-semibold text-gray-800 mb-3">
+                {{ filter.name[localization.language] | default(filter.name.ar) }}
+              </h4>
+              <div dir="ltr">
+                <div class="flex items-center justify-between mb-4">
+                  <span class="text-xs font-semibold bg-gray-50 text-gray-700 px-2.5 py-1 rounded-lg tabular-nums"
+                        x-text="(+(priceMin) || {{ filter.range.min }}).toLocaleString()"></span>
+                  <span class="text-xs text-gray-300">—</span>
+                  <span class="text-xs font-semibold bg-gray-50 text-gray-700 px-2.5 py-1 rounded-lg tabular-nums"
+                        x-text="(+(priceMax) || {{ filter.range.max }}).toLocaleString()"></span>
+                </div>
+                <div class="price-slider">
+                  <div class="slider-track"></div>
+                  <div class="slider-range"
+                       :style="`left: ${((+(priceMin) || {{ filter.range.min }}) - {{ filter.range.min }}) / ({{ filter.range.max }} - {{ filter.range.min }}) * 100}%; right: ${100 - ((+(priceMax) || {{ filter.range.max }}) - {{ filter.range.min }}) / ({{ filter.range.max }} - {{ filter.range.min }}) * 100}%`"></div>
+                  <input type="range"
+                         min="{{ filter.range.min }}" max="{{ filter.range.max }}" step="{{ filter.range.step | default(1) }}"
+                         :value="+(priceMin) || {{ filter.range.min }}"
+                         @input="priceMin = Math.min(+$event.target.value, +(priceMax) || {{ filter.range.max }}); $event.target.value = priceMin; _debouncedApplyPrice()">
+                  <input type="range"
+                         min="{{ filter.range.min }}" max="{{ filter.range.max }}" step="{{ filter.range.step | default(1) }}"
+                         :value="+(priceMax) || {{ filter.range.max }}"
+                         @input="priceMax = Math.max(+$event.target.value, +(priceMin) || {{ filter.range.min }}); $event.target.value = priceMax; _debouncedApplyPrice()">
+                </div>
+              </div>
+            </div>
+
+          {# Select Filter #}
+          {% elif filter.inputType == 'select' %}
+            <div>
+              <h4 class="text-sm font-semibold text-gray-800 mb-3">
+                {{ filter.name[localization.language] | default(filter.name.ar) }}
+              </h4>
+              <div class="space-y-2">
+                {% for item in filter.items %}
+                  <label class="flex items-center gap-2.5 cursor-pointer group">
+                    <input type="checkbox"
+                           :checked="isActive('{{ filter.handle }}', '{{ item.value }}')"
+                           @change="toggleFilter('{{ filter.handle }}', '{{ item.value }}')"
+                           class="w-4 h-4 rounded border-gray-300"
+                           style="accent-color: var(--color-primary);">
+                    <span class="text-sm text-gray-600 group-hover:text-gray-800 transition-colors">
+                      {{ item.label[localization.language] | default(item.label.ar) | default(item.value) }}
+                    </span>
+                  </label>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+
+          {% if not loop.last %}
+            <div class="border-t border-gray-100"></div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endif %}

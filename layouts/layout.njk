@@ -4,9 +4,7 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-    {# ============================================
-       1. Google Fonts - أول شيء يتم تحميله
-       ============================================ #}
+    {# Google Fonts #}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -14,11 +12,7 @@
     {% seo %}
     {% qumra_head %}
 
-    {# ============================================
-       Frontend Libraries - يجب استدعاؤها يدوياً
-       ============================================ #}
-
-    {# 2. Tailwind CSS #}
+    {# Tailwind CSS #}
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -42,18 +36,14 @@
       }
     </script>
 
-    {# 3. Swiper.js - للسلايدرات #}
+    {# Swiper.js CSS #}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 
-    {# 4. GLightbox - لمعرض الصور #}
+    {# GLightbox CSS #}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox@3/dist/css/glightbox.min.css">
-
-    {# 5. Animate.css - للحركات (اختياري) #}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4/animate.min.css">
 
     <style>
       :root {
-        {# Colors #}
         --color-primary: {{ settings.primaryColor | default('#9C27B0') }};
         --color-primary-light: {{ settings.primaryColorLight | default('#CE93D8') }};
         --color-primary-dark: {{ settings.primaryColorDark | default('#7B1FA2') }};
@@ -64,122 +54,79 @@
         --color-text: {{ settings.textColor | default('#212121') }};
         --color-text-secondary: {{ settings.textSecondaryColor | default('#757575') }};
         --color-border: {{ settings.borderColor | default('#E0E0E0') }};
-        --color-success: #4CAF50;
-        --color-error: #F44336;
-        --color-warning: #FF9800;
-
-        {# Swiper #}
-        --swiper-navigation-size: 25px;
-        --swiper-theme-color: var(--color-primary);
       }
 
-      /* الخط الافتراضي - عربي */
       html, body {
         background-color: var(--color-background);
         color: var(--color-text);
       }
 
       * {
-        font-family: 'Tajawal', sans-serif !important;
+        font-family: 'Tajawal', sans-serif;
       }
 
-      /* الخط الإنجليزي */
-      html[lang="en"] *,
-      html[dir="ltr"] * {
-        font-family: 'Poppins', sans-serif !important;
+      html[lang="en"] * {
+        font-family: 'Poppins', sans-serif;
       }
+
+      [x-cloak] { display: none !important; }
     </style>
 
     <link rel="stylesheet" href="{{ 'style.css' | assets }}"/>
-  </head>
-  <body class="min-h-screen flex flex-col" x-data="qumraApp()" @keydown.escape="closeModal()">
 
-    {# Header Template #}
-    {% template "header" %}
+    {% if settings.customCSS %}
+      <style>{{ settings.customCSS | safe }}</style>
+    {% endif %}
+  </head>
+  <body class="min-h-screen flex flex-col">
+
+    {# Header - Sticky wrapper for entire header group #}
+    <div class="sticky top-0 z-40">
+      {% template "header" %}
+    </div>
 
     {# Main Content #}
     <main class="flex-1">
-      {% content "" %}
+      {% content %}
     </main>
 
-    {# Footer Template #}
+    {# Footer #}
     {% template "footer" %}
 
-    {# Toast Container #}
-    <div id="toast-container" class="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 z-50 flex flex-col gap-2"></div>
+    {# Toast Notifications Container #}
+    <div id="toast-container" class="fixed top-4 left-1/2 -translate-x-1/2 z-[9999] flex flex-col items-center gap-2 pointer-events-none"></div>
 
-    {# ============================================
-       JavaScript Libraries - يجب استدعاؤها يدوياً
-       ============================================ #}
-
-    {# 1. Alpine.js - للتفاعل #}
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-    {# 2. Swiper.js - للسلايدرات #}
+    {# Swiper.js #}
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-    {# 3. GLightbox - لمعرض الصور #}
+    {# GLightbox #}
     <script src="https://cdn.jsdelivr.net/npm/glightbox@3/dist/js/glightbox.min.js"></script>
 
-    {# 4. Qumra Scripts #}
+    {# Alpine.js #}
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     {% qumra_scripts %}
 
-    {# 5. Localization Config #}
+    {# Currency/Language config for JS #}
     <script>
-      window.QumraLocalization = {
+      window.__QUMRA_CONFIG__ = {
+        currency: '{{ localization.currency.currencyCode | default("SAR") }}',
+        currencySymbol: '{{ localization.currency.currencySymbol | default("ر.س") }}',
         language: '{{ localization.language | default("ar") }}',
-        currencyCode: '{{ localization.currency.currencyCode | default("SAR") }}',
-        currencySymbol: '{{ localization.currency.currencySymbol | default("ر.س") }}'
+        exchangeRate: {{ localization.market.exchangeRate | default(1) }},
+        moneyFormatSample: '{{ 1000 | money }}',
+        wishlistIds: [{% for p in wishlist.products %}'{{ p._id }}'{% if not loop.last %},{% endif %}{% endfor %}],
+        messages: {
+          addedToCart: '{{t("product.added_to_cart")}}',
+          addError: '{{t("common.error")}}'
+        }
       };
     </script>
 
-    {# 6. Custom JS #}
     <script src="{{ 'main.js' | assets }}"></script>
 
-    {# 6. Alpine.js App #}
-    <script>
-      function qumraApp() {
-        return {
-          modal: {
-            open: false,
-            type: null
-          },
-          search: '',
-
-          toggleModal(type) {
-            if (this.modal.open && this.modal.type === type) {
-              this.closeModal();
-            } else {
-              this.modal.open = true;
-              this.modal.type = type;
-              document.body.style.overflow = 'hidden';
-            }
-          },
-
-          closeModal() {
-            this.modal.open = false;
-            this.modal.type = null;
-            document.body.style.overflow = '';
-          },
-
-          setSearch(query) {
-            if (query && query.trim()) {
-              window.location.href = '/search?q=' + encodeURIComponent(query.trim());
-            }
-          },
-
-          init() {
-            console.log('Qamar Theme initialized');
-          }
-        }
-      }
-
-      // Initialize GLightbox
-      document.addEventListener('DOMContentLoaded', function() {
-        if (typeof GLightbox !== 'undefined') {
-          GLightbox({ selector: '.glightbox' });
-        }
-      });
-    </script>
+    {% if settings.customJS %}
+      <script>{{ settings.customJS | safe }}</script>
+    {% endif %}
   </body>
 </html>

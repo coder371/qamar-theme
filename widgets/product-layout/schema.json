@@ -1,52 +1,9 @@
 {
-  "name": "Product Layout",
+  "name": "تفاصيل المنتج",
   "settings": {
-    "gallery_position": {
-      "type": "select",
-      "label": "موضع المعرض",
-      "default": "start",
-      "options": [
-        { "value": "start", "label": "يسار/يمين (RTL)" },
-        { "value": "end", "label": "يمين/يسار (RTL)" }
-      ]
-    },
-    "enable_zoom": {
-      "type": "boolean",
-      "label": "تفعيل التكبير",
-      "default": true
-    },
-    "enable_lightbox": {
-      "type": "boolean",
-      "label": "تفعيل العرض الكامل",
-      "default": true
-    },
-    "thumbnails_position": {
-      "type": "select",
-      "label": "موضع الصور المصغرة",
-      "default": "bottom",
-      "options": [
-        { "value": "bottom", "label": "أسفل" },
-        { "value": "side", "label": "جانبي" }
-      ]
-    },
     "show_sku": {
       "type": "boolean",
-      "label": "إظهار رمز المنتج",
-      "default": true
-    },
-    "show_vendor": {
-      "type": "boolean",
-      "label": "إظهار الماركة",
-      "default": true
-    },
-    "show_rating": {
-      "type": "boolean",
-      "label": "إظهار التقييم",
-      "default": true
-    },
-    "show_stock": {
-      "type": "boolean",
-      "label": "إظهار حالة التوفر",
+      "label": "إظهار رمز المنتج (SKU)",
       "default": true
     },
     "show_share": {
@@ -54,42 +11,35 @@
       "label": "إظهار أزرار المشاركة",
       "default": true
     },
-    "sticky_add_to_cart": {
-      "type": "boolean",
-      "label": "زر الإضافة الثابت (موبايل)",
-      "default": true
-    },
     "show_tabs": {
       "type": "boolean",
-      "label": "إظهار التبويبات",
+      "label": "إظهار تبويبات المعلومات",
       "default": true
     },
-    "tabs_style": {
+    "image_position": {
       "type": "select",
-      "label": "نمط التبويبات",
-      "default": "tabs",
+      "label": "موضع الصور",
+      "default": "start",
       "options": [
-        { "value": "tabs", "label": "تبويبات" },
-        { "value": "accordion", "label": "أكورديون" }
+        { "value": "start", "label": "البداية" },
+        { "value": "end", "label": "النهاية" }
       ]
     },
-    "show_related": {
+    "image_zoom": {
       "type": "boolean",
-      "label": "إظهار المنتجات ذات الصلة",
+      "label": "تفعيل تكبير الصور",
       "default": true
     },
-    "related_count": {
-      "type": "number",
-      "label": "عدد المنتجات ذات الصلة",
-      "default": 4,
-      "min": 2,
-      "max": 8
+    "shipping_info": {
+      "type": "text",
+      "label": "معلومات الشحن",
+      "default": ""
     }
   },
   "presets": [
     {
-      "category": "Product",
-      "name": "Product Layout"
+      "category": "صفحة المنتج",
+      "name": "تفاصيل المنتج"
     }
   ]
 }

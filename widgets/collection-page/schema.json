@@ -1,0 +1,113 @@
+{
+  "name": "صفحة التصنيف",
+  "settings": {
+    "columns_desktop": {
+      "type": "select",
+      "label": "أعمدة سطح المكتب",
+      "default": "3",
+      "options": [
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ]
+    },
+    "show_description": {
+      "type": "boolean",
+      "label": "إظهار وصف التصنيف",
+      "default": true
+    },
+    "show_sort": {
+      "type": "boolean",
+      "label": "إظهار خيارات الترتيب",
+      "default": true
+    },
+    "show_filters": {
+      "type": "boolean",
+      "label": "إظهار الفلاتر",
+      "default": true
+    },
+    "card_show_rating": {
+      "type": "boolean",
+      "label": "إظهار التقييم في الكارد",
+      "default": true
+    },
+    "card_show_options": {
+      "type": "boolean",
+      "label": "إظهار خيارات الألوان في الكارد",
+      "default": true
+    },
+    "card_show_badge": {
+      "type": "boolean",
+      "label": "إظهار شارة الخصم في الكارد",
+      "default": true
+    },
+    "card_image_ratio": {
+      "type": "select",
+      "label": "نسبة صورة الكارد",
+      "default": "square",
+      "options": [
+        { "value": "square", "label": "مربع" },
+        { "value": "portrait", "label": "طولي" },
+        { "value": "landscape", "label": "عرضي" }
+      ]
+    },
+    "card_show_button": {
+      "type": "boolean",
+      "label": "إظهار زر الإضافة للسلة",
+      "default": true
+    },
+    "card_show_compare_price": {
+      "type": "boolean",
+      "label": "إظهار السعر قبل الخصم",
+      "default": true
+    },
+    "card_title_lines": {
+      "type": "select",
+      "label": "عدد أسطر العنوان",
+      "default": "2",
+      "options": [
+        { "value": "1", "label": "سطر واحد" },
+        { "value": "2", "label": "سطرين" }
+      ]
+    },
+    "card_image_fit": {
+      "type": "select",
+      "label": "طريقة عرض الصورة",
+      "default": "contain",
+      "options": [
+        { "value": "contain", "label": "كاملة (contain)" },
+        { "value": "cover", "label": "تغطية (cover)" }
+      ]
+    },
+    "card_hover_effect": {
+      "type": "select",
+      "label": "تأثير الهوفر على الصورة",
+      "default": "zoom",
+      "options": [
+        { "value": "zoom", "label": "تكبير" },
+        { "value": "none", "label": "بدون" }
+      ]
+    },
+    "card_show_wishlist": {
+      "type": "boolean",
+      "label": "إظهار زر المفضلة",
+      "default": false
+    },
+    "card_border_radius": {
+      "type": "select",
+      "label": "حواف الكارد",
+      "default": "lg",
+      "options": [
+        { "value": "none", "label": "بدون" },
+        { "value": "sm", "label": "صغير" },
+        { "value": "md", "label": "متوسط" },
+        { "value": "lg", "label": "كبير" }
+      ]
+    }
+  },
+  "presets": [
+    {
+      "category": "صفحة التصنيف",
+      "name": "صفحة التصنيف"
+    }
+  ]
+}

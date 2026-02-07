@@ -1,221 +1,260 @@
-{# Search Page Widget #}
+{# Search Page Widget - Qamar Theme #}
+{% set products = context.products | default([]) %}
+{% set pagination = context.pagination %}
+{% set searchQuery = context.query.q | default('') %}
+{% set columns_desktop = widget.data.columns_desktop | default('4') %}
+{% set show_sort = widget.data.show_sort | default(true) %}
+{% set show_filters = widget.data.show_filters if widget.data.show_filters is defined else true %}
+{% set filters = context.filters | default([]) %}
+{% set hasFilters = show_filters and filters | length > 0 %}
+{% set hasSidebar = show_sort or hasFilters %}
 
-{% set desktopCols = {
-  '3': 'lg:grid-cols-3',
-  '4': 'lg:grid-cols-4'
-}[widget.data.columns_desktop] | default('lg:grid-cols-4') %}
+{# Card display settings #}
+{% set _cs_rating = widget.data.card_show_rating if widget.data.card_show_rating is defined else true %}
+{% set _cs_options = widget.data.card_show_options if widget.data.card_show_options is defined else true %}
+{% set _cs_badge = widget.data.card_show_badge if widget.data.card_show_badge is defined else true %}
+{% set _cs_button = widget.data.card_show_button if widget.data.card_show_button is defined else true %}
+{% set _cs_compare = widget.data.card_show_compare_price if widget.data.card_show_compare_price is defined else true %}
+{% set _cs_wishlist = widget.data.card_show_wishlist | default(false) %}
+{% set _cs_ratio = widget.data.card_image_ratio | default('square') %}
+{% set _cs_lines = widget.data.card_title_lines | default('2') %}
+{% set _cs_fit = widget.data.card_image_fit | default('contain') %}
+{% set _cs_hover = widget.data.card_hover_effect | default('zoom') %}
+{% set _cs_radius = widget.data.card_border_radius | default('lg') %}
 
-<div class="search-page py-8" x-data="{
-  query: '{{ search.query | default('') }}',
-  sortBy: '{{ search.sort | default('relevance') }}',
-  filtersOpen: false,
+{# Discover range filter handle dynamically #}
+{% set _rangeHandle = 'price' %}
+{% for filter in filters %}
+  {% if filter.inputType == 'range' %}
+    {% set _rangeHandle = filter.handle %}
+  {% endif %}
+{% endfor %}
 
-  updateSearch() {
-    const params = new URLSearchParams(window.location.search);
-    if (this.query) params.set('q', this.query);
-    if (this.sortBy && this.sortBy !== 'relevance') params.set('sort', this.sortBy);
-    window.location.search = params.toString();
+<section class="py-6 md:py-10" x-data="collectionFilter({
+  query: '{{ searchQuery | replace("'", "\\'") }}',
+  rangeHandle: '{{ _rangeHandle }}',
+  cardSettings: {
+    showRating: {{ _cs_rating }},
+    showOptions: {{ _cs_options }},
+    showBadge: {{ _cs_badge }},
+    imageRatio: '{{ _cs_ratio }}',
+    showButton: {{ _cs_button }},
+    showComparePrice: {{ _cs_compare }},
+    titleLines: '{{ _cs_lines }}',
+    imageFit: '{{ _cs_fit }}',
+    hoverEffect: '{{ _cs_hover }}',
+    showWishlist: {{ _cs_wishlist }},
+    borderRadius: '{{ _cs_radius }}',
+    gridClass: '{% if hasSidebar %}md:grid-cols-2 lg:grid-cols-3{% elif columns_desktop == "3" %}md:grid-cols-3{% else %}md:grid-cols-4{% endif %}'
   },
-
-  clearFilters() {
-    window.location.href = '/search?q=' + encodeURIComponent(this.query);
+  translations: {
+    addToCart: '{{t("product.add_to_cart")}}',
+    chooseOptions: '{{t("product.choose_options")}}',
+    outOfStock: '{{t("product.out_of_stock")}}',
+    added: '{{t("product.added")}}',
+    noResults: '{{t("search.no_results")}}',
+    tryDifferent: '{{t("search.try_different")}}',
+    home: '{{t("common.home")}}',
+    products: '{{t("common.products")}}',
+    resultsFor: '{{t("search.results_for")}}'
   }
-}">
+})">
   <div class="container mx-auto px-4">
 
-    {# Search Header #}
-    <div class="mb-8">
-      <form @submit.prevent="updateSearch()" class="max-w-2xl mx-auto">
-        <div class="relative">
-          <input
-            type="search"
-            x-model="query"
-            placeholder="{{t('search.placeholder')}}"
-            class="w-full py-4 px-6 pe-14 text-lg border-2 border-gray-200 rounded-full focus:border-primary focus:outline-none transition-colors">
-          <button
-            type="submit"
-            class="absolute top-1/2 end-4 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-primary text-white rounded-full hover:bg-primary-dark transition-colors">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-            </svg>
-          </button>
-        </div>
+    {# ===== Search Header ===== #}
+    <div class="max-w-2xl mx-auto mb-8 md:mb-10 text-center">
+      <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
+        {{t('search.title')}}
+      </h1>
+      <form action="/search" method="GET" class="relative">
+        <input type="text" name="q" value="{{ searchQuery }}"
+               placeholder="{{t('search.placeholder')}}"
+               class="w-full border-2 border-gray-200 rounded-2xl py-4 px-6 pe-14 text-base focus:outline-none focus:border-primary transition-colors bg-white"
+               autocomplete="off">
+        <button type="submit"
+                class="absolute end-4 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-primary transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </button>
       </form>
     </div>
 
-    {% if search.query %}
-      {# Results Header #}
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <div>
-          <h1 class="text-2xl font-bold">{{t("search.results_for")}} "{{ search.query }}"</h1>
-          <p class="text-gray-500 mt-1">{{ search.total | default(0) }} {{t("search.results_count")}}</p>
-        </div>
+    {# ===== Results Section ===== #}
+    {% if searchQuery %}
+      <div class="flex gap-8">
 
-        <div class="flex items-center gap-4">
-          {# Mobile Filter Toggle #}
-          {% if widget.data.show_filters %}
-            <button
-              @click="filtersOpen = !filtersOpen"
-              class="lg:hidden btn btn-outline">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
-              </svg>
-              {{t("collection.filters")}}
-            </button>
-          {% endif %}
-
-          {# Sort #}
-          {% if widget.data.show_sort %}
-            <select
-              x-model="sortBy"
-              @change="updateSearch()"
-              class="input py-2 px-4">
-              <option value="relevance">{{t("search.sort_relevance")}}</option>
-              <option value="newest">{{t("collection.sort_newest")}}</option>
-              <option value="price_asc">{{t("collection.sort_price_asc")}}</option>
-              <option value="price_desc">{{t("collection.sort_price_desc")}}</option>
-              <option value="name_asc">{{t("collection.sort_name_asc")}}</option>
-            </select>
-          {% endif %}
-        </div>
-      </div>
-
-      {% if search.products and search.products.length > 0 %}
-        <div class="flex flex-col lg:flex-row gap-8">
-
-          {# Filters Sidebar #}
-          {% if widget.data.show_filters %}
-            <aside
-              class="lg:w-64 flex-shrink-0"
-              :class="filtersOpen ? 'block' : 'hidden lg:block'">
-              <div class="bg-white rounded-xl shadow-sm p-6 sticky top-24">
-                <div class="flex items-center justify-between mb-4">
-                  <h3 class="font-bold">{{t("collection.filters")}}</h3>
-                  <button
-                    @click="clearFilters()"
-                    class="text-sm text-primary hover:underline">
-                    {{t("collection.clear_filters")}}
-                  </button>
-                </div>
-
-                {# Price Filter #}
-                <div class="border-t pt-4">
-                  <h4 class="font-medium mb-3">{{t("collection.filter_price")}}</h4>
-                  <div class="space-y-2">
-                    <label class="flex items-center gap-2 cursor-pointer">
-                      <input type="checkbox" class="form-checkbox text-primary rounded">
-                      <span class="text-sm">{{t("collection.price_under")}} 100</span>
-                    </label>
-                    <label class="flex items-center gap-2 cursor-pointer">
-                      <input type="checkbox" class="form-checkbox text-primary rounded">
-                      <span class="text-sm">100 - 200</span>
-                    </label>
-                    <label class="flex items-center gap-2 cursor-pointer">
-                      <input type="checkbox" class="form-checkbox text-primary rounded">
-                      <span class="text-sm">200 - 500</span>
-                    </label>
-                    <label class="flex items-center gap-2 cursor-pointer">
-                      <input type="checkbox" class="form-checkbox text-primary rounded">
-                      <span class="text-sm">{{t("collection.price_over")}} 500</span>
-                    </label>
-                  </div>
-                </div>
-
-                {# Categories Filter #}
-                {% if search.categories and search.categories.length > 0 %}
-                  <div class="border-t pt-4 mt-4">
-                    <h4 class="font-medium mb-3">{{t("collection.filter_category")}}</h4>
-                    <div class="space-y-2">
-                      {% for category in search.categories %}
-                        <label class="flex items-center gap-2 cursor-pointer">
-                          <input type="checkbox" class="form-checkbox text-primary rounded">
-                          <span class="text-sm">{{ category.name }}</span>
-                          <span class="text-xs text-gray-400">({{ category.count }})</span>
-                        </label>
-                      {% endfor %}
-                    </div>
-                  </div>
+        {# ===== Desktop Sidebar ===== #}
+        {% if hasSidebar and products | length > 0 %}
+          <aside class="hidden md:block w-64 flex-shrink-0">
+            <div class="sticky bottom-6 space-y-5">
+              {# Results Info #}
+              <div id="products-count" class="bg-white rounded-2xl border border-gray-100 p-5">
+                <p class="text-sm text-gray-600">
+                  {{t('search.results_for')}}
+                  <span class="font-bold text-primary">"{{ searchQuery }}"</span>
+                </p>
+                {% if pagination %}
+                  <p class="text-xs text-gray-400 mt-1">{{ pagination.totalItems }} {{t('common.products')}}</p>
                 {% endif %}
+                <template x-if="activeCount > 0">
+                  <button @click="clearFilters()"
+                          class="mt-2 text-xs text-red-500 hover:text-red-600 font-medium transition-colors">
+                    {{t('collection.clear_filters')}}
+                  </button>
+                </template>
               </div>
-            </aside>
+
+              {% ui "filter-sidebar.njk", show_sort=show_sort, filters=filters, hasFilters=hasFilters %}
+            </div>
+          </aside>
+        {% endif %}
+
+        {# ===== Products Area ===== #}
+        <div class="flex-1 min-w-0">
+
+          {# Mobile: Results info #}
+          <div class="md:hidden mb-5">
+            <p class="text-sm text-gray-600 mb-3">
+              {{t('search.results_for')}}
+              <span class="font-bold text-primary">"{{ searchQuery }}"</span>
+              {% if pagination %}
+                <span class="text-gray-400">({{ pagination.totalItems }})</span>
+              {% endif %}
+            </p>
+          </div>
+
+          {# Mobile Toolbar + Bottom Sheets (only when products exist) #}
+          {% if products | length > 0 %}
+            {% ui "filter-mobile.njk", show_sort=show_sort, filters=filters, hasFilters=hasFilters, hasSidebar=hasSidebar %}
           {% endif %}
 
-          {# Products Grid #}
-          <div class="flex-1">
-            <div class="grid grid-cols-2 md:grid-cols-3 {{ desktopCols }} gap-4 md:gap-6">
-              {% for product in search.products %}
-                {% ui "product-card", { product: product } %}
-              {% endfor %}
+          {# Desktop: Results info (when no sidebar) #}
+          {% if not hasSidebar or products | length == 0 %}
+            <div class="hidden md:block mb-6">
+              <p class="text-sm text-gray-600">
+                {{t('search.results_for')}}
+                <span class="font-bold text-primary">"{{ searchQuery }}"</span>
+                {% if pagination %}
+                  <span class="text-gray-400">({{ pagination.totalItems }} {{t('common.products')}})</span>
+                {% endif %}
+              </p>
+            </div>
+          {% endif %}
+
+          {# Products Grid Wrapper (swapped via AJAX) #}
+          <div id="products-grid-wrapper" class="relative min-h-[200px]">
+
+            {# Loading Overlay #}
+            <div x-show="loading" x-cloak
+                 class="absolute inset-0 bg-white/70 z-10 flex items-center justify-center rounded-2xl"
+                 style="backdrop-filter: blur(2px);"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                 x-transition:leave="transition ease-in duration-150"
+                 x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+              <svg class="w-8 h-8 animate-spin text-primary" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
             </div>
 
-            {# Pagination #}
-            {% if search.pagination and search.pagination.totalPages > 1 %}
-              <nav class="flex justify-center mt-12">
-                <div class="flex items-center gap-2">
-                  {% if search.pagination.currentPage > 1 %}
-                    <a
-                      href="?q={{ search.query }}&page={{ search.pagination.currentPage - 1 }}"
-                      class="w-10 h-10 flex items-center justify-center rounded-lg border hover:bg-gray-50">
-                      <svg class="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {% if products | length > 0 %}
+              <div class="grid grid-cols-2 gap-3 md:gap-5
+                {% if hasSidebar %}
+                  md:grid-cols-2 lg:grid-cols-3
+                {% else %}
+                  {% if columns_desktop == '3' %} md:grid-cols-3
+                  {% else %} md:grid-cols-4
+                  {% endif %}
+                {% endif %}">
+                {% for product in products %}
+                  {% ui "product-card.njk", product=product, show_rating=_cs_rating, show_options=_cs_options, show_badge=_cs_badge, image_ratio=_cs_ratio, show_button=_cs_button, show_compare_price=_cs_compare, title_lines=_cs_lines, image_fit=_cs_fit, hover_effect=_cs_hover, show_wishlist=_cs_wishlist, border_radius=_cs_radius %}
+                {% endfor %}
+              </div>
+
+              {# Pagination (AJAX) #}
+              {% if pagination and pagination.totalPages > 1 %}
+                <nav class="flex items-center justify-center gap-1.5 mt-10" aria-label="pagination">
+                  {% if pagination.currentPage > 1 %}
+                    <button @click.prevent="goToPage({{ pagination.currentPage - 1 }})"
+                       class="w-10 h-10 rounded-xl flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-primary transition-colors">
+                      <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                       </svg>
-                    </a>
+                    </button>
+                  {% else %}
+                    <span class="w-10 h-10 rounded-xl flex items-center justify-center text-gray-200">
+                      <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                      </svg>
+                    </span>
                   {% endif %}
 
-                  {% for page in range(1, search.pagination.totalPages + 1) %}
-                    {% if page == search.pagination.currentPage %}
-                      <span class="w-10 h-10 flex items-center justify-center rounded-lg bg-primary text-white font-medium">
-                        {{ page }}
-                      </span>
-                    {% elif page == 1 or page == search.pagination.totalPages or (page >= search.pagination.currentPage - 2 and page <= search.pagination.currentPage + 2) %}
-                      <a
-                        href="?q={{ search.query }}&page={{ page }}"
-                        class="w-10 h-10 flex items-center justify-center rounded-lg border hover:bg-gray-50">
-                        {{ page }}
-                      </a>
-                    {% elif page == search.pagination.currentPage - 3 or page == search.pagination.currentPage + 3 %}
-                      <span class="px-2">...</span>
+                  {% for i in range(1, pagination.totalPages + 1) %}
+                    {% if i == pagination.currentPage %}
+                      <span class="w-10 h-10 rounded-xl flex items-center justify-center bg-primary text-white font-semibold text-sm">{{ i }}</span>
+                    {% elif i == 1 or i == pagination.totalPages or (i >= pagination.currentPage - 1 and i <= pagination.currentPage + 1) %}
+                      <button @click.prevent="goToPage({{ i }})"
+                         class="w-10 h-10 rounded-xl flex items-center justify-center text-gray-600 hover:bg-gray-100 hover:text-primary transition-colors text-sm font-medium">{{ i }}</button>
+                    {% elif i == pagination.currentPage - 2 or i == pagination.currentPage + 2 %}
+                      <span class="w-6 flex items-center justify-center text-gray-300 text-sm">...</span>
                     {% endif %}
                   {% endfor %}
 
-                  {% if search.pagination.currentPage < search.pagination.totalPages %}
-                    <a
-                      href="?q={{ search.query }}&page={{ search.pagination.currentPage + 1 }}"
-                      class="w-10 h-10 flex items-center justify-center rounded-lg border hover:bg-gray-50">
-                      <svg class="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  {% if pagination.hasNextPage %}
+                    <button @click.prevent="goToPage({{ pagination.currentPage + 1 }})"
+                       class="w-10 h-10 rounded-xl flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-primary transition-colors">
+                      <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                       </svg>
-                    </a>
+                    </button>
+                  {% else %}
+                    <span class="w-10 h-10 rounded-xl flex items-center justify-center text-gray-200">
+                      <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                      </svg>
+                    </span>
                   {% endif %}
+                </nav>
+              {% endif %}
+
+            {% else %}
+              <div class="flex flex-col items-center justify-center py-20 text-center">
+                <div class="w-24 h-24 rounded-full bg-gray-50 flex items-center justify-center mb-5">
+                  <svg class="w-12 h-12 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                  </svg>
                 </div>
-              </nav>
+                <h3 class="text-lg font-bold text-gray-800 mb-2">
+                  {{t('search.no_results')}} "{{ searchQuery }}"
+                </h3>
+                <p class="text-gray-500 text-sm mb-6 max-w-md mx-auto">{{t('search.try_different')}}</p>
+                <a href="/" class="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:opacity-80 transition-colors">
+                  {{t('common.home')}}
+                  <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                </a>
+              </div>
             {% endif %}
+
           </div>
         </div>
+      </div>
 
-      {% else %}
-        {# No Results #}
-        <div class="max-w-md mx-auto text-center py-16">
-          <svg class="w-32 h-32 mx-auto text-gray-300 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-          </svg>
-          <h2 class="text-2xl font-bold text-gray-600 mb-2">{{t("search.no_results")}}</h2>
-          <p class="text-gray-400 mb-8">{{t("search.no_results_message")}}</p>
-          <a href="/products" class="btn btn-primary btn-lg">
-            {{t("search.browse_products")}}
-          </a>
-        </div>
-      {% endif %}
-
+    {# ===== Initial State (no query yet) ===== #}
     {% else %}
-      {# No Search Query #}
-      <div class="max-w-md mx-auto text-center py-16">
-        <svg class="w-32 h-32 mx-auto text-gray-300 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-        </svg>
-        <h2 class="text-2xl font-bold text-gray-600 mb-2">{{t("search.start_searching")}}</h2>
-        <p class="text-gray-400 mb-8">{{t("search.start_searching_message")}}</p>
+      <div class="flex flex-col items-center justify-center py-16 text-center">
+        <div class="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mb-5">
+          <svg class="w-12 h-12 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </div>
+        <h3 class="text-lg font-bold text-gray-800 mb-2">{{t('search.placeholder')}}</h3>
+        <p class="text-gray-500 text-sm">{{t('search.try_different')}}</p>
       </div>
     {% endif %}
+
   </div>
-</div>
+</section>

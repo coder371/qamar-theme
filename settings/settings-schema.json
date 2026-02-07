@@ -42,7 +42,7 @@
       },
       "textColor": {
         "type": "color",
-        "label": "لون النص",
+        "label": "لون النص الرئيسي",
         "default": "#212121"
       },
       "textSecondaryColor": {
@@ -68,22 +68,10 @@
         "label": "الخط العربي",
         "default": "Tajawal",
         "options": [
-          {
-            "value": "Tajawal",
-            "label": "Tajawal"
-          },
-          {
-            "value": "Cairo",
-            "label": "Cairo"
-          },
-          {
-            "value": "Almarai",
-            "label": "Almarai"
-          },
-          {
-            "value": "IBM Plex Sans Arabic",
-            "label": "IBM Plex Arabic"
-          }
+          { "value": "Tajawal", "label": "Tajawal" },
+          { "value": "Cairo", "label": "Cairo" },
+          { "value": "Almarai", "label": "Almarai" },
+          { "value": "IBM Plex Sans Arabic", "label": "IBM Plex Arabic" }
         ]
       },
       "fontEnglish": {
@@ -91,22 +79,10 @@
         "label": "الخط الإنجليزي",
         "default": "Poppins",
         "options": [
-          {
-            "value": "Poppins",
-            "label": "Poppins"
-          },
-          {
-            "value": "Inter",
-            "label": "Inter"
-          },
-          {
-            "value": "Playfair Display",
-            "label": "Playfair Display"
-          },
-          {
-            "value": "Montserrat",
-            "label": "Montserrat"
-          }
+          { "value": "Poppins", "label": "Poppins" },
+          { "value": "Inter", "label": "Inter" },
+          { "value": "Playfair Display", "label": "Playfair Display" },
+          { "value": "Montserrat", "label": "Montserrat" }
         ]
       }
     }
@@ -117,34 +93,43 @@
       "en": "General Settings"
     },
     "settings": {
-      "showAnnouncementBar": {
-        "type": "boolean",
-        "label": "إظهار شريط الإعلانات",
-        "default": true
-      },
-      "enableQuickView": {
-        "type": "boolean",
-        "label": "تفعيل العرض السريع",
-        "default": true
+      "buttonStyle": {
+        "type": "select",
+        "label": "شكل الأزرار",
+        "default": "rounded",
+        "options": [
+          { "value": "square", "label": "مربع" },
+          { "value": "rounded", "label": "مستدير قليلاً" },
+          { "value": "pill", "label": "كبسولة" }
+        ]
       },
       "productsPerRow": {
         "type": "select",
         "label": "عدد المنتجات في الصف",
         "default": "4",
         "options": [
-          {
-            "value": "2",
-            "label": "2 منتجات"
-          },
-          {
-            "value": "3",
-            "label": "3 منتجات"
-          },
-          {
-            "value": "4",
-            "label": "4 منتجات"
-          }
+          { "value": "2", "label": "2 منتجات" },
+          { "value": "3", "label": "3 منتجات" },
+          { "value": "4", "label": "4 منتجات" }
         ]
+      }
+    }
+  },
+  {
+    "label": {
+      "ar": "كود مخصص",
+      "en": "Custom Code"
+    },
+    "settings": {
+      "customCSS": {
+        "type": "css",
+        "label": "CSS مخصص",
+        "default": ""
+      },
+      "customJS": {
+        "type": "javascript",
+        "label": "JavaScript مخصص",
+        "default": ""
       }
     }
   }

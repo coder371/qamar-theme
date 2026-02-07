@@ -1,88 +1,69 @@
 {
-  "name": "Testimonials",
+  "name": "آراء العملاء",
   "settings": {
     "title": {
       "type": "string",
       "label": "العنوان",
-      "default": "آراء عملائنا"
+      "default": "ماذا قالت عميلاتنا"
     },
     "subtitle": {
       "type": "string",
-      "label": "العنوان الفرعي"
+      "label": "العنوان الفرعي",
+      "default": ""
     },
     "layout": {
       "type": "select",
-      "label": "التخطيط",
+      "label": "نمط العرض",
       "default": "slider",
       "options": [
-        {
-          "value": "slider",
-          "label": "سلايدر"
-        },
-        {
-          "value": "grid",
-          "label": "شبكة"
-        }
-      ]
-    },
-    "columns": {
-      "type": "select",
-      "label": "عدد الأعمدة (للشبكة)",
-      "default": "3",
-      "options": [
-        {
-          "value": "2",
-          "label": "2 أعمدة"
-        },
-        {
-          "value": "3",
-          "label": "3 أعمدة"
-        }
+        { "value": "slider", "label": "سلايدر" },
+        { "value": "grid", "label": "شبكة" }
       ]
     },
     "autoplay": {
       "type": "boolean",
       "label": "تشغيل تلقائي",
       "default": true
+    },
+    "background_color": {
+      "type": "color",
+      "label": "لون الخلفية",
+      "default": "#FAFAFA"
     }
   },
   "blocks": {
     "testimonial": {
-      "name": "تقييم",
+      "name": "رأي عميلة",
       "settings": {
         "content": {
           "type": "text",
-          "label": "المحتوى"
+          "label": "المحتوى",
+          "default": ""
         },
         "author_name": {
           "type": "string",
-          "label": "اسم العميل"
+          "label": "اسم العميلة",
+          "default": ""
         },
         "author_image": {
-          "type": "image",
-          "label": "صورة العميل"
+          "type": "media",
+          "label": "صورة العميلة"
         },
         "author_title": {
           "type": "string",
-          "label": "وصف العميل"
+          "label": "وصف العميلة",
+          "default": ""
         },
         "rating": {
           "type": "select",
           "label": "التقييم",
           "default": "5",
           "options": [
-            {
-              "value": "5",
-              "label": "5 نجوم"
-            },
-            {
-              "value": "4",
-              "label": "4 نجوم"
-            },
-            {
-              "value": "3",
-              "label": "3 نجوم"
-            }
+            { "value": "1", "label": "1" },
+            { "value": "2", "label": "2" },
+            { "value": "3", "label": "3" },
+            { "value": "4", "label": "4" },
+            { "value": "5", "label": "5" }
           ]
         }
       }
@@ -90,8 +71,8 @@
   },
   "presets": [
     {
-      "category": "Social Proof",
-      "name": "Testimonials"
+      "category": "الصفحة الرئيسية",
+      "name": "آراء العملاء"
     }
   ]
 }

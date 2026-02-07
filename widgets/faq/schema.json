@@ -1,5 +1,5 @@
 {
-  "name": "FAQ",
+  "name": "الأسئلة الشائعة",
   "settings": {
     "title": {
       "type": "string",
@@ -7,22 +7,14 @@
       "default": "الأسئلة الشائعة"
     },
     "subtitle": {
-      "type": "string",
-      "label": "العنوان الفرعي"
+      "type": "text",
+      "label": "العنوان الفرعي",
+      "default": ""
     },
-    "layout": {
-      "type": "select",
-      "label": "التخطيط",
-      "default": "single",
-      "options": [
-        { "value": "single", "label": "عمود واحد" },
-        { "value": "two-columns", "label": "عمودين" }
-      ]
-    },
-    "allow_multiple_open": {
+    "show_search": {
       "type": "boolean",
-      "label": "السماح بفتح عدة أسئلة",
-      "default": false
+      "label": "إظهار البحث",
+      "default": true
     }
   },
   "blocks": {
@@ -31,19 +23,26 @@
       "settings": {
         "question": {
           "type": "string",
-          "label": "السؤال"
+          "label": "السؤال",
+          "default": ""
         },
         "answer": {
-          "type": "richtext",
-          "label": "الإجابة"
+          "type": "text",
+          "label": "الإجابة",
+          "default": ""
+        },
+        "category": {
+          "type": "string",
+          "label": "التصنيف",
+          "default": ""
         }
       }
     }
   },
   "presets": [
     {
-      "category": "Pages",
-      "name": "FAQ"
+      "category": "الصفحات",
+      "name": "الأسئلة الشائعة"
     }
   ]
 }

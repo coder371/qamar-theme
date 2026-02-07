@@ -1,56 +1,133 @@
 {
-  "name": "Collection Products",
+  "name": "منتجات التصنيف",
   "settings": {
-    "products_per_page": {
-      "type": "number",
-      "label": "عدد المنتجات في الصفحة",
-      "default": 12,
-      "min": 8,
-      "max": 24
-    },
     "columns_desktop": {
       "type": "select",
-      "label": "عدد الأعمدة (سطح المكتب)",
+      "label": "أعمدة سطح المكتب",
       "default": "4",
       "options": [
-        { "value": "3", "label": "3 أعمدة" },
-        { "value": "4", "label": "4 أعمدة" }
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
       ]
     },
     "columns_mobile": {
       "type": "select",
-      "label": "عدد الأعمدة (موبايل)",
+      "label": "أعمدة الجوال",
       "default": "2",
       "options": [
-        { "value": "1", "label": "عمود واحد" },
-        { "value": "2", "label": "2 أعمدة" }
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
       ]
+    },
+    "show_sort": {
+      "type": "boolean",
+      "label": "إظهار خيارات الترتيب",
+      "default": true
     },
     "show_filters": {
       "type": "boolean",
       "label": "إظهار الفلاتر",
       "default": true
     },
-    "show_sort": {
+    "pagination_type": {
+      "type": "select",
+      "label": "نوع التصفح",
+      "default": "pagination",
+      "options": [
+        { "value": "pagination", "label": "ترقيم الصفحات" },
+        { "value": "load_more", "label": "تحميل المزيد" }
+      ]
+    },
+    "products_per_page": {
+      "type": "number",
+      "label": "عدد المنتجات في الصفحة",
+      "default": 12,
+      "min": 4,
+      "max": 48
+    },
+    "card_show_rating": {
       "type": "boolean",
-      "label": "إظهار الترتيب",
+      "label": "إظهار التقييم في الكارد",
       "default": true
     },
-    "filter_position": {
+    "card_show_options": {
+      "type": "boolean",
+      "label": "إظهار خيارات الألوان في الكارد",
+      "default": true
+    },
+    "card_show_badge": {
+      "type": "boolean",
+      "label": "إظهار شارة الخصم في الكارد",
+      "default": true
+    },
+    "card_image_ratio": {
       "type": "select",
-      "label": "موضع الفلاتر",
-      "default": "sidebar",
+      "label": "نسبة صورة الكارد",
+      "default": "square",
       "options": [
-        { "value": "sidebar", "label": "جانبي" },
-        { "value": "top", "label": "أعلى" },
-        { "value": "drawer", "label": "قائمة منسدلة" }
+        { "value": "square", "label": "مربع" },
+        { "value": "portrait", "label": "طولي" },
+        { "value": "landscape", "label": "عرضي" }
+      ]
+    },
+    "card_show_button": {
+      "type": "boolean",
+      "label": "إظهار زر الإضافة للسلة",
+      "default": true
+    },
+    "card_show_compare_price": {
+      "type": "boolean",
+      "label": "إظهار السعر قبل الخصم",
+      "default": true
+    },
+    "card_title_lines": {
+      "type": "select",
+      "label": "عدد أسطر العنوان",
+      "default": "2",
+      "options": [
+        { "value": "1", "label": "سطر واحد" },
+        { "value": "2", "label": "سطرين" }
+      ]
+    },
+    "card_image_fit": {
+      "type": "select",
+      "label": "طريقة عرض الصورة",
+      "default": "contain",
+      "options": [
+        { "value": "contain", "label": "كاملة (contain)" },
+        { "value": "cover", "label": "تغطية (cover)" }
+      ]
+    },
+    "card_hover_effect": {
+      "type": "select",
+      "label": "تأثير الهوفر على الصورة",
+      "default": "zoom",
+      "options": [
+        { "value": "zoom", "label": "تكبير" },
+        { "value": "none", "label": "بدون" }
+      ]
+    },
+    "card_show_wishlist": {
+      "type": "boolean",
+      "label": "إظهار زر المفضلة",
+      "default": false
+    },
+    "card_border_radius": {
+      "type": "select",
+      "label": "حواف الكارد",
+      "default": "lg",
+      "options": [
+        { "value": "none", "label": "بدون" },
+        { "value": "sm", "label": "صغير" },
+        { "value": "md", "label": "متوسط" },
+        { "value": "lg", "label": "كبير" }
       ]
     }
   },
   "presets": [
     {
-      "category": "Collection",
-      "name": "Collection Products"
+      "category": "صفحة التصنيف",
+      "name": "منتجات التصنيف"
     }
   ]
 }

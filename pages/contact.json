@@ -1,50 +1,23 @@
 {
   "layout": "layout",
+  "allowAdd": true,
+  "allowRemove": true,
+  "allowReorder": true,
   "widgets": [
     {
       "name": "نموذج التواصل",
       "widget": "contact-form",
       "settings": {
-        "title": "تواصل معنا",
-        "subtitle": "نسعد بتواصلكم معنا",
-        "show_contact_info": true,
-        "success_message": "تم إرسال رسالتك بنجاح!"
+        "title": "تواصلي معنا",
+        "subtitle": "نسعد بتواصلك معنا! أرسلي لنا رسالتك وسنرد في أقرب وقت.",
+        "show_info": true,
+        "address": "الرياض، المملكة العربية السعودية",
+        "phone": "+966 50 000 0000",
+        "email": "info@example.com",
+        "working_hours": "السبت - الخميس: 9 صباحاً - 9 مساءً",
+        "show_map": false,
+        "map_embed": ""
       }
-    },
-    {
-      "name": "الأسئلة الشائعة",
-      "widget": "faq",
-      "settings": {
-        "title": "الأسئلة الشائعة",
-        "layout": "single",
-        "allow_multiple_open": false
-      },
-      "blocks": [
-        {
-          "name": "سؤال طرق الدفع",
-          "block": "question",
-          "settings": {
-            "question": "ما هي طرق الدفع المتاحة؟",
-            "answer": "نوفر لكم طرق دفع متعددة تشمل: البطاقات البنكية (فيزا، ماستركارد)، الدفع عند الاستلام، والتحويل البنكي."
-          }
-        },
-        {
-          "name": "سؤال الشحن",
-          "block": "question",
-          "settings": {
-            "question": "كم تستغرق عملية الشحن؟",
-            "answer": "يتم الشحن خلال 2-5 أيام عمل داخل المملكة، وقد تختلف المدة حسب المنطقة."
-          }
-        },
-        {
-          "name": "سؤال الاسترجاع",
-          "block": "question",
-          "settings": {
-            "question": "هل يمكنني استرجاع أو استبدال المنتج؟",
-            "answer": "نعم، يمكنك استرجاع أو استبدال المنتج خلال 14 يوماً من تاريخ الاستلام بشرط أن يكون بحالته الأصلية."
-          }
-        }
-      ]
     }
   ]
 }

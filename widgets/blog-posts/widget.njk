@@ -1,0 +1,132 @@
+<section class="py-12 md:py-16">
+  <div class="container mx-auto px-4">
+    {# Section Header #}
+    {% if widget.data.title or widget.data.subtitle %}
+      <div class="text-center mb-10">
+        {% if widget.data.title %}
+          <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-3">{{ widget.data.title }}</h2>
+        {% endif %}
+        {% if widget.data.subtitle %}
+          <p class="text-gray-500 text-sm md:text-base max-w-xl mx-auto">{{ widget.data.subtitle }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% set blocks = widget.blocks | default([]) %}
+    {% set postsCount = widget.data.posts_count | default(3) %}
+    {% set gridCols = 3 if postsCount >= 3 else postsCount %}
+
+    {% if widget.data.layout == 'slider' %}
+      {# Slider Layout #}
+      <div class="swiper" x-data x-init="$nextTick(() => {
+        var slideCount = $el.querySelectorAll('.swiper-slide').length;
+        new Swiper($el, {
+          slidesPerView: 1,
+          spaceBetween: 24,
+          loop: slideCount > {{ gridCols }},
+          pagination: {
+            el: $el.querySelector('.swiper-pagination'),
+            clickable: true
+          },
+          breakpoints: {
+            640: { slidesPerView: 2 },
+            1024: { slidesPerView: {{ gridCols }} }
+          }
+        });
+      })">
+        <div class="swiper-wrapper">
+          {% for block in blocks %}
+            {% if loop.index0 < postsCount %}
+              <div class="swiper-slide">
+                <article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group h-full">
+                  {# Image #}
+                  {% if block.settings.image %}
+                    <a href="{{ block.settings.url | default('#') }}" class="block aspect-[16/10] overflow-hidden">
+                      <img src="{{ block.settings.image }}"
+                           alt="{{ block.settings.title }}"
+                           class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </a>
+                  {% endif %}
+
+                  <div class="p-5">
+                    {# Date #}
+                    {% if widget.data.show_date and block.settings.date %}
+                      <time class="text-xs text-primary font-medium mb-2 block">{{ block.settings.date }}</time>
+                    {% endif %}
+
+                    {# Title #}
+                    <h3 class="text-base font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">
+                      <a href="{{ block.settings.url | default('#') }}">{{ block.settings.title }}</a>
+                    </h3>
+
+                    {# Excerpt #}
+                    {% if widget.data.show_excerpt and block.settings.excerpt %}
+                      <p class="text-sm text-gray-500 leading-relaxed line-clamp-3 mb-4">{{ block.settings.excerpt }}</p>
+                    {% endif %}
+
+                    {# Read More #}
+                    <a href="{{ block.settings.url | default('#') }}"
+                       class="inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-primary-dark transition-colors">
+                      {{t('blog.read_more')}}
+                      <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+                      </svg>
+                    </a>
+                  </div>
+                </article>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        {# Navigation #}
+        <div class="swiper-pagination mt-6"></div>
+      </div>
+
+    {% else %}
+      {# Grid Layout #}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ gridCols }} gap-6">
+        {% for block in blocks %}
+          {% if loop.index0 < postsCount %}
+            <article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group">
+              {# Image #}
+              {% if block.settings.image %}
+                <a href="{{ block.settings.url | default('#') }}" class="block aspect-[16/10] overflow-hidden">
+                  <img src="{{ block.settings.image }}"
+                       alt="{{ block.settings.title }}"
+                       class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </a>
+              {% endif %}
+
+              <div class="p-5">
+                {# Date #}
+                {% if widget.data.show_date and block.settings.date %}
+                  <time class="text-xs text-primary font-medium mb-2 block">{{ block.settings.date }}</time>
+                {% endif %}
+
+                {# Title #}
+                <h3 class="text-base font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">
+                  <a href="{{ block.settings.url | default('#') }}">{{ block.settings.title }}</a>
+                </h3>
+
+                {# Excerpt #}
+                {% if widget.data.show_excerpt and block.settings.excerpt %}
+                  <p class="text-sm text-gray-500 leading-relaxed line-clamp-3 mb-4">{{ block.settings.excerpt }}</p>
+                {% endif %}
+
+                {# Read More #}
+                <a href="{{ block.settings.url | default('#') }}"
+                   class="inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-primary-dark transition-colors">
+                  {{t('blog.read_more')}}
+                  <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+                  </svg>
+                </a>
+              </div>
+            </article>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>

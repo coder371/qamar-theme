@@ -1,1099 +1,1031 @@
-/**
- * Qamar Theme - Main JavaScript
- * Scalable E-commerce Theme Architecture
- * @version 2.0.0
- */
+/* Qamar Theme - Main JavaScript */
 
-// ============================================
-// Configuration
-// ============================================
+(function () {
+  'use strict';
 
-const QumraConfig = {
-  // API Endpoints
-  api: {
-    cart: {
-      get: '/ajax/cart',
-      add: '/ajax/cart/add',
-      change: '/ajax/cart/change',
-      remove: '/ajax/cart/remove',
-      clear: '/ajax/cart/clear'
-    },
-    wishlist: {
-      add: '/ajax/wishlist/add',
-      remove: '/ajax/wishlist/remove',
-      clear: '/ajax/wishlist/clear'
-    },
-    search: {
-      products: '/ajax/search',
-      suggest: '/ajax/search/suggest'
-    },
-    product: {
-      get: '/ajax/product',
-      variant: '/ajax/product/resolve-variant-by-options'
-    }
-  },
-
-  // Default Settings (uses QumraLocalization from layout if available)
-  defaults: {
-    get currency() { return window.QumraLocalization?.currencyCode || 'SAR'; },
-    get currencySymbol() { return window.QumraLocalization?.currencySymbol || 'ر.س'; },
-    get language() { return window.QumraLocalization?.language || 'ar'; },
-    toastDuration: 3000,
-    debounceDelay: 300,
-    animationDuration: 300
-  },
-
-  // Messages (Arabic)
-  messages: {
-    cart: {
-      added: 'تمت الإضافة إلى السلة',
-      removed: 'تم الحذف من السلة',
-      updated: 'تم تحديث السلة',
-      cleared: 'تم تفريغ السلة',
-      confirmClear: 'هل تريد تفريغ السلة بالكامل؟'
-    },
-    wishlist: {
-      added: 'تمت الإضافة إلى المفضلة',
-      removed: 'تم الحذف من المفضلة',
-      cleared: 'تم مسح المفضلة',
-      confirmClear: 'هل تريد مسح المفضلة بالكامل؟'
-    },
-    errors: {
-      general: 'حدث خطأ',
-      network: 'خطأ في الاتصال',
-      validation: 'بيانات غير صحيحة'
-    }
-  },
-
-  // CSS Classes
-  classes: {
-    loading: 'loading',
-    active: 'active',
-    removing: 'removing',
-    hidden: 'hidden'
-  },
-
-  // Data Attributes
-  selectors: {
-    cart: {
-      count: '[data-cart-count]',
-      itemsCount: '[data-cart-items-count]',
-      total: '[data-cart-total]',
-      item: '[data-cart-item]',
-      itemQty: '[data-item-qty]',
-      itemTotal: '[data-item-total]',
-      container: '[data-cart-container]'
-    },
-    wishlist: {
-      count: '[data-wishlist-count]',
-      button: '[data-wishlist-btn]'
-    }
-  }
-};
-
-// ============================================
-// Event Bus - Central Event System
-// ============================================
-
-const EventBus = {
-  _events: {},
-
-  /**
-   * Subscribe to an event
-   */
-  on(event, callback) {
-    if (!this._events[event]) {
-      this._events[event] = [];
-    }
-    this._events[event].push(callback);
-    return () => this.off(event, callback);
-  },
-
-  /**
-   * Unsubscribe from an event
-   */
-  off(event, callback) {
-    if (!this._events[event]) return;
-    this._events[event] = this._events[event].filter(cb => cb !== callback);
-  },
-
-  /**
-   * Emit an event
-   */
-  emit(event, data) {
-    if (!this._events[event]) return;
-    this._events[event].forEach(callback => {
-      try {
-        callback(data);
-      } catch (error) {
-        console.error(`Error in event handler for "${event}":`, error);
+  // ===== Config =====
+  const config = window.__QUMRA_CONFIG__ || {};
+  const QumraConfig = {
+    api: {
+      cart: {
+        get: '/ajax/cart',
+        add: '/ajax/cart/add',
+        change: '/ajax/cart/change',
+        remove: '/ajax/cart/remove',
+        clear: '/ajax/cart/clear'
+      },
+      search: {
+        products: '/ajax/search/products',
+        suggest: '/ajax/search/suggest'
+      },
+      product: {
+        get: '/ajax/product',
+        variant: '/ajax/product/resolve-variant-by-options'
       }
-    });
-
-    // Also dispatch as DOM event for external listeners
-    window.dispatchEvent(new CustomEvent(event, { detail: data }));
-  }
-};
-
-// ============================================
-// API Client - Base HTTP Client
-// ============================================
-
-const ApiClient = {
-  /**
-   * Make a GET request
-   */
-  async get(url, params = {}) {
-    try {
-      const queryString = new URLSearchParams(params).toString();
-      const fullUrl = queryString ? `${url}?${queryString}` : url;
-
-      const response = await fetch(fullUrl);
-      return await this._handleResponse(response);
-    } catch (error) {
-      return this._handleError(error);
+    },
+    defaults: {
+      currency: config.currency || 'SAR',
+      currencySymbol: config.currencySymbol || 'ر.س',
+      language: config.language || 'ar',
+      exchangeRate: config.exchangeRate || 1
+    },
+    selectors: {
+      cart: {
+        count: '[data-cart-count]',
+        itemsCount: '[data-cart-items-count]',
+        total: '[data-cart-total]',
+        container: '[data-cart-container]'
+      }
+    },
+    messages: {
+      addedToCart: (config.messages && config.messages.addedToCart) || 'Added to cart',
+      addError: (config.messages && config.messages.addError) || 'Error, please try again'
     }
-  },
+  };
 
-  /**
-   * Make a POST request
-   */
-  async post(url, data = {}) {
-    try {
-      const response = await fetch(url, {
+  // ===== EventBus =====
+  const EventBus = {
+    _listeners: {},
+    on(event, callback) {
+      if (!this._listeners[event]) this._listeners[event] = [];
+      this._listeners[event].push(callback);
+      return () => {
+        this._listeners[event] = this._listeners[event].filter(cb => cb !== callback);
+      };
+    },
+    emit(event, data) {
+      (this._listeners[event] || []).forEach(cb => cb(data));
+      window.dispatchEvent(new CustomEvent(event, { detail: data }));
+    }
+  };
+
+  // ===== ApiClient =====
+  const ApiClient = {
+    async get(url, params) {
+      const query = params ? '?' + new URLSearchParams(params).toString() : '';
+      const res = await fetch(url + query);
+      if (!res.ok) throw new Error('Request failed: ' + res.status);
+      return res.json();
+    },
+    async post(url, body) {
+      const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        body: JSON.stringify(body)
       });
-      return await this._handleResponse(response);
-    } catch (error) {
-      return this._handleError(error);
+      if (!res.ok) throw new Error('Request failed: ' + res.status);
+      return res.json();
     }
-  },
+  };
 
-  /**
-   * Handle response
-   */
-  async _handleResponse(response) {
-    const data = await response.json();
+  // ===== Utils =====
+  const _moneyFormat = (function() {
+    var sample = (config.moneyFormatSample || '').trim();
+    var symbol = config.currencySymbol || '';
+    if (!sample || !symbol) return { useComma: true, space: ' ' };
+    var idx = sample.indexOf(symbol);
+    var hasSpace = idx > 0 && sample[idx - 1] === ' ';
+    var numPart = sample.substring(0, hasSpace ? idx - 1 : idx);
+    return { useComma: numPart.indexOf(',') !== -1, space: hasSpace ? ' ' : '' };
+  })();
 
-    if (!response.ok) {
-      return {
-        success: false,
-        error: true,
-        message: data.message || QumraConfig.messages.errors.general,
-        status: response.status
+  const Utils = {
+    formatMoney(amount) {
+      if (amount == null) return '';
+      var num = Number(amount);
+      var formatted;
+      if (_moneyFormat.useComma) {
+        formatted = num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      } else {
+        formatted = num.toFixed(2);
+      }
+      return formatted + _moneyFormat.space + QumraConfig.defaults.currencySymbol;
+    },
+
+    calcDiscount(price, compareAtPrice) {
+      if (!compareAtPrice || compareAtPrice <= price) return 0;
+      return Math.round(((compareAtPrice - price) / compareAtPrice) * 100);
+    },
+
+    debounce(fn, delay) {
+      let timer;
+      return function (...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn.apply(this, args), delay);
+      };
+    },
+
+    throttle(fn, limit) {
+      let inThrottle;
+      return function (...args) {
+        if (!inThrottle) {
+          fn.apply(this, args);
+          inThrottle = true;
+          setTimeout(() => (inThrottle = false), limit);
+        }
       };
     }
+  };
 
-    return data;
-  },
-
-  /**
-   * Handle error
-   */
-  _handleError(error) {
-    console.error('API Error:', error);
-    return {
-      success: false,
-      error: true,
-      message: QumraConfig.messages.errors.network
-    };
-  }
-};
-
-// ============================================
-// Toast Notification System
-// ============================================
-
-const Toast = {
-  container: null,
-
-  init() {
-    if (this.container) return;
-
-    this.container = document.getElementById('toast-container');
-    if (!this.container) {
-      this.container = document.createElement('div');
-      this.container.id = 'toast-container';
-      this.container.className = 'fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 z-50 flex flex-col gap-2';
-      document.body.appendChild(this.container);
-    }
-  },
-
-  _icons: {
-    success: '<svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>',
-    error: '<svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>',
-    warning: '<svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>',
-    info: '<svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
-  },
-
-  show(message, type = 'info', duration = QumraConfig.defaults.toastDuration) {
-    if (!this.container) this.init();
-
-    const toast = document.createElement('div');
-    toast.className = `toast toast-${type}`;
-    toast.innerHTML = `
-      ${this._icons[type] || this._icons.info}
-      <span class="flex-1">${message}</span>
-      <button onclick="this.parentElement.remove()" class="p-1 hover:opacity-70">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-        </svg>
-      </button>
-    `;
-
-    this.container.appendChild(toast);
-
-    if (duration > 0) {
+  // ===== Toast =====
+  const Toast = {
+    _show(message, type, duration) {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const el = document.createElement('div');
+      el.className = 'toast toast-' + type;
+      el.textContent = message;
+      container.appendChild(el);
       setTimeout(() => {
-        toast.classList.add(QumraConfig.classes.removing);
-        setTimeout(() => toast.remove(), QumraConfig.defaults.animationDuration);
-      }, duration);
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(-10px)';
+        el.style.transition = 'all 0.3s ease';
+        setTimeout(() => el.remove(), 300);
+      }, duration || 3000);
+    },
+    success(msg, duration) { this._show(msg, 'success', duration); },
+    error(msg, duration) { this._show(msg, 'error', duration); },
+    warning(msg, duration) { this._show(msg, 'warning', duration); },
+    info(msg, duration) { this._show(msg, 'info', duration); }
+  };
+
+  // ===== Helper: Update DOM selectors =====
+  function updateSelectors(selectors, values) {
+    Object.entries(selectors).forEach(([key, selector]) => {
+      if (typeof selector === 'string' && values[key] !== undefined) {
+        document.querySelectorAll(selector).forEach(el => {
+          el.textContent = values[key];
+        });
+      }
+    });
+  }
+
+  // ===== CartManager =====
+  const CartManager = {
+    async get() {
+      return ApiClient.get(QumraConfig.api.cart.get);
+    },
+
+    async add(productId, quantity, options) {
+      const body = { productId, quantity: quantity || 1 };
+      if (Array.isArray(options) && options.length) {
+        body.options = options;
+      } else if (options) {
+        body.variantId = options;
+      }
+
+      try {
+        const data = await ApiClient.post(QumraConfig.api.cart.add, body);
+
+        if (data.success === false) {
+          throw new Error(data.message || 'Failed');
+        }
+
+        this._updateUI(data);
+        this._refreshDrawer(data);
+        EventBus.emit('cart:updated', data);
+        EventBus.emit('cart:item-added', { productId, data });
+
+        Toast.success(QumraConfig.messages.addedToCart);
+
+        // Open cart drawer after short delay
+        setTimeout(() => { ModalController.open('cart'); }, 300);
+
+        return data;
+      } catch (error) {
+        Toast.error(QumraConfig.messages.addError);
+        throw error;
+      }
+    },
+
+    async update(itemId, quantity) {
+      const data = await ApiClient.post(QumraConfig.api.cart.change, { itemId, quantity });
+      if (data.success !== false) {
+        this._updateUI(data);
+        this._refreshDrawer(data);
+        EventBus.emit('cart:updated', data);
+      }
+      return data;
+    },
+
+    async remove(itemId) {
+      const itemEl = document.querySelector('[data-cart-item="' + itemId + '"]');
+      if (itemEl) itemEl.classList.add('removing');
+      const data = await ApiClient.post(QumraConfig.api.cart.remove, { itemId });
+      if (data.success !== false) {
+        this._updateUI(data);
+        EventBus.emit('cart:updated', data);
+        setTimeout(() => {
+          if (itemEl) itemEl.remove();
+          this._refreshDrawer(data);
+        }, 300);
+      }
+      return data;
+    },
+
+    async clear() {
+      const data = await ApiClient.post(QumraConfig.api.cart.clear, {});
+      if (data.success !== false) {
+        this._updateUI(data);
+        this._refreshDrawer(data);
+        EventBus.emit('cart:updated', data);
+      }
+      return data;
+    },
+
+    _updateUI(data) {
+      updateSelectors(QumraConfig.selectors.cart, {
+        count: data.totalQuantity || 0,
+        itemsCount: (data.items || []).length,
+        total: Utils.formatMoney(data.totalPrice)
+      });
+    },
+
+    _refreshDrawer(data) {
+      var container = document.querySelector('[data-cart-container]');
+      var footer = document.querySelector('[data-cart-footer]');
+      var empty = document.querySelector('[data-cart-empty]');
+      var countBar = document.querySelector('[data-cart-count-bar]');
+      var items = data.items || [];
+
+      if (items.length > 0) {
+        var itemIds = items.map(function(i) { return i._id; });
+
+        // Update item totals
+        items.forEach(function (item) {
+          document.querySelectorAll('[data-item-total="' + item._id + '"]').forEach(function(el) {
+            el.textContent = Utils.formatMoney(item.totalPrice);
+          });
+        });
+
+        // Add new items that don't exist in DOM yet
+        if (container) {
+          var listEl = container.querySelector('.space-y-4');
+          if (listEl) {
+            items.forEach(function(item) {
+              if (!container.querySelector('[data-cart-item="' + item._id + '"]')) {
+                var html = CartManager._buildItemHTML(item);
+                var temp = document.createElement('div');
+                temp.innerHTML = html;
+                while (temp.firstChild) {
+                  var node = temp.firstChild;
+                  listEl.appendChild(node);
+                  if (window.Alpine && node.nodeType === 1) {
+                    Alpine.initTree(node);
+                  }
+                }
+              }
+            });
+          }
+        }
+
+        // Remove items from DOM that no longer exist in cart
+        if (container) {
+          container.querySelectorAll('[data-cart-item]').forEach(function (el) {
+            var id = el.getAttribute('data-cart-item');
+            if (itemIds.indexOf(id) === -1) {
+              el.style.transition = 'all 0.3s ease';
+              el.style.opacity = '0';
+              el.style.transform = 'scale(0.95)';
+              setTimeout(function () { el.remove(); }, 300);
+            }
+          });
+          container.style.display = '';
+        }
+
+        // Update footer total
+        if (footer) {
+          footer.style.display = '';
+          var totalEl = footer.querySelector('[data-cart-total]');
+          if (totalEl) totalEl.textContent = Utils.formatMoney(data.totalPrice);
+        }
+
+        // Show count bar
+        if (countBar) countBar.style.display = '';
+
+        // Hide empty state
+        if (empty) empty.style.display = 'none';
+      } else {
+        // No items - show empty state
+        if (container) container.style.display = 'none';
+        if (footer) footer.style.display = 'none';
+        if (countBar) countBar.style.display = 'none';
+        if (empty) empty.style.display = '';
+      }
+    },
+
+    _buildItemHTML(item) {
+      var id = item._id;
+      var slug = (item.productData && item.productData.slug) || '';
+      var title = (item.productData && item.productData.title) || '';
+      var imageUrl = (item.productData && item.productData.image && item.productData.image.fileUrl) || '';
+      var totalPrice = Utils.formatMoney(item.totalPrice);
+
+      var imageHtml = imageUrl
+        ? '<div class="w-20 h-20 rounded-2xl overflow-hidden bg-gray-50 border border-gray-100">' +
+          '<img src="' + imageUrl + '" alt="' + title + '" class="w-full h-full object-cover" loading="lazy"></div>'
+        : '<div class="w-20 h-20 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center">' +
+          '<svg class="w-7 h-7 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>';
+
+      var variantHtml = '';
+      if (item.variantData && item.variantData.options && item.variantData.options.length) {
+        variantHtml = '<div class="flex flex-wrap items-center gap-x-2.5 gap-y-0.5 mt-1">';
+        item.variantData.options.forEach(function(opt) {
+          var optName = (opt.option && opt.option.name) || '';
+          var optType = (opt.option && opt.option.type) || 'text';
+          var colorDot = optType === 'color'
+            ? '<span class="inline-block w-3 h-3 rounded-full border border-gray-200 align-middle" style="background-color: ' + (opt.value || '#fff') + '"></span>'
+            : '';
+          variantHtml += '<span class="text-[11px] text-gray-400 flex items-center gap-1">' +
+            optName + ': ' + colorDot +
+            '<span class="text-gray-500">' + opt.label + '</span></span>';
+        });
+        variantHtml += '</div>';
+      }
+
+      return '<div class="transition-all duration-300" data-cart-item="' + id + '" ' +
+        'x-show="activeItems.includes(\'' + id + '\')" ' +
+        'x-transition:enter="transition ease-out duration-300" ' +
+        'x-transition:enter-start="opacity-0 translate-y-2" ' +
+        'x-transition:enter-end="opacity-100 translate-y-0" ' +
+        'x-transition:leave="transition ease-in duration-200" ' +
+        'x-transition:leave-start="opacity-100" ' +
+        'x-transition:leave-end="opacity-0" ' +
+        ':class="{ \'opacity-20 scale-95 pointer-events-none\': removingId === \'' + id + '\' }">' +
+        '<div class="flex gap-3.5">' +
+          '<a href="/product/' + slug + '" @click="$store.modal.close()" class="shrink-0">' + imageHtml + '</a>' +
+          '<div class="flex-1 min-w-0">' +
+            '<div class="flex items-start justify-between gap-2">' +
+              '<a href="/product/' + slug + '" @click="$store.modal.close()" class="text-[13px] font-semibold text-gray-800 hover:text-primary transition-colors line-clamp-2 leading-snug">' + title + '</a>' +
+              '<button @click="removeItem(\'' + id + '\')" class="shrink-0 mt-0.5 text-gray-300 hover:text-red-400 transition-colors p-0.5">' +
+                '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>' +
+              '</button>' +
+            '</div>' +
+            variantHtml +
+            '<div class="flex items-center justify-between mt-2.5">' +
+              '<div class="inline-flex items-center bg-gray-50 rounded-full h-8">' +
+                '<button @click="decrement(\'' + id + '\')" class="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-primary hover:bg-white transition-all">' +
+                  '<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M20 12H4"/></svg>' +
+                '</button>' +
+                '<span class="w-7 text-center text-xs font-bold text-gray-800">' +
+                  '<span x-show="updating !== \'' + id + '\'" x-text="quantities[\'' + id + '\']">' + item.quantity + '</span>' +
+                  '<svg x-show="updating === \'' + id + '\'" x-cloak class="w-3.5 h-3.5 animate-spin mx-auto text-primary" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>' +
+                '</span>' +
+                '<button @click="increment(\'' + id + '\')" class="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-primary hover:bg-white transition-all">' +
+                  '<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>' +
+                '</button>' +
+              '</div>' +
+              '<div class="text-end">' +
+                '<span class="text-sm font-bold text-gray-900 transition-all" data-item-total="' + id + '" :class="{ \'animate-pulse text-primary\': updating === \'' + id + '\' }">' + totalPrice + '</span>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
     }
+  };
 
-    return toast;
-  },
+  // ===== SearchManager =====
+  const SearchManager = {
+    async search(query, filters) {
+      const params = { q: query, ...filters };
+      return ApiClient.get(QumraConfig.api.search.products, params);
+    },
 
-  success(message, duration) { return this.show(message, 'success', duration); },
-  error(message, duration) { return this.show(message, 'error', duration); },
-  warning(message, duration) { return this.show(message, 'warning', duration); },
-  info(message, duration) { return this.show(message, 'info', duration); }
-};
+    suggest: Utils.debounce(async function (query, callback, limit) {
+      if (!query || query.length < 2) return;
+      const data = await ApiClient.get(QumraConfig.api.search.suggest, {
+        q: query,
+        limit: limit || 5
+      });
+      if (callback) callback(data);
+      return data;
+    }, 300),
 
-// ============================================
-// Base Manager Class Pattern
-// ============================================
+    debounce: Utils.debounce
+  };
 
-const BaseManager = {
-  loading: false,
+  // ===== WishlistManager =====
+  const WishlistManager = {
+    async add(productId) {
+      const data = await ApiClient.post('/ajax/wishlist/add', { productId });
+      this._emit(data);
+      return data;
+    },
 
-  /**
-   * Create a manager with common functionality
-   */
-  create(config) {
+    async remove(productId) {
+      const data = await ApiClient.post('/ajax/wishlist/remove', { productId });
+      this._emit(data);
+      return data;
+    },
+
+    async toggle(productId, isInWishlist) {
+      return isInWishlist ? this.remove(productId) : this.add(productId);
+    },
+
+    _emit(data) {
+      document.querySelectorAll('[data-wishlist-count]').forEach(el => {
+        el.textContent = data.count || 0;
+      });
+      EventBus.emit('wishlist:updated', data);
+    }
+  };
+
+  // ===== ProductManager =====
+  const ProductManager = {
+    async get(handle) {
+      return ApiClient.get(QumraConfig.api.product.get, { handle });
+    },
+
+    async getVariant(productId, selectedOptions, quantity) {
+      return ApiClient.post(QumraConfig.api.product.variant, {
+        productId,
+        options: selectedOptions,
+        quantity: quantity || 1
+      });
+    },
+
+    calculatePrice(variant, quantity) {
+      return {
+        price: variant.price * (quantity || 1),
+        compareAtPrice: (variant.compareAtPrice || 0) * (quantity || 1)
+      };
+    }
+  };
+
+  // ===== ModalController =====
+  const ModalController = {
+    current: null,
+
+    open(name) {
+      this.current = name;
+      document.body.style.overflow = 'hidden';
+      EventBus.emit('modal:open', { name });
+    },
+
+    close() {
+      const name = this.current;
+      this.current = null;
+      document.body.style.overflow = '';
+      EventBus.emit('modal:close', { name });
+    },
+
+    toggle(name) {
+      if (this.current === name) {
+        this.close();
+      } else {
+        this.close();
+        this.open(name);
+      }
+    }
+  };
+
+  // ===== Qumra Namespace =====
+  const Qumra = {
+    config: QumraConfig,
+    events: EventBus,
+    api: ApiClient,
+    cart: CartManager,
+    wishlist: WishlistManager,
+    search: SearchManager,
+    product: ProductManager,
+    modal: ModalController,
+    utils: Utils,
+    toast: Toast
+  };
+
+  // ===== Global Exports =====
+  window.Qumra = Qumra;
+
+  // Backward compatibility
+  window.CartManager = CartManager;
+  window.WishlistManager = WishlistManager;
+  window.SearchManager = SearchManager;
+  window.ProductManager = ProductManager;
+  window.EventBus = EventBus;
+  window.formatMoney = Utils.formatMoney;
+  window.toggleModal = function (name) { ModalController.toggle(name); };
+
+  // ===== Alpine.js Stores + Components =====
+  document.addEventListener('alpine:init', () => {
+    // --- Stores ---
+    Alpine.store('modal', {
+      current: null,
+      open(name) { Qumra.modal.open(name); this.current = name; },
+      close() { Qumra.modal.close(); this.current = null; },
+      toggle(name) {
+        if (this.current === name) { this.close(); }
+        else { this.close(); this.open(name); }
+      }
+    });
+
+    Alpine.store('wishlist', {
+      ids: (config.wishlistIds || []),
+      has(productId) { return this.ids.indexOf(productId) !== -1; },
+      update(data) {
+        if (data && data.products) {
+          this.ids = data.products.map(p => p._id || p);
+        }
+      }
+    });
+
+    Alpine.store('cart', {
+      totalQuantity: 0,
+      totalPrice: 0,
+      items: [],
+      update(data) {
+        this.totalQuantity = data.totalQuantity || 0;
+        this.totalPrice = data.totalPrice || 0;
+        this.items = data.items || [];
+      }
+    });
+
+    // --- Cart Interaction Component ---
+    Alpine.data('cartInteraction', (config) => ({
+      quantities: {},
+      updateTimers: {},
+      updating: null,
+      removingId: null,
+      confirmRemoveId: null,
+      activeItems: [],
+
+      init() {
+        (config.items || []).forEach(i => {
+          this.quantities[i.id] = i.qty;
+          this.activeItems.push(i.id);
+        });
+
+        window.addEventListener('cart:updated', (e) => {
+          this.updating = null;
+          this.removingId = null;
+          this.confirmRemoveId = null;
+          if (e.detail && e.detail.items) {
+            this.activeItems = e.detail.items.map(i => i._id);
+            e.detail.items.forEach(item => {
+              this.quantities[item._id] = item.quantity;
+            });
+          } else {
+            this.activeItems = [];
+          }
+        });
+      },
+
+      increment(id) {
+        this.quantities[id] = (this.quantities[id] || 1) + 1;
+        this._scheduleUpdate(id);
+      },
+
+      decrement(id) {
+        var c = this.quantities[id] || 1;
+        if (c <= 1) {
+          if (config.confirmRemove) {
+            this.confirmRemoveId = id;
+          } else {
+            this.removeItem(id);
+          }
+          return;
+        }
+        this.quantities[id] = c - 1;
+        this._scheduleUpdate(id);
+      },
+
+      _scheduleUpdate(id) {
+        if (this.updateTimers[id]) clearTimeout(this.updateTimers[id]);
+        this.updateTimers[id] = setTimeout(() => {
+          this.updating = id;
+          delete this.updateTimers[id];
+          Qumra.cart.update(id, this.quantities[id]);
+        }, 500);
+      },
+
+      removeItem(id) {
+        this.removingId = id;
+        this.confirmRemoveId = null;
+        Qumra.cart.remove(id);
+      }
+    }));
+
+    // --- Collection/Search Filter Component (AJAX) ---
+    Alpine.data('collectionFilter', (cfg) => {
+    cfg = cfg || {};
+    var _sortMap = { newest: 'created-desc', price_asc: 'price-asc', price_desc: 'price-desc' };
+    var _reverseSortMap = { 'created-desc': 'newest', 'price-asc': 'price_asc', 'price-desc': 'price_desc' };
+    var _rh = cfg.rangeHandle || 'price';
+    var _p = new URLSearchParams(window.location.search);
+    var _s = _p.get('sort') || '';
+    var _initSort = _reverseSortMap[_s] || _s;
+    var _initPriceMin = _p.get('filters[' + _rh + '][min]') || '';
+    var _initPriceMax = _p.get('filters[' + _rh + '][max]') || '';
     return {
+      searchQuery: cfg.query || '',
+      collectionId: cfg.collectionId || '',
+      cardSettings: cfg.cardSettings || {},
+      translations: cfg.translations || {},
+      rangeHandle: _rh,
       loading: false,
-      ...config,
+      currentSort: _initSort,
+      priceMin: _initPriceMin,
+      priceMax: _initPriceMax,
+      filtersOpen: false,
+      sortOpen: false,
+      _abortCtrl: null,
+      _priceTimer: null,
 
-      /**
-       * Execute action with loading state
-       */
-      async _execute(action, options = {}) {
-        if (this.loading) return null;
+      isActive(handle, value) {
+        return new URLSearchParams(window.location.search).getAll('filters[' + handle + '][]').includes(value);
+      },
 
-        const {
-          loadingElement = null,
-          loadingSelector = null,
-          showToast = true,
-          successMessage = null,
-          errorMessage = QumraConfig.messages.errors.general,
-          onSuccess = null,
-          onError = null
-        } = options;
+      get activeCount() {
+        var c = 0;
+        new URLSearchParams(window.location.search).forEach(function(v, k) { if (k.startsWith('filters[')) c++; });
+        return c;
+      },
 
+      sortBy(value) {
+        var url = new URL(window.location);
+        var mapped = _sortMap[value] || value;
+        if (mapped) url.searchParams.set('sort', mapped);
+        else url.searchParams.delete('sort');
+        url.searchParams.delete('page');
+        this.currentSort = value;
+        this.sortOpen = false;
+        this._fetch(url);
+      },
+
+      toggleFilter(handle, value) {
+        var url = new URL(window.location);
+        var key = 'filters[' + handle + '][]';
+        var existing = url.searchParams.getAll(key);
+        url.searchParams.delete(key);
+        var idx = existing.indexOf(value);
+        if (idx >= 0) existing.splice(idx, 1);
+        else existing.push(value);
+        existing.forEach(function(v) { url.searchParams.append(key, v); });
+        url.searchParams.delete('page');
+        this._fetch(url);
+      },
+
+      _debouncedApplyPrice() {
+        clearTimeout(this._priceTimer);
+        this._priceTimer = setTimeout(() => {
+          this.applyPrice();
+        }, 500);
+      },
+
+      applyPrice() {
+        var url = new URL(window.location);
+        var rh = this.rangeHandle;
+        if (this.priceMin) url.searchParams.set('filters[' + rh + '][min]', this.priceMin);
+        else url.searchParams.delete('filters[' + rh + '][min]');
+        if (this.priceMax) url.searchParams.set('filters[' + rh + '][max]', this.priceMax);
+        else url.searchParams.delete('filters[' + rh + '][max]');
+        url.searchParams.delete('page');
+        this._fetch(url);
+      },
+
+      clearFilters() {
+        var url = new URL(window.location);
+        url.searchParams.delete('page');
+        var keysToRemove = [];
+        url.searchParams.forEach(function(v, k) { if (k.startsWith('filters[')) keysToRemove.push(k); });
+        var unique = [];
+        keysToRemove.forEach(function(k) { if (unique.indexOf(k) === -1) unique.push(k); });
+        unique.forEach(function(k) { url.searchParams.delete(k); });
+        this.priceMin = '';
+        this.priceMax = '';
+        this._fetch(url);
+      },
+
+      goToPage(page) {
+        var url = new URL(window.location);
+        if (page > 1) url.searchParams.set('page', page);
+        else url.searchParams.delete('page');
+        this._fetch(url);
+      },
+
+      async _fetch(url) {
+        if (this._abortCtrl) this._abortCtrl.abort();
+        this._abortCtrl = new AbortController();
         this.loading = true;
-        this._setLoading(loadingElement, loadingSelector, true);
+        this.filtersOpen = false;
 
         try {
-          const result = await action();
-
-          if (result && result.success !== false) {
-            if (showToast && successMessage) {
-              Toast.success(successMessage);
-            }
-            if (onSuccess) onSuccess(result);
-          } else {
-            if (showToast) {
-              Toast.error(result?.message || errorMessage);
-            }
-            if (onError) onError(result);
+          var apiUrl = new URL('/ajax/search/products', window.location.origin);
+          url.searchParams.forEach(function(v, k) {
+            apiUrl.searchParams.append(k, v);
+          });
+          if (!apiUrl.searchParams.has('q') && this.searchQuery) {
+            apiUrl.searchParams.set('q', this.searchQuery);
+          }
+          if (this.collectionId && !apiUrl.searchParams.has('collectionId')) {
+            apiUrl.searchParams.set('collectionId', this.collectionId);
           }
 
-          return result;
-        } catch (error) {
-          console.error('Manager action error:', error);
-          if (showToast) Toast.error(errorMessage);
-          if (onError) onError(error);
-          return null;
+          var res = await fetch(apiUrl.toString(), { signal: this._abortCtrl.signal });
+          if (!res.ok) throw new Error(res.status);
+          var data = await res.json();
+
+          this._renderResults(data);
+          history.pushState(null, '', url.toString());
+        } catch (e) {
+          if (e.name !== 'AbortError') {
+            console.error('Filter fetch error:', e);
+            window.location = url.toString();
+          }
         } finally {
           this.loading = false;
-          this._setLoading(loadingElement, loadingSelector, false);
+          this._abortCtrl = null;
         }
       },
 
-      /**
-       * Set loading state on element
-       */
-      _setLoading(element, selector, loading) {
-        const el = element || (selector ? document.querySelector(selector) : null);
-        if (!el) return;
+      _renderResults(data) {
+        var wrapper = document.querySelector('#products-grid-wrapper');
+        var countEl = document.querySelector('#products-count');
+        if (!wrapper) return;
 
-        if (loading) {
-          el.classList.add(QumraConfig.classes.loading);
-          if (el.tagName === 'BUTTON') el.disabled = true;
-        } else {
-          el.classList.remove(QumraConfig.classes.loading);
-          if (el.tagName === 'BUTTON') el.disabled = false;
+        var products = data.products || data.results || [];
+        var pagination = data.pagination || null;
+        var totalItems = pagination ? pagination.totalItems : products.length;
+        var cs = this.cardSettings;
+        var tr = this.translations;
+        var self = this;
+
+        // Update count
+        if (countEl) {
+          var countHtml;
+          if (self.searchQuery) {
+            countHtml = '<p class="text-sm text-gray-600">' + (tr.resultsFor || '') +
+              ' <span class="font-bold text-primary">&quot;' + self.searchQuery + '&quot;</span></p>';
+            if (totalItems !== undefined) {
+              countHtml += '<p class="text-xs text-gray-400 mt-1">' + totalItems + ' ' + (tr.products || '') + '</p>';
+            }
+          } else {
+            countHtml = '<p class="text-sm text-gray-600"><span class="font-bold text-gray-800">' + totalItems + '</span> ' + (tr.products || '') + '</p>';
+          }
+          countEl.innerHTML = countHtml;
         }
+
+        if (products.length > 0) {
+          var gridClass = cs.gridClass || 'md:grid-cols-2 lg:grid-cols-3';
+          var html = '<div class="grid grid-cols-2 gap-3 md:gap-5 ' + gridClass + '">';
+          products.forEach(function(product) {
+            html += self._buildProductCard(product);
+          });
+          html += '</div>';
+
+          if (pagination && pagination.totalPages > 1) {
+            html += self._buildPagination(pagination);
+          }
+
+          wrapper.innerHTML = html;
+
+          wrapper.querySelectorAll('[x-data]').forEach(function(el) {
+            Alpine.initTree(el);
+          });
+
+          wrapper.querySelectorAll('.product-card').forEach(function(card, i) {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(12px)';
+            setTimeout(function() {
+              card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+              card.style.opacity = '1';
+              card.style.transform = 'translateY(0)';
+            }, i * 50);
+          });
+        } else {
+          var emptyIcon, emptyTitle, emptyText;
+          if (self.searchQuery) {
+            emptyIcon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>';
+            emptyTitle = (tr.noResults || '') + ' &quot;' + self.searchQuery + '&quot;';
+            emptyText = tr.tryDifferent || '';
+          } else {
+            emptyIcon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>';
+            emptyTitle = tr.noProducts || '';
+            emptyText = tr.noResults || '';
+          }
+          wrapper.innerHTML =
+            '<div class="flex flex-col items-center justify-center py-20 text-center">' +
+              '<div class="w-24 h-24 rounded-full bg-gray-50 flex items-center justify-center mb-5">' +
+                '<svg class="w-12 h-12 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">' + emptyIcon + '</svg>' +
+              '</div>' +
+              '<h3 class="text-lg font-bold text-gray-800 mb-2">' + emptyTitle + '</h3>' +
+              '<p class="text-gray-500 text-sm mb-6 max-w-md mx-auto">' + emptyText + '</p>' +
+              '<a href="/" class="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:opacity-80 transition-colors">' +
+                (tr.home || '') +
+                '<svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">' +
+                  '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>' +
+                '</svg>' +
+              '</a>' +
+            '</div>';
+        }
+      },
+
+      _buildProductCard(product) {
+        var cs = this.cardSettings;
+        var tr = this.translations;
+        var pricing = product.pricing || {};
+        var price = pricing.price || 0;
+        var compareAtPrice = pricing.compareAtPrice || 0;
+        var hasDiscount = compareAtPrice && compareAtPrice > price;
+        var canPurchase = product.quantity > 0 || !product.trackQuantity || product.allowBackorder;
+        var title = (product.title || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        var titleAttr = title.replace(/"/g, '&quot;');
+
+        var radiusMap = { none: '0', sm: '8px', md: '12px', lg: '16px' };
+        var radius = radiusMap[cs.borderRadius] || '16px';
+        var ratioClass = cs.imageRatio === 'portrait' ? 'aspect-[3/4]' : cs.imageRatio === 'landscape' ? 'aspect-[4/3]' : 'aspect-square';
+        var fitPad = cs.imageFit === 'contain' ? ' p-4' : '';
+        var imgClass = cs.imageFit === 'contain' ? 'max-w-full max-h-full object-contain' : 'w-full h-full object-cover';
+        var imageUrl = (product.images && product.images.length) ? product.images[0].fileUrl : '';
+        var lineClamp = cs.titleLines === '1' ? 'line-clamp-1' : 'line-clamp-2';
+
+        var h = '<div class="product-card group flex flex-col h-full ' + (cs.hoverEffect === 'zoom' ? 'hover-zoom' : '') + '" style="border-radius: ' + radius + ';" x-data="productCard(\'' + product._id + '\')">';
+
+        // Image
+        h += '<a href="/product/' + product.slug + '" class="block relative overflow-hidden card-img">';
+        h += '<div class="' + ratioClass + ' bg-white flex items-center justify-center' + fitPad + '">';
+        if (imageUrl) {
+          h += '<img src="' + imageUrl + '" alt="' + titleAttr + '" class="' + imgClass + '" loading="lazy">';
+        } else {
+          h += '<svg class="w-16 h-16 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>';
+        }
+        h += '</div>';
+
+        // Badge
+        if (cs.showBadge && hasDiscount) {
+          var disc = Math.round(((compareAtPrice - price) / compareAtPrice) * 100);
+          h += '<span class="absolute top-2.5 start-2.5 bg-red-500 text-white text-[11px] font-semibold px-2 py-0.5 rounded">-' + disc + '%</span>';
+        }
+
+        // Wishlist
+        if (cs.showWishlist) {
+          h += '<button @click.prevent="toggleWishlist()" :disabled="wishlistLoading" class="wishlist-btn absolute top-2.5 end-2.5 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-all hover:scale-110" :class="inWishlist ? \'text-red-500\' : \'text-gray-400 hover:text-red-400\'">';
+          h += '<svg class="w-4 h-4" :fill="inWishlist ? \'currentColor\' : \'none\'" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>';
+          h += '</button>';
+        }
+
+        h += '</a>';
+
+        // Content
+        h += '<div class="p-3 pt-2 flex flex-col flex-1">';
+        h += '<a href="/product/' + product.slug + '" class="block text-sm font-medium text-gray-900 ' + lineClamp + ' leading-snug mb-2 hover:text-primary transition-colors">' + title + '</a>';
+
+        // Rating
+        if (cs.showRating && product.averageRating > 0) {
+          h += '<div class="flex items-center gap-0.5 mb-2">';
+          for (var i = 0; i < 5; i++) {
+            h += '<svg class="w-3.5 h-3.5 ' + (i < product.averageRating ? 'text-amber-400' : 'text-gray-200') + '" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>';
+          }
+          h += '<span class="text-[11px] text-gray-400 ms-1">(' + (product.reviewsCount || 0) + ')</span></div>';
+        }
+
+        // Color swatches
+        if (cs.showOptions && product.options) {
+          product.options.forEach(function(opt) {
+            if (opt.type === 'color' && opt.values && opt.values.length) {
+              h += '<div class="flex items-center gap-1.5 mb-2">';
+              opt.values.forEach(function(v) {
+                h += '<span class="w-4 h-4 rounded-full border border-gray-300 shrink-0" style="background-color: ' + (v.value || '#fff') + ';" title="' + (v.label || '') + '"></span>';
+              });
+              h += '</div>';
+            }
+          });
+        }
+
+        // Price
+        h += '<div class="mt-auto"><div class="flex items-baseline gap-2' + (cs.showButton ? ' mb-2.5' : '') + '">';
+        h += '<span class="text-base font-bold text-gray-900">' + Utils.formatMoney(price) + '</span>';
+        if (cs.showComparePrice && hasDiscount) {
+          h += '<span class="text-xs text-gray-400 line-through">' + Utils.formatMoney(compareAtPrice) + '</span>';
+        }
+        h += '</div>';
+
+        // Button
+        if (cs.showButton) {
+          if (canPurchase) {
+            if (product.variantsCount > 0) {
+              h += '<a href="/product/' + product.slug + '" class="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-lg text-xs font-semibold border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all">';
+              h += '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>';
+              h += (tr.chooseOptions || '') + '</a>';
+            } else {
+              h += '<button @click="addToCart()" :disabled="cartLoading || cartSuccess" class="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-lg text-xs font-semibold transition-all" :class="cartSuccess ? \'bg-green-500 text-white border-2 border-green-500\' : \'bg-primary text-white border-2 border-primary hover:bg-primary-dark hover:border-primary-dark\'">';
+              h += '<template x-if="cartLoading"><svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg></template>';
+              h += '<template x-if="cartSuccess"><svg class="w-4 h-4 animate-check" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></template>';
+              h += '<template x-if="!cartLoading && !cartSuccess"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg></template>';
+              h += '<span x-show="!cartLoading && !cartSuccess">' + (tr.addToCart || '') + '</span>';
+              h += '<span x-show="cartSuccess" x-cloak>' + (tr.added || '') + '</span>';
+              h += '</button>';
+            }
+          } else {
+            h += '<div class="text-center py-2 text-xs text-gray-400 font-medium">' + (tr.outOfStock || '') + '</div>';
+          }
+        }
+
+        h += '</div></div></div>';
+        return h;
+      },
+
+      _buildPagination(pagination) {
+        var h = '<nav class="flex items-center justify-center gap-1.5 mt-10" aria-label="pagination">';
+        if (pagination.currentPage > 1) {
+          h += '<button @click.prevent="goToPage(' + (pagination.currentPage - 1) + ')" class="w-10 h-10 rounded-xl flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-primary transition-colors"><svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>';
+        } else {
+          h += '<span class="w-10 h-10 rounded-xl flex items-center justify-center text-gray-200"><svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></span>';
+        }
+        for (var i = 1; i <= pagination.totalPages; i++) {
+          if (i === pagination.currentPage) {
+            h += '<span class="w-10 h-10 rounded-xl flex items-center justify-center bg-primary text-white font-semibold text-sm">' + i + '</span>';
+          } else if (i === 1 || i === pagination.totalPages || (i >= pagination.currentPage - 1 && i <= pagination.currentPage + 1)) {
+            h += '<button @click.prevent="goToPage(' + i + ')" class="w-10 h-10 rounded-xl flex items-center justify-center text-gray-600 hover:bg-gray-100 hover:text-primary transition-colors text-sm font-medium">' + i + '</button>';
+          } else if (i === pagination.currentPage - 2 || i === pagination.currentPage + 2) {
+            h += '<span class="w-6 flex items-center justify-center text-gray-300 text-sm">...</span>';
+          }
+        }
+        if (pagination.hasNextPage) {
+          h += '<button @click.prevent="goToPage(' + (pagination.currentPage + 1) + ')" class="w-10 h-10 rounded-xl flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-primary transition-colors"><svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></button>';
+        } else {
+          h += '<span class="w-10 h-10 rounded-xl flex items-center justify-center text-gray-200"><svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></span>';
+        }
+        h += '</nav>';
+        return h;
+      },
+
+      init() {
+        var self = this;
+        window.addEventListener('popstate', function() {
+          var params = new URLSearchParams(window.location.search);
+          var sort = params.get('sort') || '';
+          self.currentSort = _reverseSortMap[sort] || sort;
+          self.priceMin = params.get('filters[' + self.rangeHandle + '][min]') || '';
+          self.priceMax = params.get('filters[' + self.rangeHandle + '][max]') || '';
+          self._fetch(new URL(window.location));
+        });
       }
     };
-  }
-};
+    });
 
-// ============================================
-// Cart Manager
-// ============================================
+    // --- Product Card Component ---
+    Alpine.data('productCard', (productId) => ({
+      productId: productId,
+      cartLoading: false,
+      cartSuccess: false,
+      wishlistLoading: false,
 
-const CartManager = BaseManager.create({
-  /**
-   * Get cart data
-   */
-  async get() {
-    const data = await ApiClient.get(QumraConfig.api.cart.get);
-    if (data && data.success !== false) {
-      this.updateUI(data);
-    }
-    return data;
-  },
-
-  /**
-   * Add item to cart
-   */
-  async add(productId, quantity = 1, variantId = null) {
-    return this._execute(
-      async () => {
-        const body = { productId, quantity };
-        if (variantId) body.variantId = variantId;
-        return ApiClient.post(QumraConfig.api.cart.add, body);
+      get inWishlist() {
+        return Alpine.store('wishlist').has(this.productId);
       },
-      {
-        loadingSelector: QumraConfig.selectors.cart.container,
-        successMessage: QumraConfig.messages.cart.added,
-        onSuccess: (data) => {
-          this.updateUI(data);
-          EventBus.emit('cart:updated', data);
-          // Re-render cart items
-          this._renderCartItems(data);
-          // Open cart sidebar via Alpine
-          const appEl = document.body;
-          if (appEl._x_dataStack && appEl._x_dataStack[0]) {
-            appEl._x_dataStack[0].toggleModal('cart');
-          }
+
+      async addToCart() {
+        if (this.cartLoading) return;
+        this.cartLoading = true;
+        try {
+          await Qumra.cart.add(this.productId);
+          this.cartSuccess = true;
+          setTimeout(() => { this.cartSuccess = false; }, 2000);
+        } catch (e) {
+          // Error already handled in CartManager
+        } finally {
+          this.cartLoading = false;
+        }
+      },
+
+      async toggleWishlist() {
+        if (this.wishlistLoading) return;
+        this.wishlistLoading = true;
+        try {
+          await Qumra.wishlist.toggle(this.productId, this.inWishlist);
+        } catch (e) {
+          // silent
+        } finally {
+          this.wishlistLoading = false;
         }
       }
-    );
-  },
+    }));
+  });
 
-  /**
-   * Render cart items in sidebar
-   */
-  _renderCartItems(cart) {
-    const cartContainer = document.querySelector('[data-cart-container]');
-    if (!cartContainer) return;
-
-    const itemsContainer = cartContainer.querySelector('.flex-1.overflow-y-auto');
-    if (!itemsContainer) return;
-
-    if (!cart.items || cart.items.length === 0) {
-      // Show empty cart
-      itemsContainer.innerHTML = `
-        <div class="flex flex-col items-center justify-center h-full text-center p-8">
-          <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6">
-            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-            </svg>
-          </div>
-          <h3 class="text-lg font-bold text-gray-800 mb-2">السلة فارغة</h3>
-          <p class="text-gray-500 mb-6">لم تقم بإضافة أي منتجات بعد</p>
-          <a href="/products" class="inline-flex items-center justify-center px-6 py-3 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 transition-colors">
-            تصفح المنتجات
-          </a>
-        </div>
-      `;
-      // Remove footer
-      const footer = cartContainer.querySelector('.border-t.border-gray-200.bg-gray-50');
-      if (footer) footer.remove();
-      return;
+  // ===== Sync Alpine Stores with Events =====
+  EventBus.on('cart:updated', (data) => {
+    if (window.Alpine && Alpine.store('cart')) {
+      Alpine.store('cart').update(data);
     }
+  });
 
-    // Build items HTML
-    const itemsHtml = cart.items.map(item => this._buildCartItemHtml(item)).join('');
-    itemsContainer.innerHTML = `<div class="p-4 space-y-4">${itemsHtml}</div>`;
-
-    // Ensure footer exists
-    let footer = cartContainer.querySelector('.border-t.border-gray-200.bg-gray-50');
-    if (!footer) {
-      footer = document.createElement('div');
-      footer.className = 'border-t border-gray-200 bg-gray-50 p-4 space-y-4';
-      footer.innerHTML = `
-        <div class="flex items-center justify-between">
-          <span class="text-lg font-bold text-gray-800">الإجمالي</span>
-          <span class="text-xl font-bold text-primary" data-cart-total data-money="${cart.totalPrice}">${this.formatMoney(cart.totalPrice)}</span>
-        </div>
-        <div class="space-y-3">
-          <a href="/checkout" class="flex items-center justify-center gap-2 w-full py-3 px-6 bg-primary hover:bg-primary/90 text-white rounded-xl font-medium transition-colors">
-            <span>إتمام الطلب</span>
-            <svg class="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-            </svg>
-          </a>
-          <button onclick="closeModal()" class="flex items-center justify-center w-full py-3 px-6 border border-gray-200 hover:bg-gray-100 text-gray-700 rounded-xl font-medium transition-colors">
-            متابعة التسوق
-          </button>
-        </div>
-      `;
-      cartContainer.appendChild(footer);
-    }
-  },
-
-  /**
-   * Build HTML for a single cart item
-   */
-  _buildCartItemHtml(item) {
-    const productData = item.productData || {};
-    const handle = productData.handle || item.productId;
-    const imageUrl = productData.image?.fileUrl || '/placeholder.jpg';
-    const title = productData.title || 'منتج';
-    const hasComparePrice = item.compareAtPrice && item.compareAtPrice > item.price;
-    const showTrash = item.quantity <= 1;
-
-    return `
-      <div class="cart-item flex gap-4 p-3 bg-gray-50 rounded-xl relative group" data-cart-item="${item._id}">
-        <div class="cart-item-loading absolute inset-0 bg-white/80 rounded-xl flex items-center justify-center z-10 opacity-0 pointer-events-none transition-opacity">
-          <svg class="w-6 h-6 text-primary animate-spin" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-          </svg>
-        </div>
-        <a href="/products/${handle}" class="flex-shrink-0">
-          <img src="${imageUrl}" alt="${title}" class="w-20 h-20 object-cover rounded-lg">
-        </a>
-        <div class="flex-1 min-w-0">
-          <a href="/products/${handle}" class="block">
-            <h4 class="font-medium text-gray-800 line-clamp-2 hover:text-primary transition-colors">${title}</h4>
-          </a>
-          <div class="flex items-center gap-2 mt-2">
-            <span class="text-primary font-bold" data-money="${item.price}">${this.formatMoney(item.price)}</span>
-            ${hasComparePrice ? `<span class="text-gray-400 text-sm line-through" data-money="${item.compareAtPrice}">${this.formatMoney(item.compareAtPrice)}</span>` : ''}
-          </div>
-          <div class="flex items-center justify-between mt-3">
-            <div class="flex items-center border border-gray-200 rounded-lg bg-white">
-              <button onclick="Qumra.cart.decrement('${item._id}')" class="decrement-btn w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-r-lg transition-colors" data-item-decrement="${item._id}" title="تقليل">
-                <svg class="w-4 h-4 text-red-500 icon-trash ${showTrash ? '' : 'hidden'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                </svg>
-                <svg class="w-4 h-4 icon-minus ${showTrash ? 'hidden' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
-                </svg>
-              </button>
-              <span class="w-10 text-center font-medium text-gray-800" data-item-qty="${item._id}">${item.quantity}</span>
-              <button onclick="Qumra.cart.increment('${item._id}')" class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-l-lg transition-colors" title="زيادة">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                </svg>
-              </button>
-            </div>
-            <span class="text-sm font-medium text-gray-600" data-item-total="${item._id}" data-money="${item.totalPrice}">${this.formatMoney(item.totalPrice)}</span>
-          </div>
-        </div>
-        <button onclick="Qumra.cart.remove('${item._id}')" class="absolute top-2 left-2 p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors opacity-0 group-hover:opacity-100" title="حذف">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </button>
-      </div>
-    `;
-  },
-
-  /**
-   * Update item quantity
-   */
-  async update(itemId, quantity) {
-    if (quantity < 1) return this.remove(itemId);
-
-    return this._execute(
-      () => ApiClient.post(QumraConfig.api.cart.change, { itemId, quantity }),
-      {
-        loadingSelector: `[data-cart-item="${itemId}"]`,
-        showToast: false,
-        onSuccess: (data) => {
-          this.updateUI(data);
-          EventBus.emit('cart:updated', data);
-        }
-      }
-    );
-  },
-
-  // Pending quantities and debounce timers
-  _pendingQty: {},
-  _debounceTimers: {},
-
-  /**
-   * Get current quantity from DOM
-   */
-  _getQuantityFromDOM(itemId) {
-    const qtyElement = document.querySelector(`[data-item-qty="${itemId}"]`);
-    return qtyElement ? parseInt(qtyElement.textContent.trim(), 10) || 1 : 1;
-  },
-
-  /**
-   * Update quantity display in DOM (instant feedback)
-   */
-  _updateQtyDisplay(itemId, qty) {
-    const qtyElement = document.querySelector(`[data-item-qty="${itemId}"]`);
-    if (qtyElement) qtyElement.textContent = qty;
-
-    // Toggle trash/minus icons
-    const decrementBtn = document.querySelector(`[data-item-decrement="${itemId}"]`);
-    if (decrementBtn) {
-      const trashIcon = decrementBtn.querySelector('.icon-trash');
-      const minusIcon = decrementBtn.querySelector('.icon-minus');
-      if (trashIcon && minusIcon) {
-        if (qty <= 1) {
-          trashIcon.classList.remove('hidden');
-          minusIcon.classList.add('hidden');
-        } else {
-          trashIcon.classList.add('hidden');
-          minusIcon.classList.remove('hidden');
-        }
-      }
-    }
-  },
-
-  /**
-   * Debounced update - sends request after delay
-   */
-  _debouncedUpdate(itemId) {
-    clearTimeout(this._debounceTimers[itemId]);
-    this._debounceTimers[itemId] = setTimeout(() => {
-      const qty = this._pendingQty[itemId];
-      if (qty !== undefined) {
-        if (qty <= 0) {
-          this.remove(itemId);
-        } else {
-          this.update(itemId, qty);
-        }
-        delete this._pendingQty[itemId];
-      }
-    }, 500);
-  },
-
-  /**
-   * Increment item quantity (debounced)
-   */
-  increment(itemId) {
-    const currentQty = this._pendingQty[itemId] ?? this._getQuantityFromDOM(itemId);
-    const newQty = currentQty + 1;
-    this._pendingQty[itemId] = newQty;
-    this._updateQtyDisplay(itemId, newQty);
-    this._debouncedUpdate(itemId);
-  },
-
-  /**
-   * Decrement item quantity (debounced)
-   */
-  decrement(itemId) {
-    const currentQty = this._pendingQty[itemId] ?? this._getQuantityFromDOM(itemId);
-    const newQty = currentQty - 1;
-    this._pendingQty[itemId] = newQty;
-    this._updateQtyDisplay(itemId, newQty <= 0 ? 0 : newQty);
-    this._debouncedUpdate(itemId);
-  },
-
-  /**
-   * Remove item from cart
-   */
-  async remove(itemId) {
-    return this._execute(
-      () => ApiClient.post(QumraConfig.api.cart.remove, { itemId }),
-      {
-        loadingSelector: `[data-cart-item="${itemId}"]`,
-        successMessage: QumraConfig.messages.cart.removed,
-        onSuccess: async (data) => {
-          // Remove element from DOM with animation
-          const itemEl = document.querySelector(`[data-cart-item="${itemId}"]`);
-          if (itemEl) {
-            itemEl.classList.add(QumraConfig.classes.removing);
-            await this._delay(QumraConfig.defaults.animationDuration);
-            itemEl.remove();
-          }
-
-          this.updateUI(data);
-          EventBus.emit('cart:updated', data);
-
-          // Re-render if empty
-          if (!data.items || data.items.length === 0) {
-            this._renderCartItems(data);
-          }
-        }
-      }
-    );
-  },
-
-  /**
-   * Clear entire cart
-   */
-  async clear() {
-    if (!confirm(QumraConfig.messages.cart.confirmClear)) return null;
-
-    return this._execute(
-      () => ApiClient.post(QumraConfig.api.cart.clear),
-      {
-        loadingSelector: QumraConfig.selectors.cart.container,
-        successMessage: QumraConfig.messages.cart.cleared,
-        onSuccess: (data) => {
-          this.updateUI(data);
-          EventBus.emit('cart:updated', data);
-          window.location.reload();
-        }
-      }
-    );
-  },
-
-  /**
-   * Update UI elements
-   */
-  updateUI(cart) {
-    if (!cart) return;
-
-    // Update count badges
-    this._updateElements(QumraConfig.selectors.cart.count, cart.totalQuantity || 0);
-    this._updateElements(QumraConfig.selectors.cart.itemsCount, cart.items?.length || 0);
-    this._updateElements(QumraConfig.selectors.cart.total, this.formatMoney(cart.totalPrice));
-
-    // Update individual items
-    if (cart.items) {
-      cart.items.forEach(item => {
-        this._updateElement(`[data-item-qty="${item._id}"]`, item.quantity);
-        this._updateElement(`[data-item-total="${item._id}"]`, this.formatMoney(item.totalPrice));
-      });
-    }
-
-    // Update Alpine store
-    this._updateAlpineStore('cart', {
-      items: cart.items || [],
-      totalQuantity: cart.totalQuantity || 0,
-      totalPrice: cart.totalPrice || 0
-    });
-  },
-
-  /**
-   * Helper: Update single element
-   */
-  _updateElement(selector, value) {
-    const el = document.querySelector(selector);
-    if (el) el.textContent = value;
-  },
-
-  /**
-   * Helper: Update multiple elements
-   */
-  _updateElements(selector, value) {
-    document.querySelectorAll(selector).forEach(el => {
-      el.textContent = value;
-    });
-  },
-
-  /**
-   * Helper: Update Alpine store
-   */
-  _updateAlpineStore(name, data) {
-    if (window.Alpine && Alpine.store(name)) {
-      Object.assign(Alpine.store(name), data);
-    }
-  },
-
-  /**
-   * Helper: Delay promise
-   */
-  _delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  },
-
-  /**
-   * Format money (uses localization settings)
-   */
-  formatMoney(amount) {
-    const num = Number(amount) || 0;
-    const fixed = num.toFixed(2);
-    const parts = fixed.split('.');
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    return `${parts.join('.')} ${QumraConfig.defaults.currencySymbol}`;
-  }
-});
-
-// ============================================
-// Wishlist Manager
-// ============================================
-
-const WishlistManager = BaseManager.create({
-  /**
-   * Add to wishlist
-   */
-  async add(productId) {
-    return this._execute(
-      () => ApiClient.post(QumraConfig.api.wishlist.add, { productId }),
-      {
-        loadingSelector: `[data-wishlist-btn="${productId}"]`,
-        successMessage: QumraConfig.messages.wishlist.added,
-        onSuccess: (data) => {
-          this.updateUI(data);
-          EventBus.emit('wishlist:updated', data);
-        }
-      }
-    );
-  },
-
-  /**
-   * Remove from wishlist
-   */
-  async remove(productId) {
-    return this._execute(
-      () => ApiClient.post(QumraConfig.api.wishlist.remove, { productId }),
-      {
-        loadingSelector: `[data-wishlist-btn="${productId}"]`,
-        successMessage: QumraConfig.messages.wishlist.removed,
-        onSuccess: (data) => {
-          this.updateUI(data);
-          EventBus.emit('wishlist:updated', data);
-        }
-      }
-    );
-  },
-
-  /**
-   * Toggle wishlist status
-   */
-  async toggle(productId) {
-    const btn = document.querySelector(`[data-wishlist-btn="${productId}"]`);
-    const isActive = btn?.classList.contains(QumraConfig.classes.active);
-    return isActive ? this.remove(productId) : this.add(productId);
-  },
-
-  /**
-   * Clear wishlist
-   */
-  async clear() {
-    if (!confirm(QumraConfig.messages.wishlist.confirmClear)) return null;
-
-    return this._execute(
-      () => ApiClient.post(QumraConfig.api.wishlist.clear),
-      {
-        successMessage: QumraConfig.messages.wishlist.cleared,
-        onSuccess: (data) => {
-          this.updateUI(data);
-          EventBus.emit('wishlist:updated', data);
-          window.location.reload();
-        }
-      }
-    );
-  },
-
-  /**
-   * Update UI elements
-   */
-  updateUI(wishlist) {
-    if (!wishlist) return;
-
-    // Update count badges
-    const countEls = document.querySelectorAll(QumraConfig.selectors.wishlist.count);
-    countEls.forEach(el => {
-      el.textContent = wishlist.count || 0;
-      el.style.display = (wishlist.count > 0) ? '' : 'none';
-    });
-
-    // Update buttons
-    const productIds = (wishlist.products || []).map(p => p._id);
-    document.querySelectorAll(QumraConfig.selectors.wishlist.button).forEach(btn => {
-      const productId = btn.dataset.wishlistBtn;
-      btn.classList.toggle(QumraConfig.classes.active, productIds.includes(productId));
-    });
-
-    // Update Alpine store
+  EventBus.on('wishlist:updated', (data) => {
     if (window.Alpine && Alpine.store('wishlist')) {
-      Object.assign(Alpine.store('wishlist'), {
-        items: wishlist.products || [],
-        count: wishlist.count || 0
-      });
+      Alpine.store('wishlist').update(data);
     }
-  }
-});
-
-// ============================================
-// Search Manager
-// ============================================
-
-const SearchManager = {
-  _debounceTimer: null,
-
-  /**
-   * Search products
-   */
-  async search(query, options = {}) {
-    return ApiClient.get(QumraConfig.api.search.products, { q: query, ...options });
-  },
-
-  /**
-   * Get suggestions with debounce
-   */
-  suggest(query, callback, delay = QumraConfig.defaults.debounceDelay) {
-    clearTimeout(this._debounceTimer);
-
-    if (query.length < 2) {
-      callback([]);
-      return;
-    }
-
-    this._debounceTimer = setTimeout(async () => {
-      const data = await this.search(query, { limit: 5 });
-      callback(data.products || []);
-    }, delay);
-  },
-
-  /**
-   * Debounce utility
-   */
-  debounce(func, delay = QumraConfig.defaults.debounceDelay) {
-    let timer;
-    return (...args) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => func.apply(this, args), delay);
-    };
-  }
-};
-
-// ============================================
-// Product Manager
-// ============================================
-
-const ProductManager = {
-  /**
-   * Get product by ID
-   */
-  async get(productId) {
-    return ApiClient.get(`${QumraConfig.api.product.get}/${productId}`);
-  },
-
-  /**
-   * Get product variant by options
-   */
-  async getVariant(productId, selectedOptions) {
-    return ApiClient.post(QumraConfig.api.product.variant, {
-      productId,
-      selectedOptions
-    });
-  }
-};
-
-// ============================================
-// Modal/Drawer Controller
-// ============================================
-
-const ModalController = {
-  _current: null,
-
-  open(name) {
-    this._current = name;
-    document.body.setAttribute('data-modal', name);
-    EventBus.emit('modal:open', { name });
-  },
-
-  close() {
-    const previous = this._current;
-    this._current = null;
-    document.body.removeAttribute('data-modal');
-    EventBus.emit('modal:close', { name: previous });
-  },
-
-  toggle(name) {
-    if (this._current === name) {
-      this.close();
-    } else {
-      this.open(name);
-    }
-  },
-
-  get current() {
-    return this._current;
-  }
-};
-
-// Legacy support
-function toggleModal(name) { ModalController.toggle(name); }
-function closeModal() { ModalController.close(); }
-
-// Close on Escape
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') ModalController.close();
-});
-
-// ============================================
-// Utility Functions
-// ============================================
-
-const Utils = {
-  /**
-   * Format money (uses localization settings)
-   */
-  formatMoney(amount) {
-    const num = Number(amount) || 0;
-    const fixed = num.toFixed(2);
-    const parts = fixed.split('.');
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    return `${parts.join('.')} ${QumraConfig.defaults.currencySymbol}`;
-  },
-
-  /**
-   * Calculate discount percentage
-   */
-  calcDiscount(price, comparePrice) {
-    if (!comparePrice || comparePrice <= price) return 0;
-    return Math.round(((comparePrice - price) / comparePrice) * 100);
-  },
-
-  /**
-   * Debounce function
-   */
-  debounce(func, delay = QumraConfig.defaults.debounceDelay) {
-    let timer;
-    return (...args) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => func.apply(this, args), delay);
-    };
-  },
-
-  /**
-   * Throttle function
-   */
-  throttle(func, limit = 100) {
-    let inThrottle;
-    return (...args) => {
-      if (!inThrottle) {
-        func.apply(this, args);
-        inThrottle = true;
-        setTimeout(() => inThrottle = false, limit);
-      }
-    };
-  },
-
-  /**
-   * Lazy load images
-   */
-  lazyLoadImages() {
-    const images = document.querySelectorAll('img[data-src]');
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const img = entry.target;
-          img.src = img.dataset.src;
-          img.removeAttribute('data-src');
-          observer.unobserve(img);
-        }
-      });
-    });
-
-    images.forEach(img => observer.observe(img));
-  }
-};
-
-// Legacy function support
-function formatMoney(amount, currency) { return Utils.formatMoney(amount, currency); }
-function calcDiscount(price, comparePrice) { return Utils.calcDiscount(price, comparePrice); }
-
-// ============================================
-// Alpine.js Integration
-// ============================================
-
-document.addEventListener('alpine:init', () => {
-  // Cart Store
-  Alpine.store('cart', {
-    items: [],
-    totalQuantity: 0,
-    totalPrice: 0
   });
 
-  // Wishlist Store
-  Alpine.store('wishlist', {
-    items: [],
-    count: 0
+  EventBus.on('modal:open', ({ name }) => {
+    if (window.Alpine && Alpine.store('modal')) {
+      Alpine.store('modal').current = name;
+    }
   });
 
-  // Modal Store
-  Alpine.store('modal', {
-    current: null,
-    open(name) { ModalController.open(name); },
-    close() { ModalController.close(); },
-    toggle(name) { ModalController.toggle(name); }
+  EventBus.on('modal:close', () => {
+    if (window.Alpine && Alpine.store('modal')) {
+      Alpine.store('modal').current = null;
+    }
   });
 
-  // Global App Data
-  Alpine.data('app', () => ({
-    modal: null,
-    toggleModal(name) { this.modal = this.modal === name ? null : name; },
-    closeModal() { this.modal = null; }
-  }));
-});
-
-// ============================================
-// Initialization
-// ============================================
-
-const Qumra = {
-  config: QumraConfig,
-  events: EventBus,
-  api: ApiClient,
-  cart: CartManager,
-  wishlist: WishlistManager,
-  search: SearchManager,
-  product: ProductManager,
-  modal: ModalController,
-  utils: Utils,
-  toast: Toast,
-
-  init() {
-    Toast.init();
-    Utils.lazyLoadImages();
-    this.formatAllMoney();
-    console.log('Qumra Theme v2.0 initialized');
-  },
-
-  /**
-   * Format all elements with data-money attribute
-   */
-  formatAllMoney() {
-    document.querySelectorAll('[data-money]').forEach(el => {
-      const amount = parseFloat(el.dataset.money) || 0;
-      el.textContent = Utils.formatMoney(amount);
-    });
-  }
-};
-
-// Initialize on DOM Ready
-document.addEventListener('DOMContentLoaded', () => Qumra.init());
-
-// ============================================
-// Global Exports
-// ============================================
-
-// Namespace export
-window.Qumra = Qumra;
-
-// Individual exports (backward compatibility)
-window.QumraConfig = QumraConfig;
-window.EventBus = EventBus;
-window.ApiClient = ApiClient;
-window.CartManager = CartManager;
-window.WishlistManager = WishlistManager;
-window.SearchManager = SearchManager;
-window.ProductManager = ProductManager;
-window.ModalController = ModalController;
-window.Toast = Toast;
-window.Utils = Utils;
-
-// Legacy function exports
-window.toggleModal = toggleModal;
-window.closeModal = closeModal;
-window.formatMoney = formatMoney;
-window.calcDiscount = calcDiscount;
+})();

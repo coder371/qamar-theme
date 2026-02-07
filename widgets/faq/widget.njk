@@ -1,95 +1,133 @@
-{# FAQ Accordion Widget #}
+{# FAQ Accordion Widget - Qamar Theme #}
+{% set blocks = widget.blocks | default([]) %}
 
-<section class="faq-section py-12 md:py-16">
+<section class="py-12 md:py-16 lg:py-20">
   <div class="container mx-auto px-4">
+    <div class="max-w-3xl mx-auto"
+         x-data="{
+           searchQuery: '',
+           openItem: null,
+           toggle(index) {
+             this.openItem = this.openItem === index ? null : index;
+           },
+           isVisible(question, answer, category) {
+             if (!this.searchQuery.trim()) return true;
+             const q = this.searchQuery.trim().toLowerCase();
+             return question.toLowerCase().includes(q) ||
+                    answer.toLowerCase().includes(q) ||
+                    (category && category.toLowerCase().includes(q));
+           },
+           get visibleCount() {
+             return this.$refs.faqList ? this.$refs.faqList.querySelectorAll('[data-faq-item]:not([style*=&quot;display: none&quot;])').length : {{ blocks | length }};
+           }
+         }">
 
-    {# Header #}
-    {% if widget.data.title %}
-      <div class="text-center mb-10">
-        {% if widget.data.subtitle %}
-          <span class="text-primary text-sm font-medium mb-2 block">{{ widget.data.subtitle }}</span>
-        {% endif %}
-        <h2 class="text-2xl md:text-3xl font-bold">{{ widget.data.title }}</h2>
-      </div>
-    {% endif %}
-
-    <div
-      class="max-w-3xl mx-auto"
-      x-data="{
-        openItems: [],
-        allowMultiple: {{ widget.data.allow_multiple_open | default(false) | lower }},
-
-        toggle(index) {
-          if (this.allowMultiple) {
-            if (this.openItems.includes(index)) {
-              this.openItems = this.openItems.filter(i => i !== index);
-            } else {
-              this.openItems.push(index);
-            }
-          } else {
-            this.openItems = this.openItems.includes(index) ? [] : [index];
-          }
-        },
-
-        isOpen(index) {
-          return this.openItems.includes(index);
-        }
-      }">
-
-      {% if widget.data.layout == 'two-columns' %}
-        <div class="grid md:grid-cols-2 gap-4">
-          {% for item in widget.blocks %}
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-              <button
-                @click="toggle({{ loop.index0 }})"
-                class="w-full flex items-center justify-between p-5 text-start font-medium hover:bg-gray-50 transition-colors">
-                <span>{{ item.data.question }}</span>
-                <svg
-                  class="w-5 h-5 text-gray-400 transition-transform"
-                  :class="isOpen({{ loop.index0 }}) && 'rotate-180'"
-                  fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                </svg>
-              </button>
-              <div
-                x-show="isOpen({{ loop.index0 }})"
-                x-collapse
-                class="px-5 pb-5">
-                <div class="text-gray-600 prose prose-sm max-w-none">
-                  {{ item.data.answer | safe }}
-                </div>
-              </div>
-            </div>
-          {% endfor %}
-        </div>
-
-      {% else %}
-        <div class="space-y-3">
-          {% for item in widget.blocks %}
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-              <button
-                @click="toggle({{ loop.index0 }})"
-                class="w-full flex items-center justify-between p-5 text-start font-medium hover:bg-gray-50 transition-colors">
-                <span>{{ item.data.question }}</span>
-                <svg
-                  class="w-5 h-5 text-gray-400 transition-transform flex-shrink-0 ms-4"
-                  :class="isOpen({{ loop.index0 }}) && 'rotate-180'"
-                  fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                </svg>
-              </button>
-              <div
-                x-show="isOpen({{ loop.index0 }})"
-                x-collapse
-                class="px-5 pb-5">
-                <div class="text-gray-600 prose prose-sm max-w-none">
-                  {{ item.data.answer | safe }}
-                </div>
-              </div>
-            </div>
-          {% endfor %}
+      {# Section Header #}
+      {% if widget.data.title or widget.data.subtitle %}
+        <div class="text-center mb-10 md:mb-14">
+          {% if widget.data.title %}
+            <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-3">
+              {{ widget.data.title }}
+            </h1>
+          {% endif %}
+          {% if widget.data.subtitle %}
+            <p class="text-gray-500 text-sm md:text-base max-w-xl mx-auto">
+              {{ widget.data.subtitle | safe }}
+            </p>
+          {% endif %}
         </div>
       {% endif %}
+
+      {# Search Input #}
+      {% if widget.data.show_search and blocks | length > 0 %}
+        <div class="mb-8">
+          <div class="relative">
+            <svg class="absolute start-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"
+                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input type="text"
+                   x-model="searchQuery"
+                   class="w-full ps-12 pe-4 py-3.5 rounded-xl border border-gray-200 bg-white
+                          text-gray-900 text-sm placeholder-gray-400
+                          focus:ring-2 focus:ring-primary/20 focus:border-primary
+                          transition-colors duration-200"
+                   placeholder="{{t('faq.search_placeholder')}}">
+            {# Clear Button #}
+            <button x-show="searchQuery.length > 0" x-cloak
+                    @click="searchQuery = ''"
+                    class="absolute end-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    type="button">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      {% endif %}
+
+      {# FAQ Items #}
+      {% if blocks | length > 0 %}
+        <div class="space-y-3" x-ref="faqList">
+          {% for block in blocks %}
+            <div data-faq-item
+                 x-show="isVisible('{{ block.settings.question | replace("'", "\\'") }}', '{{ block.settings.answer | replace("'", "\\'") }}', '{{ block.settings.category | default("") | replace("'", "\\'") }}')"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 -translate-y-1"
+                 x-transition:enter-end="opacity-100 translate-y-0"
+                 class="bg-white border border-gray-200 rounded-xl overflow-hidden
+                        hover:border-primary/30 transition-colors duration-200"
+                 :class="openItem === {{ loop.index0 }} && 'border-primary/30 shadow-sm'">
+
+              {# Question Header #}
+              <button @click="toggle({{ loop.index0 }})"
+                      class="w-full flex items-center justify-between gap-4 px-5 py-4 text-start
+                             focus:outline-none focus:ring-2 focus:ring-primary/20 rounded-xl"
+                      :aria-expanded="openItem === {{ loop.index0 }}">
+                <div class="flex items-center gap-3 flex-1 min-w-0">
+                  {% if block.settings.category %}
+                    <span class="inline-block px-2.5 py-0.5 text-xs font-medium bg-primary/10 text-primary rounded-full flex-shrink-0">
+                      {{ block.settings.category }}
+                    </span>
+                  {% endif %}
+                  <span class="font-semibold text-sm md:text-base text-gray-900 truncate">
+                    {{ block.settings.question }}
+                  </span>
+                </div>
+                <svg class="w-5 h-5 text-gray-400 flex-shrink-0 transition-transform duration-300"
+                     :class="openItem === {{ loop.index0 }} && 'rotate-180 text-primary'"
+                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+
+              {# Answer Body #}
+              <div x-show="openItem === {{ loop.index0 }}"
+                   x-collapse
+                   x-cloak>
+                <div class="px-5 pb-5 pt-0">
+                  <div class="border-t border-gray-100 pt-4">
+                    <div class="text-sm text-gray-600 leading-relaxed prose prose-sm max-w-none">
+                      {{ block.settings.answer | safe }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        {# No Results State #}
+        <div x-show="searchQuery.trim() && !document.querySelector('[data-faq-item]:not([style*=\'display: none\'])')"
+             x-cloak
+             class="text-center py-12">
+          <svg class="w-16 h-16 text-gray-200 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <p class="text-gray-500 text-sm">{{t('faq.no_results')}}</p>
+        </div>
+      {% endif %}
+
     </div>
   </div>
 </section>

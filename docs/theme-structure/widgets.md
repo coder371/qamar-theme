@@ -675,7 +675,7 @@ widgets/
 
 ```nunjucks
 {% for product in widget.data.products %}
-  <a href="/products/{{ product.slug }}">
+  <a href="/product/{{ product.slug }}">
     {% if product.images | length %}
       <img src="{{ product.images[0].fileUrl }}" alt="{{ product.title }}">
     {% endif %}

@@ -1,4 +1,19 @@
 {
   "layout": "layout",
-  "widgets": []
+  "allowAdd": true,
+  "allowRemove": true,
+  "allowReorder": true,
+  "widgets": [
+    {
+      "name": "صفحة التصنيفات",
+      "widget": "collections-page",
+      "settings": {
+        "title": "جميع التصنيفات",
+        "subtitle": "",
+        "layout": "card",
+        "columns": "3",
+        "show_count": true
+      }
+    }
+  ]
 }

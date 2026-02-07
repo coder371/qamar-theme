@@ -1,4 +1,20 @@
 {
   "layout": "layout",
-  "widgets": []
+  "allowAdd": true,
+  "allowRemove": true,
+  "allowReorder": true,
+  "widgets": [
+    {
+      "name": "جميع المدونات",
+      "widget": "blog-posts",
+      "settings": {
+        "title": "المدونات",
+        "subtitle": "استكشفي جميع مدوناتنا",
+        "posts_count": 6,
+        "layout": "grid",
+        "show_date": true,
+        "show_excerpt": true
+      }
+    }
+  ]
 }
