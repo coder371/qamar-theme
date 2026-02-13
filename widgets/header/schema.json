@@ -1,5 +1,6 @@
 {
   "name": "الهيدر الرئيسي",
+  "icon": "panel-top",
   "settings": {
     "header_menu": {
       "type": "menu",
@@ -14,11 +15,6 @@
     "show_cart": {
       "type": "boolean",
       "label": "إظهار السلة",
-      "default": true
-    },
-    "sticky": {
-      "type": "boolean",
-      "label": "تثبيت عند التمرير",
       "default": true
     }
   },

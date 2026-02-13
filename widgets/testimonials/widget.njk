@@ -4,16 +4,17 @@
     {% if widget.data.title or widget.data.subtitle %}
       <div class="text-center mb-10">
         {% if widget.data.title %}
-          <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-3">{{ widget.data.title }}</h2>
+          <h2 class="text-2xl md:text-3xl font-bold text-theme-text mb-3">{{ widget.data.title }}</h2>
         {% endif %}
         {% if widget.data.subtitle %}
-          <p class="text-gray-500 text-sm md:text-base max-w-xl mx-auto">{{ widget.data.subtitle }}</p>
+          <p class="text-theme-text-secondary text-sm md:text-base max-w-xl mx-auto">{{ widget.data.subtitle }}</p>
         {% endif %}
       </div>
     {% endif %}
 
     {% set blocks = widget.blocks | default([]) %}
 
+    {% if blocks | length > 0 %}
     {% if widget.data.layout == 'grid' %}
       {# Grid Layout #}
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -27,7 +28,7 @@
             </div>
 
             {# Content #}
-            <p class="text-gray-600 text-sm leading-relaxed mb-5">{{ block.settings.content }}</p>
+            <p class="text-theme-text-secondary text-sm leading-relaxed mb-5">{{ block.settings.content }}</p>
 
             {# Star Rating #}
             {% set rating = block.settings.rating | default('5') | int %}
@@ -49,9 +50,9 @@
                 </div>
               {% endif %}
               <div>
-                <h4 class="text-sm font-bold text-gray-800">{{ block.settings.author_name }}</h4>
+                <h4 class="text-sm font-bold text-theme-text">{{ block.settings.author_name }}</h4>
                 {% if block.settings.author_title %}
-                  <p class="text-xs text-gray-400">{{ block.settings.author_title }}</p>
+                  <p class="text-xs text-theme-text-secondary/70">{{ block.settings.author_title }}</p>
                 {% endif %}
               </div>
             </div>
@@ -95,7 +96,7 @@
                 </div>
 
                 {# Content #}
-                <p class="text-gray-600 text-sm leading-relaxed mb-5">{{ block.settings.content }}</p>
+                <p class="text-theme-text-secondary text-sm leading-relaxed mb-5">{{ block.settings.content }}</p>
 
                 {# Star Rating #}
                 {% set rating = block.settings.rating | default('5') | int %}
@@ -117,9 +118,9 @@
                     </div>
                   {% endif %}
                   <div>
-                    <h4 class="text-sm font-bold text-gray-800">{{ block.settings.author_name }}</h4>
+                    <h4 class="text-sm font-bold text-theme-text">{{ block.settings.author_name }}</h4>
                     {% if block.settings.author_title %}
-                      <p class="text-xs text-gray-400">{{ block.settings.author_title }}</p>
+                      <p class="text-xs text-theme-text-secondary/70">{{ block.settings.author_title }}</p>
                     {% endif %}
                   </div>
                 </div>
@@ -131,6 +132,42 @@
         {# Pagination #}
         <div class="swiper-pagination mt-6"></div>
       </div>
+    {% endif %}
+    {% else %}
+      {# Preview / Empty State #}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for i in range(0, 3) %}
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-dashed border-theme-border">
+            {# Quote Icon #}
+            <div class="mb-4">
+              <svg class="w-8 h-8 text-primary/15" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10H14.017zM0 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151C7.546 6.068 5.983 8.789 5.983 11H10v10H0z"/>
+              </svg>
+            </div>
+            {# Skeleton Content #}
+            <div class="space-y-2 mb-5">
+              <div class="h-3 bg-surface rounded-full w-full"></div>
+              <div class="h-3 bg-surface rounded-full w-full"></div>
+              <div class="h-3 bg-surface rounded-full w-2/3"></div>
+            </div>
+            {# Skeleton Stars #}
+            <div class="flex items-center gap-0.5 mb-4">
+              {% for s in range(5) %}
+                <div class="w-4 h-4 rounded-sm bg-surface"></div>
+              {% endfor %}
+            </div>
+            {# Skeleton Author #}
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-surface"></div>
+              <div>
+                <div class="h-3.5 w-24 bg-surface rounded-full mb-1.5"></div>
+                <div class="h-3 w-16 bg-surface/60 rounded-full"></div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      <p class="text-center text-sm text-theme-text-secondary/70 mt-8">{{t('testimonials.add_testimonials_hint')}}</p>
     {% endif %}
   </div>
 </section>

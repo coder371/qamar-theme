@@ -1,5 +1,6 @@
 {
   "name": "المنتجات المميزة",
+  "icon": "star",
   "settings": {
     "title": {
       "type": "string",
@@ -20,8 +21,14 @@
       "label": "طريقة العرض",
       "default": "grid",
       "options": [
-        { "value": "grid", "label": "شبكة" },
-        { "value": "slider", "label": "سلايدر" }
+        {
+          "value": "grid",
+          "label": "شبكة"
+        },
+        {
+          "value": "slider",
+          "label": "سلايدر"
+        }
       ]
     },
     "columns_desktop": {
@@ -29,9 +36,18 @@
       "label": "أعمدة سطح المكتب",
       "default": "4",
       "options": [
-        { "value": "2", "label": "2" },
-        { "value": "3", "label": "3" },
-        { "value": "4", "label": "4" }
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        }
       ]
     },
     "columns_mobile": {
@@ -39,8 +55,14 @@
       "label": "أعمدة الجوال",
       "default": "2",
       "options": [
-        { "value": "1", "label": "1" },
-        { "value": "2", "label": "2" }
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
       ]
     },
     "autoplay": {
@@ -53,11 +75,26 @@
       "label": "سرعة التشغيل التلقائي",
       "default": "5",
       "options": [
-        { "value": "3", "label": "3 ثواني" },
-        { "value": "4", "label": "4 ثواني" },
-        { "value": "5", "label": "5 ثواني" },
-        { "value": "7", "label": "7 ثواني" },
-        { "value": "10", "label": "10 ثواني" }
+        {
+          "value": "3",
+          "label": "3 ثواني"
+        },
+        {
+          "value": "4",
+          "label": "4 ثواني"
+        },
+        {
+          "value": "5",
+          "label": "5 ثواني"
+        },
+        {
+          "value": "7",
+          "label": "7 ثواني"
+        },
+        {
+          "value": "10",
+          "label": "10 ثواني"
+        }
       ]
     },
     "show_arrows": {
@@ -95,9 +132,18 @@
       "label": "نسبة صورة الكارد",
       "default": "square",
       "options": [
-        { "value": "square", "label": "مربع" },
-        { "value": "portrait", "label": "طولي" },
-        { "value": "landscape", "label": "عرضي" }
+        {
+          "value": "square",
+          "label": "مربع"
+        },
+        {
+          "value": "portrait",
+          "label": "طولي"
+        },
+        {
+          "value": "landscape",
+          "label": "عرضي"
+        }
       ]
     },
     "card_show_button": {
@@ -115,8 +161,14 @@
       "label": "عدد أسطر العنوان",
       "default": "2",
       "options": [
-        { "value": "1", "label": "سطر واحد" },
-        { "value": "2", "label": "سطرين" }
+        {
+          "value": "1",
+          "label": "سطر واحد"
+        },
+        {
+          "value": "2",
+          "label": "سطرين"
+        }
       ]
     },
     "card_image_fit": {
@@ -124,8 +176,14 @@
       "label": "طريقة عرض الصورة",
       "default": "contain",
       "options": [
-        { "value": "contain", "label": "كاملة (contain)" },
-        { "value": "cover", "label": "تغطية (cover)" }
+        {
+          "value": "contain",
+          "label": "كاملة (contain)"
+        },
+        {
+          "value": "cover",
+          "label": "تغطية (cover)"
+        }
       ]
     },
     "card_hover_effect": {
@@ -133,24 +191,37 @@
       "label": "تأثير الهوفر على الصورة",
       "default": "zoom",
       "options": [
-        { "value": "zoom", "label": "تكبير" },
-        { "value": "none", "label": "بدون" }
+        {
+          "value": "zoom",
+          "label": "تكبير"
+        },
+        {
+          "value": "none",
+          "label": "بدون"
+        }
       ]
-    },
-    "card_show_wishlist": {
-      "type": "boolean",
-      "label": "إظهار زر المفضلة",
-      "default": false
     },
     "card_border_radius": {
       "type": "select",
       "label": "حواف الكارد",
       "default": "lg",
       "options": [
-        { "value": "none", "label": "بدون" },
-        { "value": "sm", "label": "صغير" },
-        { "value": "md", "label": "متوسط" },
-        { "value": "lg", "label": "كبير" }
+        {
+          "value": "none",
+          "label": "بدون"
+        },
+        {
+          "value": "sm",
+          "label": "صغير"
+        },
+        {
+          "value": "md",
+          "label": "متوسط"
+        },
+        {
+          "value": "lg",
+          "label": "كبير"
+        }
       ]
     }
   },

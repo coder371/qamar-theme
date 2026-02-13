@@ -1,10 +1,13 @@
+{% set use_theme = widget.data.use_theme_color if widget.data.use_theme_color is defined else true %}
+{% set bg_color = 'var(--color-primary)' if use_theme else (widget.data.background_color | default('var(--color-primary)')) %}
+
 <section class="py-12 md:py-16 relative overflow-hidden"
   {% if widget.data.background_style == 'solid' %}
-    style="background-color: {{ widget.data.background_color | default('#9C27B0') }};"
+    style="background-color: {{ bg_color }};"
   {% elif widget.data.background_style == 'image' and widget.data.background_image %}
-    style="background-image: url('{{ widget.data.background_image }}'); background-size: cover; background-position: center;"
+    style="background-image: url('{{ widget.data.background_image.fileUrl }}'); background-size: cover; background-position: center;"
   {% else %}
-    style="background: linear-gradient(135deg, {{ widget.data.background_color | default('#9C27B0') }}, #7B1FA2);"
+    style="background: linear-gradient(135deg, {{ bg_color }}, var(--color-primary-dark));"
   {% endif %}
 >
   {# Overlay for image background #}
@@ -49,7 +52,7 @@
                  class="flex-1 px-5 py-3 rounded-full bg-white/20 border border-white/30 text-white placeholder-white/60 focus:outline-none focus:bg-white/30 focus:border-white/50 backdrop-blur-sm transition-all text-sm">
           <button type="submit"
                   :disabled="loading"
-                  class="px-8 py-3 rounded-full bg-white text-primary font-bold text-sm hover:bg-gray-100 transition-colors disabled:opacity-70 flex items-center justify-center gap-2 whitespace-nowrap">
+                  class="px-8 py-3 rounded-full bg-white text-primary font-bold text-sm hover:bg-surface transition-colors disabled:opacity-70 flex items-center justify-center gap-2 whitespace-nowrap">
             <span x-show="!loading">{{ widget.data.button_text | default('اشتراك') }}</span>
             <span x-show="loading" x-cloak>
               <svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">

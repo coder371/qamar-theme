@@ -1,4 +1,4 @@
-<header class="bg-white border-b border-gray-100"
+<header class="bg-background border-b border-theme-border/40"
         x-data="{ scrolled: false }"
         @scroll.window="scrolled = window.scrollY > 10"
         :class="{ 'shadow-md': scrolled }">
@@ -6,7 +6,7 @@
     <div class="flex items-center justify-between h-16">
 
       {# Mobile Menu Button #}
-      <button @click="$store.modal.toggle('sidebar')" class="lg:hidden p-2 -ms-2 text-gray-700 hover:text-primary transition-colors">
+      <button @click="$store.modal.toggle('sidebar')" class="lg:hidden p-2 -ms-2 text-theme-text hover:text-primary transition-colors">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
         </svg>
@@ -25,7 +25,7 @@
       <nav class="hidden lg:flex items-center gap-6">
         {% for item in widget.data.header_menu %}
           <a href="{{ item.url | default('#') }}"
-             class="text-gray-700 hover:text-primary font-medium transition-colors text-sm">
+             class="text-theme-text hover:text-primary font-medium transition-colors text-sm">
             {{ item.title }}
           </a>
         {% endfor %}
@@ -36,7 +36,7 @@
         {# Search #}
         {% if widget.data.show_search %}
           <button @click="$store.modal.toggle('search')"
-                  class="p-2 text-gray-600 hover:text-primary transition-colors">
+                  class="p-2 text-theme-text-secondary hover:text-primary transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
             </svg>
@@ -46,7 +46,7 @@
         {# Cart #}
         {% if widget.data.show_cart %}
           <button @click="$store.modal.toggle('cart')"
-                  class="p-2 text-gray-600 hover:text-primary transition-colors relative">
+                  class="p-2 text-theme-text-secondary hover:text-primary transition-colors relative">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
             </svg>

@@ -1,5 +1,6 @@
 {
   "name": "نموذج التواصل",
+  "icon": "mail",
   "settings": {
     "title": {
       "type": "string",
@@ -46,11 +47,5 @@
       "label": "كود الخريطة (iframe)",
       "default": ""
     }
-  },
-  "presets": [
-    {
-      "category": "الصفحات",
-      "name": "نموذج التواصل"
-    }
-  ]
+  }
 }

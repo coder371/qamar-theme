@@ -1,5 +1,6 @@
 {
   "name": "شعارات الماركات",
+  "icon": "award",
   "settings": {
     "title": {
       "type": "string",

@@ -76,7 +76,8 @@
     "no_reviews": "لا توجد تقييمات بعد",
     "select_option": "اختاري {{option}}",
     "choose_options": "اختاري الخيارات",
-    "added": "تمت الإضافة"
+    "added": "تمت الإضافة",
+    "related_preview_hint": "سيتم عرض المنتجات ذات الصلة تلقائياً"
   },
   "cart": {
     "title": "سلة التسوق",
@@ -128,7 +129,12 @@
     "no_products": "لا توجد منتجات في هذا التصنيف",
     "price_range": "نطاق السعر",
     "clear_filters": "مسح الفلاتر",
-    "show_results": "عرض النتائج"
+    "show_results": "عرض النتائج",
+    "select_collection_hint": "اختر تصنيفاً لعرض منتجاته هنا",
+    "select_products_hint": "اختر تصنيف لعرض منتجاته هنا",
+    "select_collections_hint": "اختر التصنيفات من إعدادات الويدجت",
+    "banner_preview_hint": "معاينة بانر التصنيف",
+    "collections_page_hint": "سيتم عرض التصنيفات هنا تلقائياً"
   },
   "404": {
     "title": "الصفحة غير موجودة",
@@ -178,12 +184,36 @@
     "easy_returns": "إرجاع سهل",
     "easy_returns_desc": "إرجاع خلال 14 يوم",
     "support": "دعم متواصل",
-    "support_desc": "خدمة عملاء على مدار الساعة"
+    "support_desc": "خدمة عملاء على مدار الساعة",
+    "add_features_hint": "أضف المميزات من إعدادات الويدجت"
+  },
+  "brands": {
+    "select_brands_hint": "أضف الماركات من إعدادات الويدجت"
+  },
+  "blog": {
+    "blog": "المدونة",
+    "read_more": "اقرأ المزيد",
+    "category": "التصنيف",
+    "views": "مشاهدة",
+    "share_article": "شارك المقالة",
+    "related_articles": "مقالات ذات صلة",
+    "select_articles_hint": "اختر المقالات من إعدادات الويدجت",
+    "article_preview_hint": "معاينة صفحة المقالة"
   },
   "faq": {
     "title": "الأسئلة الشائعة",
     "subtitle": "إجابات على أكثر الأسئلة شيوعاً",
     "search_placeholder": "ابحثي في الأسئلة الشائعة...",
-    "no_results": "لا توجد نتائج مطابقة لبحثك"
+    "no_results": "لا توجد نتائج مطابقة لبحثك",
+    "add_questions_hint": "أضف الأسئلة من إعدادات الويدجت"
+  },
+  "hero": {
+    "add_slides_hint": "أضف الشرائح من إعدادات الويدجت"
+  },
+  "banner": {
+    "add_banners_hint": "أضف البانرات من إعدادات الويدجت"
+  },
+  "testimonials": {
+    "add_testimonials_hint": "أضف آراء العملاء من إعدادات الويدجت"
   }
 }

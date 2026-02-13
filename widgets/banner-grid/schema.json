@@ -1,5 +1,6 @@
 {
   "name": "شبكة البانرات",
+  "icon": "layout-grid",
   "settings": {
     "layout": {
       "type": "select",

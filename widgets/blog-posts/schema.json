@@ -1,30 +1,39 @@
 {
-  "name": "مقالات المدونة",
+  "name": "صفحة المدونة",
+  "icon": "book-open",
   "settings": {
-    "title": {
-      "type": "string",
-      "label": "العنوان",
-      "default": "من مدونتنا"
-    },
-    "subtitle": {
-      "type": "string",
-      "label": "العنوان الفرعي",
-      "default": ""
-    },
-    "posts_count": {
-      "type": "number",
-      "label": "عدد المقالات",
-      "default": 3,
-      "min": 2,
-      "max": 6
+    "columns": {
+      "type": "select",
+      "label": "عدد الأعمدة",
+      "default": "3",
+      "options": [
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        }
+      ]
     },
     "layout": {
       "type": "select",
       "label": "نمط العرض",
       "default": "grid",
       "options": [
-        { "value": "grid", "label": "شبكة" },
-        { "value": "slider", "label": "سلايدر" }
+        {
+          "value": "grid",
+          "label": "شبكة"
+        },
+        {
+          "value": "slider",
+          "label": "سلايدر"
+        }
       ]
     },
     "show_date": {
@@ -37,42 +46,5 @@
       "label": "إظهار المقتطف",
       "default": true
     }
-  },
-  "blocks": {
-    "post": {
-      "name": "مقالة",
-      "settings": {
-        "image": {
-          "type": "media",
-          "label": "صورة المقالة"
-        },
-        "title": {
-          "type": "string",
-          "label": "عنوان المقالة",
-          "default": ""
-        },
-        "excerpt": {
-          "type": "text",
-          "label": "مقتطف المقالة",
-          "default": ""
-        },
-        "url": {
-          "type": "string",
-          "label": "رابط المقالة",
-          "default": ""
-        },
-        "date": {
-          "type": "string",
-          "label": "تاريخ النشر",
-          "default": ""
-        }
-      }
-    }
-  },
-  "presets": [
-    {
-      "category": "الصفحة الرئيسية",
-      "name": "مقالات المدونة"
-    }
-  ]
+  }
 }

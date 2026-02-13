@@ -1,5 +1,6 @@
 {
   "name": "شريط الإعلانات",
+  "icon": "bell-ring",
   "settings": {
     "text": {
       "type": "string",
@@ -16,9 +17,14 @@
       "label": "إظهار زر الإغلاق",
       "default": true
     },
+    "use_theme_color": {
+      "type": "boolean",
+      "label": "استخدام اللون الأساسي من الثيم",
+      "default": true
+    },
     "background_color": {
       "type": "color",
-      "label": "لون الخلفية",
+      "label": "لون خلفية مخصص",
       "default": "#9C27B0"
     },
     "text_color": {

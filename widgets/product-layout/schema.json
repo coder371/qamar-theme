@@ -1,5 +1,6 @@
 {
   "name": "تفاصيل المنتج",
+  "icon": "box",
   "settings": {
     "show_sku": {
       "type": "boolean",
@@ -21,8 +22,14 @@
       "label": "موضع الصور",
       "default": "start",
       "options": [
-        { "value": "start", "label": "البداية" },
-        { "value": "end", "label": "النهاية" }
+        {
+          "value": "start",
+          "label": "البداية"
+        },
+        {
+          "value": "end",
+          "label": "النهاية"
+        }
       ]
     },
     "image_zoom": {
@@ -35,11 +42,5 @@
       "label": "معلومات الشحن",
       "default": ""
     }
-  },
-  "presets": [
-    {
-      "category": "صفحة المنتج",
-      "name": "تفاصيل المنتج"
-    }
-  ]
+  }
 }

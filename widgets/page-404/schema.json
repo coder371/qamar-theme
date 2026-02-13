@@ -1,5 +1,6 @@
 {
   "name": "صفحة 404",
+  "icon": "file-x",
   "settings": {
     "title": {
       "type": "string",
@@ -21,11 +22,5 @@
       "label": "رابط الصفحة الرئيسية",
       "default": "/"
     }
-  },
-  "presets": [
-    {
-      "category": "الصفحات",
-      "name": "صفحة 404"
-    }
-  ]
+  }
 }

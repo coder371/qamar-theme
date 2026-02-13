@@ -1,5 +1,5 @@
-{{widget.settings.pp | json}}
-{% set bg_color = widget.data.background_color | default('#9C27B0') %}
+{% set use_theme = widget.data.use_theme_color if widget.data.use_theme_color is defined else true %}
+{% set bg_color = 'var(--color-primary)' if use_theme else (widget.data.background_color | default('var(--color-primary)')) %}
 {% set text_color = widget.data.text_color | default('white') %}
 {% set height = widget.data.height | default('medium') %}
 {% set alignment = widget.data.text_alignment | default('center') %}
@@ -37,7 +37,7 @@
           {% if text_color == 'white' %}
             bg-white/20 text-white border border-white/30
           {% else %}
-            bg-gray-800/10 text-gray-800 border border-gray-800/20
+            bg-theme-text/10 text-theme-text border border-theme-text/20
           {% endif %}">
           {{ widget.data.badge_text }}
         </span>
@@ -45,14 +45,14 @@
 
       {% if widget.data.title %}
         <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4
-          {% if text_color == 'white' %} text-white {% else %} text-gray-800 {% endif %}">
+          {% if text_color == 'white' %} text-white {% else %} text-theme-text {% endif %}">
           {{ widget.data.title }}
         </h2>
       {% endif %}
 
       {% if widget.data.subtitle %}
         <p class="text-lg md:text-xl mb-8 opacity-90
-          {% if text_color == 'white' %} text-white {% else %} text-gray-600 {% endif %}">
+          {% if text_color == 'white' %} text-white {% else %} text-theme-text-secondary {% endif %}">
           {{ widget.data.subtitle | safe }}
         </p>
       {% endif %}
@@ -94,56 +94,56 @@
               {# Days #}
               <div class="flex flex-col items-center">
                 <div class="w-16 h-16 md:w-20 md:h-20 rounded-xl flex items-center justify-center text-2xl md:text-3xl font-bold
-                  {% if text_color == 'white' %} bg-white/20 text-white {% else %} bg-gray-800/10 text-gray-800 {% endif %}">
+                  {% if text_color == 'white' %} bg-white/20 text-white {% else %} bg-theme-text/10 text-theme-text {% endif %}">
                   <span x-text="String(days).padStart(2, '0')">00</span>
                 </div>
                 <span class="text-xs md:text-sm mt-2 opacity-80
-                  {% if text_color == 'white' %} text-white {% else %} text-gray-600 {% endif %}">
+                  {% if text_color == 'white' %} text-white {% else %} text-theme-text-secondary {% endif %}">
                   {{t('promo.days')}}
                 </span>
               </div>
 
               <span class="text-2xl font-bold opacity-60
-                {% if text_color == 'white' %} text-white {% else %} text-gray-800 {% endif %}">:</span>
+                {% if text_color == 'white' %} text-white {% else %} text-theme-text {% endif %}">:</span>
 
               {# Hours #}
               <div class="flex flex-col items-center">
                 <div class="w-16 h-16 md:w-20 md:h-20 rounded-xl flex items-center justify-center text-2xl md:text-3xl font-bold
-                  {% if text_color == 'white' %} bg-white/20 text-white {% else %} bg-gray-800/10 text-gray-800 {% endif %}">
+                  {% if text_color == 'white' %} bg-white/20 text-white {% else %} bg-theme-text/10 text-theme-text {% endif %}">
                   <span x-text="String(hours).padStart(2, '0')">00</span>
                 </div>
                 <span class="text-xs md:text-sm mt-2 opacity-80
-                  {% if text_color == 'white' %} text-white {% else %} text-gray-600 {% endif %}">
+                  {% if text_color == 'white' %} text-white {% else %} text-theme-text-secondary {% endif %}">
                   {{t('promo.hours')}}
                 </span>
               </div>
 
               <span class="text-2xl font-bold opacity-60
-                {% if text_color == 'white' %} text-white {% else %} text-gray-800 {% endif %}">:</span>
+                {% if text_color == 'white' %} text-white {% else %} text-theme-text {% endif %}">:</span>
 
               {# Minutes #}
               <div class="flex flex-col items-center">
                 <div class="w-16 h-16 md:w-20 md:h-20 rounded-xl flex items-center justify-center text-2xl md:text-3xl font-bold
-                  {% if text_color == 'white' %} bg-white/20 text-white {% else %} bg-gray-800/10 text-gray-800 {% endif %}">
+                  {% if text_color == 'white' %} bg-white/20 text-white {% else %} bg-theme-text/10 text-theme-text {% endif %}">
                   <span x-text="String(minutes).padStart(2, '0')">00</span>
                 </div>
                 <span class="text-xs md:text-sm mt-2 opacity-80
-                  {% if text_color == 'white' %} text-white {% else %} text-gray-600 {% endif %}">
+                  {% if text_color == 'white' %} text-white {% else %} text-theme-text-secondary {% endif %}">
                   {{t('promo.minutes')}}
                 </span>
               </div>
 
               <span class="text-2xl font-bold opacity-60
-                {% if text_color == 'white' %} text-white {% else %} text-gray-800 {% endif %}">:</span>
+                {% if text_color == 'white' %} text-white {% else %} text-theme-text {% endif %}">:</span>
 
               {# Seconds #}
               <div class="flex flex-col items-center">
                 <div class="w-16 h-16 md:w-20 md:h-20 rounded-xl flex items-center justify-center text-2xl md:text-3xl font-bold
-                  {% if text_color == 'white' %} bg-white/20 text-white {% else %} bg-gray-800/10 text-gray-800 {% endif %}">
+                  {% if text_color == 'white' %} bg-white/20 text-white {% else %} bg-theme-text/10 text-theme-text {% endif %}">
                   <span x-text="String(seconds).padStart(2, '0')">00</span>
                 </div>
                 <span class="text-xs md:text-sm mt-2 opacity-80
-                  {% if text_color == 'white' %} text-white {% else %} text-gray-600 {% endif %}">
+                  {% if text_color == 'white' %} text-white {% else %} text-theme-text-secondary {% endif %}">
                   {{t('promo.seconds')}}
                 </span>
               </div>
@@ -152,7 +152,7 @@
 
           <template x-if="expired">
             <p class="text-xl md:text-2xl font-bold
-              {% if text_color == 'white' %} text-white {% else %} text-gray-800 {% endif %}">
+              {% if text_color == 'white' %} text-white {% else %} text-theme-text {% endif %}">
               {{t('promo.expired')}}
             </p>
           </template>
@@ -166,13 +166,13 @@
            class="inline-block px-8 py-3 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-105 hover:shadow-lg
            {% if button_style == 'outline' %}
              {% if text_color == 'white' %}
-               bg-transparent text-white border-2 border-white hover:bg-white hover:text-gray-800
+               bg-transparent text-white border-2 border-white hover:bg-white hover:text-theme-text
              {% else %}
                bg-transparent border-2 hover:text-white
              {% endif %}
            {% else %}
              {% if text_color == 'white' %}
-               bg-white hover:bg-gray-100
+               bg-white hover:bg-surface
              {% else %}
                text-white hover:opacity-90
              {% endif %}

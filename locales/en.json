@@ -72,7 +72,8 @@
     "no_reviews": "No reviews yet",
     "select_option": "Select {{option}}",
     "choose_options": "Choose Options",
-    "added": "Added!"
+    "added": "Added!",
+    "related_preview_hint": "Related products will be displayed here automatically"
   },
   "cart": {
     "title": "Shopping Cart",
@@ -117,7 +118,12 @@
     "no_products": "No products in this category",
     "price_range": "Price Range",
     "clear_filters": "Clear Filters",
-    "show_results": "Show Results"
+    "show_results": "Show Results",
+    "select_collection_hint": "Select a collection to display its products here",
+    "select_products_hint": "Select a collection to display its products here",
+    "select_collections_hint": "Select collections from widget settings",
+    "banner_preview_hint": "Collection banner preview",
+    "collections_page_hint": "Collections will be displayed here automatically"
   },
   "404": {
     "title": "Page Not Found",
@@ -165,9 +171,35 @@
     "easy_returns": "Easy Returns",
     "easy_returns_desc": "14-day return policy",
     "support": "24/7 Support",
-    "support_desc": "Round-the-clock customer service"
+    "support_desc": "Round-the-clock customer service",
+    "add_features_hint": "Add features from widget settings"
+  },
+  "brands": {
+    "select_brands_hint": "Add brands from widget settings"
+  },
+  "blog": {
+    "blog": "Blog",
+    "read_more": "Read More",
+    "category": "Category",
+    "views": "views",
+    "share_article": "Share Article",
+    "related_articles": "Related Articles",
+    "select_articles_hint": "Select articles from widget settings",
+    "article_preview_hint": "Article page preview"
   },
   "faq": {
-    "title": "Frequently Asked Questions"
+    "title": "Frequently Asked Questions",
+    "search_placeholder": "Search FAQ...",
+    "no_results": "No matching results found",
+    "add_questions_hint": "Add questions from widget settings"
+  },
+  "hero": {
+    "add_slides_hint": "Add slides from widget settings"
+  },
+  "banner": {
+    "add_banners_hint": "Add banners from widget settings"
+  },
+  "testimonials": {
+    "add_testimonials_hint": "Add testimonials from widget settings"
   }
 }

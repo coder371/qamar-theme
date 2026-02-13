@@ -1,5 +1,6 @@
 {
   "name": "صفحة التصنيفات",
+  "icon": "layout-list",
   "settings": {
     "title": {
       "type": "string",
@@ -16,9 +17,18 @@
       "label": "شكل العرض",
       "default": "card",
       "options": [
-        { "value": "card", "label": "بطاقة" },
-        { "value": "overlay", "label": "تراكب" },
-        { "value": "minimal", "label": "بسيط" }
+        {
+          "value": "card",
+          "label": "بطاقة"
+        },
+        {
+          "value": "overlay",
+          "label": "تراكب"
+        },
+        {
+          "value": "minimal",
+          "label": "بسيط"
+        }
       ]
     },
     "columns": {
@@ -26,9 +36,18 @@
       "label": "عدد الأعمدة",
       "default": "3",
       "options": [
-        { "value": "2", "label": "2" },
-        { "value": "3", "label": "3" },
-        { "value": "4", "label": "4" }
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        }
       ]
     },
     "show_count": {
@@ -36,11 +55,5 @@
       "label": "إظهار عدد المنتجات",
       "default": true
     }
-  },
-  "presets": [
-    {
-      "category": "صفحة التصنيفات",
-      "name": "صفحة التصنيفات"
-    }
-  ]
+  }
 }

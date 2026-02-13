@@ -1,5 +1,6 @@
 {
   "name": "النشرة البريدية",
+  "icon": "mail-plus",
   "settings": {
     "title": {
       "type": "string",
@@ -31,9 +32,14 @@
         { "value": "image", "label": "صورة" }
       ]
     },
+    "use_theme_color": {
+      "type": "boolean",
+      "label": "استخدام اللون الأساسي من الثيم",
+      "default": true
+    },
     "background_color": {
       "type": "color",
-      "label": "لون الخلفية",
+      "label": "لون خلفية مخصص",
       "default": "#9C27B0"
     },
     "background_image": {

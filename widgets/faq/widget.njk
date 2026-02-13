@@ -26,12 +26,12 @@
       {% if widget.data.title or widget.data.subtitle %}
         <div class="text-center mb-10 md:mb-14">
           {% if widget.data.title %}
-            <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-3">
+            <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-theme-text mb-3">
               {{ widget.data.title }}
             </h1>
           {% endif %}
           {% if widget.data.subtitle %}
-            <p class="text-gray-500 text-sm md:text-base max-w-xl mx-auto">
+            <p class="text-theme-text-secondary text-sm md:text-base max-w-xl mx-auto">
               {{ widget.data.subtitle | safe }}
             </p>
           {% endif %}
@@ -42,21 +42,21 @@
       {% if widget.data.show_search and blocks | length > 0 %}
         <div class="mb-8">
           <div class="relative">
-            <svg class="absolute start-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"
+            <svg class="absolute start-4 top-1/2 -translate-y-1/2 w-5 h-5 text-theme-text-secondary/70 pointer-events-none"
                  fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
             </svg>
             <input type="text"
                    x-model="searchQuery"
-                   class="w-full ps-12 pe-4 py-3.5 rounded-xl border border-gray-200 bg-white
-                          text-gray-900 text-sm placeholder-gray-400
+                   class="w-full ps-12 pe-4 py-3.5 rounded-xl border border-theme-border bg-white
+                          text-theme-text text-sm placeholder-theme-text-secondary/70
                           focus:ring-2 focus:ring-primary/20 focus:border-primary
                           transition-colors duration-200"
                    placeholder="{{t('faq.search_placeholder')}}">
             {# Clear Button #}
             <button x-show="searchQuery.length > 0" x-cloak
                     @click="searchQuery = ''"
-                    class="absolute end-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    class="absolute end-4 top-1/2 -translate-y-1/2 text-theme-text-secondary/70 hover:text-theme-text-secondary transition-colors"
                     type="button">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -75,7 +75,7 @@
                  x-transition:enter="transition ease-out duration-200"
                  x-transition:enter-start="opacity-0 -translate-y-1"
                  x-transition:enter-end="opacity-100 translate-y-0"
-                 class="bg-white border border-gray-200 rounded-xl overflow-hidden
+                 class="bg-white border border-theme-border rounded-xl overflow-hidden
                         hover:border-primary/30 transition-colors duration-200"
                  :class="openItem === {{ loop.index0 }} && 'border-primary/30 shadow-sm'">
 
@@ -90,11 +90,11 @@
                       {{ block.settings.category }}
                     </span>
                   {% endif %}
-                  <span class="font-semibold text-sm md:text-base text-gray-900 truncate">
+                  <span class="font-semibold text-sm md:text-base text-theme-text truncate">
                     {{ block.settings.question }}
                   </span>
                 </div>
-                <svg class="w-5 h-5 text-gray-400 flex-shrink-0 transition-transform duration-300"
+                <svg class="w-5 h-5 text-theme-text-secondary/70 flex-shrink-0 transition-transform duration-300"
                      :class="openItem === {{ loop.index0 }} && 'rotate-180 text-primary'"
                      fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
@@ -106,8 +106,8 @@
                    x-collapse
                    x-cloak>
                 <div class="px-5 pb-5 pt-0">
-                  <div class="border-t border-gray-100 pt-4">
-                    <div class="text-sm text-gray-600 leading-relaxed prose prose-sm max-w-none">
+                  <div class="border-t border-theme-border/40 pt-4">
+                    <div class="text-sm text-theme-text-secondary leading-relaxed prose prose-sm max-w-none">
                       {{ block.settings.answer | safe }}
                     </div>
                   </div>
@@ -124,8 +124,51 @@
           <svg class="w-16 h-16 text-gray-200 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
-          <p class="text-gray-500 text-sm">{{t('faq.no_results')}}</p>
+          <p class="text-theme-text-secondary text-sm">{{t('faq.no_results')}}</p>
         </div>
+      {% else %}
+        {# Preview / Empty State #}
+        <div class="space-y-3">
+          {# Skeleton Search Bar #}
+          <div class="mb-5">
+            <div class="relative">
+              <div class="w-full h-12 rounded-xl border border-dashed border-theme-border bg-surface/50 flex items-center ps-12 pe-4">
+                <svg class="absolute start-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-300 pointer-events-none"
+                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <div class="h-3 w-40 bg-surface rounded-full"></div>
+              </div>
+            </div>
+          </div>
+
+          {# Skeleton FAQ Items #}
+          {% for i in range(0, 4) %}
+            <div class="bg-white border border-dashed border-theme-border rounded-xl overflow-hidden">
+              <div class="flex items-center justify-between gap-4 px-5 py-4">
+                <div class="flex items-center gap-3 flex-1 min-w-0">
+                  {% if loop.index0 < 2 %}
+                    <div class="h-5 w-16 bg-primary/10 rounded-full flex-shrink-0"></div>
+                  {% endif %}
+                  <div class="h-4 bg-surface rounded-full {% if loop.first %}w-3/4{% elif loop.index0 == 1 %}w-2/3{% elif loop.index0 == 2 %}w-4/5{% else %}w-1/2{% endif %}"></div>
+                </div>
+                <svg class="w-5 h-5 text-gray-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </div>
+              {% if loop.first %}
+                <div class="px-5 pb-5 pt-0">
+                  <div class="border-t border-theme-border/40 pt-4 space-y-2">
+                    <div class="h-3 bg-surface rounded-full w-full"></div>
+                    <div class="h-3 bg-surface rounded-full w-full"></div>
+                    <div class="h-3 bg-surface rounded-full w-2/3"></div>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+        <p class="text-center text-sm text-theme-text-secondary/70 mt-8">{{t('faq.add_questions_hint')}}</p>
       {% endif %}
 
     </div>

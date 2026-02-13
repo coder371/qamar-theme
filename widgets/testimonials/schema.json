@@ -1,5 +1,6 @@
 {
   "name": "آراء العملاء",
+  "icon": "quote",
   "settings": {
     "title": {
       "type": "string",

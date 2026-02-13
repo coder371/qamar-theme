@@ -1,13 +1,20 @@
 {
   "name": "منتجات التصنيف",
+  "icon": "shopping-bag",
   "settings": {
     "columns_desktop": {
       "type": "select",
       "label": "أعمدة سطح المكتب",
       "default": "4",
       "options": [
-        { "value": "3", "label": "3" },
-        { "value": "4", "label": "4" }
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        }
       ]
     },
     "columns_mobile": {
@@ -15,8 +22,14 @@
       "label": "أعمدة الجوال",
       "default": "2",
       "options": [
-        { "value": "1", "label": "1" },
-        { "value": "2", "label": "2" }
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
       ]
     },
     "show_sort": {
@@ -34,8 +47,14 @@
       "label": "نوع التصفح",
       "default": "pagination",
       "options": [
-        { "value": "pagination", "label": "ترقيم الصفحات" },
-        { "value": "load_more", "label": "تحميل المزيد" }
+        {
+          "value": "pagination",
+          "label": "ترقيم الصفحات"
+        },
+        {
+          "value": "load_more",
+          "label": "تحميل المزيد"
+        }
       ]
     },
     "products_per_page": {
@@ -65,9 +84,18 @@
       "label": "نسبة صورة الكارد",
       "default": "square",
       "options": [
-        { "value": "square", "label": "مربع" },
-        { "value": "portrait", "label": "طولي" },
-        { "value": "landscape", "label": "عرضي" }
+        {
+          "value": "square",
+          "label": "مربع"
+        },
+        {
+          "value": "portrait",
+          "label": "طولي"
+        },
+        {
+          "value": "landscape",
+          "label": "عرضي"
+        }
       ]
     },
     "card_show_button": {
@@ -85,8 +113,14 @@
       "label": "عدد أسطر العنوان",
       "default": "2",
       "options": [
-        { "value": "1", "label": "سطر واحد" },
-        { "value": "2", "label": "سطرين" }
+        {
+          "value": "1",
+          "label": "سطر واحد"
+        },
+        {
+          "value": "2",
+          "label": "سطرين"
+        }
       ]
     },
     "card_image_fit": {
@@ -94,8 +128,14 @@
       "label": "طريقة عرض الصورة",
       "default": "contain",
       "options": [
-        { "value": "contain", "label": "كاملة (contain)" },
-        { "value": "cover", "label": "تغطية (cover)" }
+        {
+          "value": "contain",
+          "label": "كاملة (contain)"
+        },
+        {
+          "value": "cover",
+          "label": "تغطية (cover)"
+        }
       ]
     },
     "card_hover_effect": {
@@ -103,31 +143,38 @@
       "label": "تأثير الهوفر على الصورة",
       "default": "zoom",
       "options": [
-        { "value": "zoom", "label": "تكبير" },
-        { "value": "none", "label": "بدون" }
+        {
+          "value": "zoom",
+          "label": "تكبير"
+        },
+        {
+          "value": "none",
+          "label": "بدون"
+        }
       ]
-    },
-    "card_show_wishlist": {
-      "type": "boolean",
-      "label": "إظهار زر المفضلة",
-      "default": false
     },
     "card_border_radius": {
       "type": "select",
       "label": "حواف الكارد",
       "default": "lg",
       "options": [
-        { "value": "none", "label": "بدون" },
-        { "value": "sm", "label": "صغير" },
-        { "value": "md", "label": "متوسط" },
-        { "value": "lg", "label": "كبير" }
+        {
+          "value": "none",
+          "label": "بدون"
+        },
+        {
+          "value": "sm",
+          "label": "صغير"
+        },
+        {
+          "value": "md",
+          "label": "متوسط"
+        },
+        {
+          "value": "lg",
+          "label": "كبير"
+        }
       ]
     }
-  },
-  "presets": [
-    {
-      "category": "صفحة التصنيف",
-      "name": "منتجات التصنيف"
-    }
-  ]
+  }
 }

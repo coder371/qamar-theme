@@ -26,7 +26,7 @@
     <div class="container mx-auto px-4 py-4">
       <form action="/search" method="get" class="flex items-center gap-3">
         {# Search Icon #}
-        <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-5 h-5 text-theme-text-secondary/70 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
         </svg>
 
@@ -35,13 +35,13 @@
                name="q"
                x-model="query"
                @input.debounce.300ms="if(query.length >= 2) Qumra.search.suggest(query, (data) => suggestions = data.products || [])"
-               class="flex-1 text-lg border-none outline-none placeholder-gray-400"
+               class="flex-1 text-lg border-none outline-none placeholder-theme-text-secondary/70"
                placeholder="{{t('header.search_placeholder')}}"
                autocomplete="off"
                autofocus>
 
         {# Close #}
-        <button type="button" @click="$store.modal.close()" class="p-1 hover:bg-gray-100 rounded-full transition-colors">
+        <button type="button" @click="$store.modal.close()" class="p-1 hover:bg-surface rounded-full transition-colors">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
           </svg>
@@ -49,9 +49,9 @@
       </form>
 
       {# Suggestions #}
-      <div x-show="suggestions.length > 0" class="mt-4 border-t border-gray-100 pt-4">
+      <div x-show="suggestions.length > 0" class="mt-4 border-t border-theme-border/40 pt-4">
         <template x-for="item in suggestions" :key="item._id">
-          <a :href="'/product/' + item.slug" class="flex items-center gap-3 py-2 px-1 hover:bg-gray-50 rounded-lg transition-colors">
+          <a :href="'/product/' + item.slug" class="flex items-center gap-3 py-2 px-1 hover:bg-surface rounded-lg transition-colors">
             <template x-if="item.images && item.images.length">
               <img :src="item.images[0].fileUrl" :alt="item.title" class="w-10 h-10 rounded object-cover">
             </template>

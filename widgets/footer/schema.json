@@ -1,5 +1,6 @@
 {
   "name": "الفوتر الرئيسي",
+  "icon": "panel-bottom",
   "settings": {
     "show_logo": {
       "type": "boolean",

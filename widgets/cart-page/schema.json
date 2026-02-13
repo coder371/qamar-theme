@@ -1,5 +1,6 @@
 {
   "name": "صفحة السلة",
+  "icon": "shopping-cart",
   "settings": {
     "show_savings": {
       "type": "boolean",
@@ -16,11 +17,5 @@
       "label": "رابط إتمام الطلب",
       "default": "/checkout"
     }
-  },
-  "presets": [
-    {
-      "category": "صفحات",
-      "name": "صفحة السلة"
-    }
-  ]
+  }
 }

@@ -15,7 +15,7 @@
         {% endif %}
 
         {% if widget.data.description %}
-          <p class="text-gray-400 text-sm leading-relaxed mb-4">
+          <p class="text-white/60 text-sm leading-relaxed mb-4">
             {{ widget.data.description | safe }}
           </p>
         {% endif %}
@@ -58,7 +58,7 @@
         <ul class="space-y-2">
           {% for item in widget.data.footer_menu_1 %}
             <li>
-              <a href="{{ item.url | default('#') }}" class="text-gray-400 hover:text-white text-sm transition-colors">
+              <a href="{{ item.url | default('#') }}" class="text-white/60 hover:text-white text-sm transition-colors">
                 {{ item.title }}
               </a>
             </li>
@@ -72,7 +72,7 @@
         <ul class="space-y-2">
           {% for item in widget.data.footer_menu_2 %}
             <li>
-              <a href="{{ item.url | default('#') }}" class="text-gray-400 hover:text-white text-sm transition-colors">
+              <a href="{{ item.url | default('#') }}" class="text-white/60 hover:text-white text-sm transition-colors">
                 {{ item.title }}
               </a>
             </li>
@@ -83,10 +83,10 @@
       {# Newsletter #}
       <div>
         <h3 class="text-base font-bold mb-4">{{t('footer.newsletter_title')}}</h3>
-        <p class="text-gray-400 text-sm mb-3">{{t('footer.newsletter_subtitle')}}</p>
+        <p class="text-white/60 text-sm mb-3">{{t('footer.newsletter_subtitle')}}</p>
         <form class="flex gap-2" x-data="{ email: '', sent: false }">
           <input type="email" x-model="email"
-                 class="flex-1 bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:border-primary"
+                 class="flex-1 bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm text-white placeholder-white/50 focus:outline-none focus:border-primary"
                  placeholder="{{t('footer.newsletter_placeholder')}}">
           <button type="submit" class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
             {{t('footer.newsletter_button')}}
@@ -97,7 +97,7 @@
 
     {# Copyright #}
     <div class="border-t border-white/10 mt-8 pt-6 text-center">
-      <p class="text-gray-500 text-sm">
+      <p class="text-white/50 text-sm">
         &copy; {{ "now" | date("YYYY") }} {{ store.name }}. {{ widget.data.copyright_text }}
       </p>
     </div>

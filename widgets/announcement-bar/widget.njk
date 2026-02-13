@@ -1,10 +1,13 @@
+{% set use_theme = widget.data.use_theme_color if widget.data.use_theme_color is defined else true %}
+{% set bg_color = 'var(--color-primary)' if use_theme else (widget.data.background_color | default('var(--color-primary)')) %}
+
 <div x-data="{ visible: true }"
      x-show="visible"
      x-transition:leave="transition ease-in duration-200"
      x-transition:leave-start="opacity-100 max-h-12"
      x-transition:leave-end="opacity-0 max-h-0"
      class="overflow-hidden"
-     style="background-color: {{ widget.data.background_color | default('#9C27B0') }}; color: {{ widget.data.text_color | default('#FFFFFF') }};">
+     style="background-color: {{ bg_color }}; color: {{ widget.data.text_color | default('#FFFFFF') }};">
   <div class="container mx-auto px-4 py-2 flex items-center justify-center relative text-sm">
     {% if widget.data.link %}
       <a href="{{ widget.data.link }}" class="hover:underline">

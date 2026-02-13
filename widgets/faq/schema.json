@@ -1,5 +1,6 @@
 {
   "name": "الأسئلة الشائعة",
+  "icon": "circle-help",
   "settings": {
     "title": {
       "type": "string",

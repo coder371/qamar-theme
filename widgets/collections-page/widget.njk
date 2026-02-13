@@ -10,23 +10,23 @@
 
     {# ===== Breadcrumb ===== #}
     <nav class="mb-5 md:mb-6" aria-label="breadcrumb">
-      <ol class="flex items-center gap-1.5 text-xs md:text-sm text-gray-400">
+      <ol class="flex items-center gap-1.5 text-xs md:text-sm text-theme-text-secondary/70">
         <li><a href="/" class="hover:text-primary transition-colors">{{t('common.home')}}</a></li>
         <li><svg class="w-3 h-3 rtl:rotate-180 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></li>
-        <li class="text-gray-600 font-medium">{{t('common.categories')}}</li>
+        <li class="text-theme-text-secondary font-medium">{{t('common.categories')}}</li>
       </ol>
     </nav>
 
     {# ===== Header ===== #}
     <div class="mb-8 md:mb-10">
       {% if widget.data.title %}
-        <h1 class="text-2xl md:text-3xl font-bold text-gray-900">{{ widget.data.title }}</h1>
+        <h1 class="text-2xl md:text-3xl font-bold text-theme-text">{{ widget.data.title }}</h1>
       {% endif %}
       {% if widget.data.subtitle %}
-        <p class="text-gray-500 mt-2">{{ widget.data.subtitle }}</p>
+        <p class="text-theme-text-secondary mt-2">{{ widget.data.subtitle }}</p>
       {% endif %}
       {% if pagination %}
-        <p class="text-sm text-gray-400 mt-2">{{ pagination.totalItems }} {{t('common.categories')}}</p>
+        <p class="text-sm text-theme-text-secondary/70 mt-2">{{ pagination.totalItems }} {{t('common.categories')}}</p>
       {% endif %}
     </div>
 
@@ -43,8 +43,8 @@
           {# ---- Card Layout ---- #}
           {% if layout == 'card' %}
             <a href="/collections/{{ collection.handle }}"
-               class="group block bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg hover:border-gray-200 transition-all duration-300">
-              <div class="aspect-[4/3] overflow-hidden bg-gray-50 relative">
+               class="group block bg-white rounded-2xl overflow-hidden border border-theme-border/40 hover:shadow-lg hover:border-theme-border transition-all duration-300">
+              <div class="aspect-[4/3] overflow-hidden bg-surface relative">
                 {% if collection.image %}
                   <img src="{{ collection.image.fileUrl }}"
                        alt="{{ collection.title }}"
@@ -59,11 +59,11 @@
                 {% endif %}
               </div>
               <div class="p-3.5 md:p-4">
-                <h3 class="font-semibold text-gray-800 group-hover:text-primary transition-colors text-sm md:text-base">
+                <h3 class="font-semibold text-theme-text group-hover:text-primary transition-colors text-sm md:text-base">
                   {{ collection.title }}
                 </h3>
                 {% if showCount and collection.productCount %}
-                  <p class="text-xs text-gray-400 mt-1">{{ collection.productCount }} {{t('common.products')}}</p>
+                  <p class="text-xs text-theme-text-secondary/70 mt-1">{{ collection.productCount }} {{t('common.products')}}</p>
                 {% endif %}
               </div>
             </a>
@@ -92,7 +92,7 @@
           {% elif layout == 'minimal' %}
             <a href="/collections/{{ collection.handle }}"
                class="group block text-center">
-              <div class="aspect-square rounded-full overflow-hidden mx-auto mb-3 w-full max-w-[200px] border-2 border-gray-100 group-hover:border-primary transition-all duration-300 shadow-sm group-hover:shadow-md">
+              <div class="aspect-square rounded-full overflow-hidden mx-auto mb-3 w-full max-w-[200px] border-2 border-theme-border/40 group-hover:border-primary transition-all duration-300 shadow-sm group-hover:shadow-md">
                 {% if collection.image %}
                   <img src="{{ collection.image.fileUrl }}"
                        alt="{{ collection.title }}"
@@ -106,11 +106,11 @@
                   </div>
                 {% endif %}
               </div>
-              <h3 class="font-semibold text-gray-800 group-hover:text-primary transition-colors text-sm md:text-base">
+              <h3 class="font-semibold text-theme-text group-hover:text-primary transition-colors text-sm md:text-base">
                 {{ collection.title }}
               </h3>
               {% if showCount and collection.productCount %}
-                <p class="text-xs text-gray-400 mt-0.5">{{ collection.productCount }} {{t('common.products')}}</p>
+                <p class="text-xs text-theme-text-secondary/70 mt-0.5">{{ collection.productCount }} {{t('common.products')}}</p>
               {% endif %}
             </a>
           {% endif %}
@@ -124,7 +124,7 @@
           {# Previous #}
           {% if pagination.currentPage > 1 %}
             <a href="?page={{ pagination.currentPage - 1 }}"
-               class="w-10 h-10 rounded-xl flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-primary transition-colors">
+               class="w-10 h-10 rounded-xl flex items-center justify-center text-theme-text-secondary hover:bg-surface hover:text-primary transition-colors">
               <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
             </a>
           {% else %}
@@ -139,7 +139,7 @@
               <span class="w-10 h-10 rounded-xl flex items-center justify-center bg-primary text-white font-semibold text-sm">{{ i }}</span>
             {% elif i == 1 or i == pagination.totalPages or (i >= pagination.currentPage - 1 and i <= pagination.currentPage + 1) %}
               <a href="?page={{ i }}"
-                 class="w-10 h-10 rounded-xl flex items-center justify-center text-gray-600 hover:bg-gray-100 hover:text-primary transition-colors text-sm font-medium">{{ i }}</a>
+                 class="w-10 h-10 rounded-xl flex items-center justify-center text-theme-text-secondary hover:bg-surface hover:text-primary transition-colors text-sm font-medium">{{ i }}</a>
             {% elif i == pagination.currentPage - 2 or i == pagination.currentPage + 2 %}
               <span class="w-6 flex items-center justify-center text-gray-300 text-sm">...</span>
             {% endif %}
@@ -148,7 +148,7 @@
           {# Next #}
           {% if pagination.hasNextPage %}
             <a href="?page={{ pagination.currentPage + 1 }}"
-               class="w-10 h-10 rounded-xl flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-primary transition-colors">
+               class="w-10 h-10 rounded-xl flex items-center justify-center text-theme-text-secondary hover:bg-surface hover:text-primary transition-colors">
               <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </a>
           {% else %}
@@ -160,19 +160,49 @@
       {% endif %}
 
     {% else %}
-      {# ===== Empty State ===== #}
-      <div class="flex flex-col items-center justify-center py-20 text-center">
-        <div class="w-24 h-24 rounded-full bg-gray-50 flex items-center justify-center mb-5">
-          <svg class="w-12 h-12 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-          </svg>
-        </div>
-        <p class="text-gray-500 text-sm">{{t('collection.no_products')}}</p>
+      {# ===== Preview / Empty State ===== #}
+      <div class="grid grid-cols-2 gap-3 md:gap-5
+        {% if columns == '2' %} md:grid-cols-2
+        {% elif columns == '4' %} md:grid-cols-4
+        {% else %} md:grid-cols-3
+        {% endif %}">
+        {% for i in range(0, columns | int * 2) %}
+          {% if layout == 'card' %}
+            <div class="bg-white rounded-2xl overflow-hidden border border-dashed border-theme-border">
+              <div class="aspect-[4/3] bg-surface flex items-center justify-center">
+                <svg class="w-12 h-12 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                </svg>
+              </div>
+              <div class="p-3.5 md:p-4">
+                <div class="h-4 w-24 bg-surface rounded-full mb-1.5"></div>
+                <div class="h-3 w-16 bg-surface/60 rounded-full"></div>
+              </div>
+            </div>
+          {% elif layout == 'overlay' %}
+            <div class="rounded-2xl overflow-hidden aspect-square border border-dashed border-theme-border bg-surface relative">
+              <svg class="w-12 h-12 text-gray-200 absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+              <div class="absolute inset-0 bg-black/10 flex flex-col justify-end p-4">
+                <div class="h-5 w-28 bg-white/30 rounded-full mb-1"></div>
+                <div class="h-3 w-16 bg-white/20 rounded-full"></div>
+              </div>
+            </div>
+          {% elif layout == 'minimal' %}
+            <div class="text-center">
+              <div class="aspect-square rounded-full overflow-hidden mx-auto mb-3 w-full max-w-[200px] border-2 border-dashed border-theme-border bg-surface flex items-center justify-center">
+                <svg class="w-10 h-10 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                </svg>
+              </div>
+              <div class="h-4 w-20 bg-surface rounded-full mx-auto mb-1"></div>
+              <div class="h-3 w-14 bg-surface/60 rounded-full mx-auto"></div>
+            </div>
+          {% endif %}
+        {% endfor %}
       </div>
+      <p class="text-center text-sm text-theme-text-secondary/70 mt-8">{{t('collection.collections_page_hint')}}</p>
     {% endif %}
-
-    <a href="collection/all" class="text-center mt-10">
-      all
-    </a>
   </div>
 </section>

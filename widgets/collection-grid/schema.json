@@ -1,5 +1,6 @@
 {
   "name": "شبكة التصنيفات",
+  "icon": "grid-3x3",
   "settings": {
     "title": {
       "type": "string",

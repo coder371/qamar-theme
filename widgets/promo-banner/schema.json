@@ -1,5 +1,6 @@
 {
   "name": "بانر ترويجي",
+  "icon": "megaphone",
   "settings": {
     "title": {
       "type": "string",
@@ -28,20 +29,15 @@
       "max": 100,
       "step": 5
     },
+    "countdown_date": {
+      "type": "datetime",
+      "label": "تاريخ انتهاء العرض (مثال: 2026-12-31)",
+      "default": ""
+    },
     "show_countdown": {
       "type": "boolean",
       "label": "إظهار العد التنازلي",
       "default": false
-    },
-    "countdown_date": {
-      "type": "date-time",
-      "label": "تاريخ انتهاء العرض (مثال: 2026-12-31)",
-      "default": ""
-    },
-    "pp": {
-      "type": "spacing",
-      "label": "Padding",
-      "default": ""
     },
     "button_text": {
       "type": "string",
@@ -92,9 +88,14 @@
       "label": "عرض كامل (بدون حاوية)",
       "default": false
     },
+    "use_theme_color": {
+      "type": "boolean",
+      "label": "استخدام اللون الأساسي من الثيم",
+      "default": true
+    },
     "background_color": {
       "type": "color",
-      "label": "لون الخلفية",
+      "label": "لون خلفية مخصص",
       "default": "#9C27B0"
     },
     "text_color": {

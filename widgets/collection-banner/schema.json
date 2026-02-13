@@ -1,5 +1,6 @@
 {
   "name": "بانر التصنيف",
+  "icon": "image",
   "settings": {
     "show_description": {
       "type": "boolean",
@@ -21,9 +22,18 @@
       "label": "ارتفاع البانر",
       "default": "small",
       "options": [
-        { "value": "small", "label": "صغير" },
-        { "value": "medium", "label": "متوسط" },
-        { "value": "large", "label": "كبير" }
+        {
+          "value": "small",
+          "label": "صغير"
+        },
+        {
+          "value": "medium",
+          "label": "متوسط"
+        },
+        {
+          "value": "large",
+          "label": "كبير"
+        }
       ]
     },
     "background_image": {
@@ -44,11 +54,5 @@
       "step": 5,
       "unit": "%"
     }
-  },
-  "presets": [
-    {
-      "category": "صفحة التصنيف",
-      "name": "بانر التصنيف"
-    }
-  ]
+  }
 }

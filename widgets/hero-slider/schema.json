@@ -1,5 +1,6 @@
 {
   "name": "السلايدر الرئيسي",
+  "icon": "images",
   "settings": {
     "autoplay": {
       "type": "boolean",

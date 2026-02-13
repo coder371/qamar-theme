@@ -17,9 +17,9 @@
        :class="{ 'open': $store.modal.current === 'sidebar' }">
 
     {# Header #}
-    <div class="flex items-center justify-between p-4 border-b border-gray-100">
+    <div class="flex items-center justify-between p-4 border-b border-theme-border/40">
       <span class="text-lg font-bold">{{t('header.menu')}}</span>
-      <button @click="$store.modal.close()" class="p-1 hover:bg-gray-100 rounded-full transition-colors">
+      <button @click="$store.modal.close()" class="p-1 hover:bg-surface rounded-full transition-colors">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
         </svg>
@@ -32,10 +32,10 @@
         {% for item in data.menu %}
           <li>
             <a href="{{ item.url | default('#') }}"
-               class="flex items-center justify-between py-3 px-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors">
+               class="flex items-center justify-between py-3 px-2 rounded-lg text-theme-text hover:bg-surface hover:text-primary transition-colors">
               <span class="font-medium">{{ item.title }}</span>
               {% if item.children | length %}
-                <svg class="w-4 h-4 text-gray-400 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 text-theme-text-secondary/70 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
               {% endif %}

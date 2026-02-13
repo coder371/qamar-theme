@@ -23,12 +23,12 @@
       </div>
 
       {# Title #}
-      <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+      <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-theme-text mb-4">
         {{ widget.data.title | default(t('404.title')) }}
       </h1>
 
       {# Message #}
-      <p class="text-gray-500 text-base md:text-lg leading-relaxed mb-10 max-w-lg mx-auto">
+      <p class="text-theme-text-secondary text-base md:text-lg leading-relaxed mb-10 max-w-lg mx-auto">
         {{ widget.data.message | default(t('404.message')) | safe }}
       </p>
 
@@ -49,8 +49,8 @@
         {% if widget.data.show_search_button %}
           <button type="button"
                   @click="$store.modal.toggle('search')"
-                  class="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700
-                         font-medium px-8 py-3.5 rounded-xl border border-gray-200
+                  class="inline-flex items-center gap-2 bg-white hover:bg-surface text-theme-text
+                         font-medium px-8 py-3.5 rounded-xl border border-theme-border
                          transition-all duration-300 hover:shadow-md hover:-translate-y-0.5
                          w-full sm:w-auto justify-center">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

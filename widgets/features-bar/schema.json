@@ -1,5 +1,6 @@
 {
   "name": "شريط المميزات",
+  "icon": "shield-check",
   "settings": {
     "background_color": {
       "type": "color",

@@ -1,0 +1,46 @@
+{
+  "name": "صفحة المقالة",
+  "icon": "file-text",
+  "settings": {
+    "show_date": {
+      "type": "boolean",
+      "label": {
+        "ar": "إظهار التاريخ",
+        "en": "Show Date"
+      },
+      "default": true
+    },
+    "show_share": {
+      "type": "boolean",
+      "label": {
+        "ar": "إظهار أزرار المشاركة",
+        "en": "Show Share Buttons"
+      },
+      "default": true
+    },
+    "show_views": {
+      "type": "boolean",
+      "label": {
+        "ar": "إظهار عدد المشاهدات",
+        "en": "Show Views Count"
+      },
+      "default": true
+    },
+    "show_image": {
+      "type": "boolean",
+      "label": {
+        "ar": "إظهار صورة المقالة",
+        "en": "Show Article Image"
+      },
+      "default": true
+    },
+    "show_tags": {
+      "type": "boolean",
+      "label": {
+        "ar": "إظهار الوسوم",
+        "en": "Show Tags"
+      },
+      "default": true
+    }
+  }
+}
