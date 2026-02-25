@@ -20,8 +20,8 @@
           "block": "slide",
           "settings": {
             "title": "مجموعة الصيف الجديدة",
-            "subtitle": "اكتشفي أحدث صيحات الموضة لهذا الموسم",
-            "button_text": "تسوقي الآن",
+            "subtitle": "اكتشف أحدث صيحات الموضة لهذا الموسم",
+            "button_text": "تسوق الآن",
             "button_url": "/products",
             "text_position": "center",
             "text_color": "#FFFFFF",
@@ -34,7 +34,7 @@
           "settings": {
             "title": "خصومات حتى 50%",
             "subtitle": "على جميع المنتجات المختارة",
-            "button_text": "اكتشفي العروض",
+            "button_text": "اكتشف العروض",
             "button_url": "/products",
             "text_position": "start",
             "text_color": "#FFFFFF",
@@ -47,8 +47,8 @@
       "name": "شبكة  التصنيفات",
       "widget": "collection-grid",
       "settings": {
-        "title": "تسوقي حسب التصنيف",
-        "subtitle": "اختاري من مجموعاتنا المتنوعة",
+        "title": "تسوق حسب التصنيف",
+        "subtitle": "اختر من مجموعاتنا المتنوعة",
         "layout": "circle",
         "columns": "6"
       }
@@ -58,7 +58,7 @@
       "widget": "featured-products",
       "settings": {
         "title": "منتجات مميزة",
-        "subtitle": "اختيارات منتقاة بعناية لكِ",
+        "subtitle": "اختيارات منتقاة بعناية لك",
         "layout": "grid",
         "columns_desktop": "4",
         "columns_mobile": "2",
@@ -87,7 +87,7 @@
         "subtitle": "خصم 30% على جميع منتجات العناية بالبشرة",
         "show_countdown": false,
         "countdown_date": "",
-        "button_text": "تسوقي الآن",
+        "button_text": "تسوق الآن",
         "button_link": "/products",
         "background_color": "#9C27B0",
         "text_color": "white",
@@ -174,7 +174,7 @@
       "name": "آراء العملاء",
       "widget": "testimonials",
       "settings": {
-        "title": "ماذا قالت عميلاتنا",
+        "title": "ماذا قال عملاؤنا",
         "subtitle": "آراء حقيقية من عميلات سعيدات",
         "layout": "slider",
         "autoplay": true,
@@ -187,7 +187,7 @@
           "settings": {
             "content": "تجربة تسوق رائعة! المنتجات بجودة عالية والتوصيل سريع جداً. أنصح الجميع بالتسوق من هنا.",
             "author_name": "سارة أحمد",
-            "author_title": "عميلة مميزة",
+            "author_title": "عميل مميز",
             "rating": "5"
           }
         },
@@ -197,7 +197,7 @@
           "settings": {
             "content": "أحببت التنوع في المنتجات والأسعار المناسبة. خدمة العملاء ممتازة ومتعاونة.",
             "author_name": "نورة محمد",
-            "author_title": "عميلة دائمة",
+            "author_title": "عميل دائم",
             "rating": "5"
           }
         },
@@ -207,7 +207,7 @@
           "settings": {
             "content": "التغليف أنيق جداً والمنتجات مطابقة للصور. سأعود للتسوق مرة أخرى بالتأكيد!",
             "author_name": "ريم عبدالله",
-            "author_title": "عميلة جديدة",
+            "author_title": "عميل جديد",
             "rating": "4"
           }
         }
@@ -273,12 +273,40 @@
       ]
     },
     {
+      "name": "مقالات المدونة",
+      "widget": "blog-articles",
+      "settings": {
+        "title": "من مدونتنا",
+        "subtitle": "أحدث المقالات والنصائح",
+        "layout": "slider",
+        "columns": "3",
+        "show_date": true,
+        "show_excerpt": true,
+        "show_category": true,
+        "show_views": false
+      }
+    },
+    {
+      "name": "أفضل المقالات",
+      "widget": "best-articles",
+      "settings": {
+        "title": "أفضل المقالات",
+        "subtitle": "مقالات مختارة لك",
+        "layout": "grid",
+        "columns": "3",
+        "show_date": true,
+        "show_excerpt": true,
+        "show_category": true,
+        "show_views": false
+      }
+    },
+    {
       "name": "النشرة البريدية",
       "widget": "newsletter",
       "settings": {
-        "title": "اشتركي في نشرتنا البريدية",
-        "subtitle": "احصلي على أحدث العروض والمنتجات الجديدة",
-        "placeholder": "أدخلي بريدك الإلكتروني",
+        "title": "اشترك في نشرتنا البريدية",
+        "subtitle": "احصل على أحدث العروض والمنتجات الجديدة",
+        "placeholder": "أدخل بريدك الإلكتروني",
         "button_text": "اشتراك",
         "background_style": "gradient",
         "background_color": "#9C27B0",

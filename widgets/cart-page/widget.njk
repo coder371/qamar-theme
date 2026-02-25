@@ -262,7 +262,7 @@
 
                 {% if cart.totalSavings > 0 %}
                   <div class="flex justify-between text-green-600">
-                    <span>{{t('cart.savings')}}</span>
+                    <span>{{ t('cart.savings_f') if settings.addressingTone == 'feminine' else t('cart.savings') }}</span>
                     <span class="font-medium">-{{ cart.totalSavings | money }}</span>
                   </div>
                 {% endif %}
@@ -324,7 +324,7 @@
           </div>
         </div>
         <h2 class="text-xl font-bold text-theme-text mb-2">{{t('cart.empty')}}</h2>
-        <p class="text-sm text-theme-text-secondary/70 leading-relaxed mb-8">{{t('cart.empty_message')}}</p>
+        <p class="text-sm text-theme-text-secondary/70 leading-relaxed mb-8">{{ t('cart.empty_message_f') if settings.addressingTone == 'feminine' else t('cart.empty_message') }}</p>
         <a href="{{ continue_url }}"
            class="inline-flex items-center gap-2 bg-primary text-white font-semibold px-8 py-3.5 rounded-xl hover:bg-primary-dark transition-colors">
           {{t('cart.continue_shopping')}}

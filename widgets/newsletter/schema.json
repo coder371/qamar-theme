@@ -5,17 +5,17 @@
     "title": {
       "type": "string",
       "label": "العنوان",
-      "default": "اشتركي في نشرتنا البريدية"
+      "default": "اشترك في نشرتنا البريدية"
     },
     "subtitle": {
       "type": "string",
       "label": "العنوان الفرعي",
-      "default": "احصلي على أحدث العروض والمنتجات الجديدة"
+      "default": "احصل على أحدث العروض والمنتجات الجديدة"
     },
     "placeholder": {
       "type": "string",
       "label": "نص الحقل",
-      "default": "أدخلي بريدك الإلكتروني"
+      "default": "أدخل بريدك الإلكتروني"
     },
     "button_text": {
       "type": "string",

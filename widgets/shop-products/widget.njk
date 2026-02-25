@@ -1,0 +1,154 @@
+{# Shop Products Widget - Unified shop/collection/search page #}
+{# Modes: all (/shop) | collection (/shop/:handle) | search (/shop?q= or /shop/:handle?q=) #}
+{% set shop = context.shop %}
+{% set products = [] %}
+{% set pagination = false %}
+{% set filters = [] %}
+{% set appliedFiltersData = {} %}
+{% set shopCollection = false %}
+{% set searchQuery = '' %}
+{% set mode = 'all' %}
+{% set currentSort = '' %}
+
+{% if shop %}
+  {% set products = shop.products if shop.products else [] %}
+  {% set pagination = shop.pagination if shop.pagination else false %}
+  {% set shopCollection = shop.collection if shop.collection else false %}
+  {% set searchQuery = shop.query if shop.query else '' %}
+  {% set mode = shop.mode if shop.mode else 'all' %}
+  {% if shop.filters %}
+    {% set filters = shop.filters.available if shop.filters.available else [] %}
+    {% set appliedFiltersData = shop.filters.applied if shop.filters.applied else {} %}
+  {% endif %}
+  {% if shop.sort %}
+    {% set currentSort = shop.sort.current if shop.sort.current else '' %}
+  {% endif %}
+{% endif %}
+
+{% set show_sort = widget.data.show_sort | default(true) %}
+{% set show_filters = widget.data.show_filters if widget.data.show_filters is defined else true %}
+{% set hasFilters = show_filters and filters | length > 0 %}
+{% set hasSidebar = show_sort or hasFilters %}
+
+<section class="py-6 md:py-10">
+  <div class="container mx-auto px-4">
+
+    {# ===== Breadcrumb ===== #}
+    {% set chevron %}
+      <li>
+        <svg class="w-3 h-3 rtl:rotate-180 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </li>
+    {% endset %}
+
+    <nav class="mb-5 md:mb-6" aria-label="breadcrumb">
+      <ol class="flex items-center gap-1.5 text-xs md:text-sm text-theme-text-secondary/70">
+        <li><a href="/" class="hover:text-primary transition-colors">{{t('common.home')}}</a></li>
+        {{ chevron | safe }}
+
+        {% if mode == 'all' %}
+          <li class="text-theme-text-secondary font-medium">{{t('common.products')}}</li>
+
+        {% elif mode == 'collection' %}
+          <li><a href="/shop" class="hover:text-primary transition-colors">{{t('common.products')}}</a></li>
+          {{ chevron | safe }}
+          <li class="text-theme-text-secondary font-medium">{{ shopCollection.title }}</li>
+
+        {% elif mode == 'search' %}
+          <li><a href="/shop" class="hover:text-primary transition-colors">{{t('common.products')}}</a></li>
+          {% if shopCollection %}
+            {{ chevron | safe }}
+            <li><a href="/shop/{{ shopCollection.handle }}" class="hover:text-primary transition-colors">{{ shopCollection.title }}</a></li>
+          {% endif %}
+          {{ chevron | safe }}
+          <li class="text-theme-text-secondary font-medium">{{t('search.title')}}</li>
+        {% endif %}
+      </ol>
+    </nav>
+
+    {# ===== Page Header ===== #}
+    <div class="mb-6 md:mb-8">
+      {% if mode == 'search' %}
+        <h1 class="text-2xl md:text-3xl font-bold text-theme-text">
+          {{t('search.results_for')}} "{{ searchQuery }}"
+          {% if shopCollection %}
+            <span class="text-theme-text-secondary font-normal text-lg md:text-xl">
+              {{t('search.filter')}} {{ shopCollection.title }}
+            </span>
+          {% endif %}
+        </h1>
+
+      {% elif mode == 'collection' %}
+        <h1 class="text-2xl md:text-3xl font-bold text-theme-text">{{ shopCollection.title }}</h1>
+        {% if shopCollection.description %}
+          <p class="text-theme-text-secondary text-sm md:text-base mt-2 max-w-2xl">{{ shopCollection.description }}</p>
+        {% endif %}
+
+      {% else %}
+        <h1 class="text-2xl md:text-3xl font-bold text-theme-text">{{t('collection.all_products')}}</h1>
+      {% endif %}
+    </div>
+
+    {# Mobile Toolbar + Bottom Sheets (OUTSIDE section) #}
+    {% ui "filter-mobile.njk", show_sort=show_sort, filters=filters, hasFilters=hasFilters, hasSidebar=hasSidebar, currentSort=currentSort, appliedFilters=appliedFiltersData %}
+
+    {# ===== Main Layout: Sidebar + Grid ===== #}
+    <div class="{% if hasSidebar %}flex gap-8{% endif %}">
+
+      {# ===== Desktop Sidebar (OUTSIDE section — SDK handles toggle state) ===== #}
+      {% if hasSidebar %}
+        <aside class="hidden md:block w-64 flex-shrink-0">
+          <div class="sticky bottom-6 space-y-5">
+
+            {# Products Count + Clear #}
+            <div class="bg-white rounded-2xl border border-theme-border/40 p-5">
+              {% if mode == 'search' %}
+                <p class="text-sm text-theme-text-secondary">
+                  {{t('search.results_for')}}
+                  <span class="font-bold text-primary">"{{ searchQuery }}"</span>
+                </p>
+              {% else %}
+                <p class="text-sm text-theme-text-secondary">
+                  <span class="font-bold text-theme-text" id="shop-products-count">{% if pagination %}{{ pagination.totalItems }}{% else %}{{ products | length }}{% endif %}</span>
+                  {{t('common.products')}}
+                </p>
+              {% endif %}
+              <button data-qumra-filter-clear
+                      class="mt-2 text-xs text-red-500 hover:text-red-600 font-medium transition-colors"
+                      x-data="{ show: {{ 'true' if appliedFiltersData | length > 0 else 'false' }} }"
+                      x-show="show || qumra.filters.hasAny()"
+                      x-cloak>
+                {{t('collection.clear_filters')}}
+              </button>
+            </div>
+
+            {# Sort + Filter Controls #}
+            {% ui "filter-sidebar.njk", show_sort=show_sort, filters=filters, hasFilters=hasFilters, currentSort=currentSort, appliedFilters=appliedFiltersData %}
+
+            {# Collection Image #}
+            {% if shopCollection and shopCollection.image %}
+              <div class="rounded-2xl overflow-hidden">
+                <img src="{{ shopCollection.image.fileUrl }}"
+                     alt="{{ shopCollection.title }}"
+                     class="w-full h-auto object-cover"
+                     loading="lazy">
+              </div>
+            {% endif %}
+          </div>
+        </aside>
+      {% endif %}
+
+      {# ===== Products Area ===== #}
+      <div class="flex-1 min-w-0">
+
+        {# Products Grid Section — ONLY this re-renders on filter change #}
+        <div data-qumra-section="products-grid" class="relative min-h-[200px]">
+          {% widget "products-grid" %}
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>

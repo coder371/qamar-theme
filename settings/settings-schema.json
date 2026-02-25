@@ -112,6 +112,15 @@
           { "value": "3", "label": "3 منتجات" },
           { "value": "4", "label": "4 منتجات" }
         ]
+      },
+      "addressingTone": {
+        "type": "select",
+        "label": "أسلوب المخاطبة",
+        "default": "neutral",
+        "options": [
+          { "value": "neutral", "label": "محايد (أضف، تسوق، ابحث)" },
+          { "value": "feminine", "label": "مؤنث (أضيفي، تسوقي، ابحثي)" }
+        ]
       }
     }
   },

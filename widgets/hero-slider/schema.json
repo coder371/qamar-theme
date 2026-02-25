@@ -56,12 +56,12 @@
         "subtitle": {
           "type": "text",
           "label": "العنوان الفرعي",
-          "default": "اكتشفي أحدث صيحات الموضة"
+          "default": "اكتشف أحدث صيحات الموضة"
         },
         "button_text": {
           "type": "string",
           "label": "نص الزر",
-          "default": "تسوقي الآن"
+          "default": "تسوق الآن"
         },
         "button_url": {
           "type": "string",

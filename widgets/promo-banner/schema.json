@@ -42,7 +42,7 @@
     "button_text": {
       "type": "string",
       "label": "نص الزر",
-      "default": "تسوقي الآن"
+      "default": "تسوق الآن"
     },
     "button_link": {
       "type": "string",

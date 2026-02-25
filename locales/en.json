@@ -108,7 +108,10 @@
     "min_price": "Min Price",
     "max_price": "Max Price",
     "apply": "Apply",
-    "filter": "Filter"
+    "filter": "Filter",
+    "view_all_results": "View all results",
+    "collections": "Collections",
+    "articles": "Articles"
   },
   "collection": {
     "all_products": "All Products",

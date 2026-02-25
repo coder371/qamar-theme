@@ -5,7 +5,7 @@
     "title": {
       "type": "string",
       "label": "العنوان",
-      "default": "ماذا قالت عميلاتنا"
+      "default": "ماذا قال عملاؤنا"
     },
     "subtitle": {
       "type": "string",
@@ -34,7 +34,7 @@
   },
   "blocks": {
     "testimonial": {
-      "name": "رأي عميلة",
+      "name": "رأي عميل",
       "settings": {
         "content": {
           "type": "text",
@@ -43,16 +43,16 @@
         },
         "author_name": {
           "type": "string",
-          "label": "اسم العميلة",
+          "label": "اسم العميل",
           "default": ""
         },
         "author_image": {
           "type": "media",
-          "label": "صورة العميلة"
+          "label": "صورة العميل"
         },
         "author_title": {
           "type": "string",
-          "label": "وصف العميلة",
+          "label": "وصف العميل",
           "default": ""
         },
         "rating": {

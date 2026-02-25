@@ -1,9 +1,15 @@
-{# Shared Filter Sidebar (Desktop) - Used inside filterPage() Alpine scope #}
-{# Params: show_sort, filters, hasFilters #}
+{# Shared Filter Sidebar (Desktop) - Uses FiltersModule SDK #}
+{# Params: show_sort, filters, hasFilters, currentSort, appliedFilters #}
+{# Auto-detected: data-qumra-filter + data-value (checkbox toggle), data-qumra-filter-clear #}
+{# JS methods: qumra.filters.sort(), .range(), .searchText(), .remove() #}
 
-{# Sort Section #}
+{% set _appliedFilters = appliedFilters | default({}) %}
+
+{# Sort Section — Alpine tracks active state client-side #}
 {% if show_sort %}
-  <div class="bg-white rounded-2xl border border-theme-border/40 p-5">
+  <div class="bg-white rounded-2xl border border-theme-border/40 p-5"
+       x-data="{ sort: '{{ currentSort }}' }"
+       @click="if ($event.target.closest('[data-sort]')) { sort = $event.target.closest('[data-sort]').dataset.sort; qumra.filters.sort(sort); }">
     <h3 class="font-semibold text-theme-text text-sm mb-3 flex items-center gap-2">
       <svg class="w-4 h-4 text-theme-text-secondary/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"/>
@@ -11,24 +17,24 @@
       {{t('collection.sort')}}
     </h3>
     <div class="space-y-1">
-      <button @click="sortBy('')"
+      <button data-sort=""
               class="w-full text-start px-3 py-2 text-sm rounded-lg transition-colors"
-              :class="!currentSort ? 'bg-primary/10 text-primary font-medium' : 'text-theme-text-secondary hover:bg-surface'">
+              :class="sort === '' ? 'bg-primary/10 text-primary font-medium' : 'text-theme-text-secondary hover:bg-surface'">
         {{t('collection.all_products')}}
       </button>
-      <button @click="sortBy('createdAt-desc')"
+      <button data-sort="createdAt-desc"
               class="w-full text-start px-3 py-2 text-sm rounded-lg transition-colors"
-              :class="currentSort === 'createdAt-desc' ? 'bg-primary/10 text-primary font-medium' : 'text-theme-text-secondary hover:bg-surface'">
+              :class="sort === 'createdAt-desc' ? 'bg-primary/10 text-primary font-medium' : 'text-theme-text-secondary hover:bg-surface'">
         {{t('search.newest')}}
       </button>
-      <button @click="sortBy('price-asc')"
+      <button data-sort="price-asc"
               class="w-full text-start px-3 py-2 text-sm rounded-lg transition-colors"
-              :class="currentSort === 'price-asc' ? 'bg-primary/10 text-primary font-medium' : 'text-theme-text-secondary hover:bg-surface'">
+              :class="sort === 'price-asc' ? 'bg-primary/10 text-primary font-medium' : 'text-theme-text-secondary hover:bg-surface'">
         {{t('search.price_low_high')}}
       </button>
-      <button @click="sortBy('price-desc')"
+      <button data-sort="price-desc"
               class="w-full text-start px-3 py-2 text-sm rounded-lg transition-colors"
-              :class="currentSort === 'price-desc' ? 'bg-primary/10 text-primary font-medium' : 'text-theme-text-secondary hover:bg-surface'">
+              :class="sort === 'price-desc' ? 'bg-primary/10 text-primary font-medium' : 'text-theme-text-secondary hover:bg-surface'">
         {{t('search.price_high_low')}}
       </button>
     </div>
@@ -46,12 +52,13 @@
     </h3>
     <div class="space-y-4">
       {% for filter in filters %}
-        {# Range Filter - each has independent rMin/rMax state #}
+        {% set _applied = _appliedFilters[filter.handle] %}
+
+        {# Range Filter — JS: qumra.filters.range(name, { min, max }) #}
         {% if filter.inputType == 'range' %}
-          <div x-data="{ open: true, rMin: '', rMax: '', applied: false }"
-               x-init="rMin = new URLSearchParams(window.location.search).get('filters[{{ filter.handle }}][min]') || ''; rMax = new URLSearchParams(window.location.search).get('filters[{{ filter.handle }}][max]') || ''; applied = !!(rMin || rMax);"
-               @filters-cleared.window="rMin = ''; rMax = ''; applied = false"
-               @filter-removed.window="if ($event.detail.handle === '{{ filter.handle }}') { rMin = ''; rMax = ''; applied = false; }">
+          {% set _appliedMin = _applied.min | default('') if _applied else '' %}
+          {% set _appliedMax = _applied.max | default('') if _applied else '' %}
+          <div x-data="{ open: true, rMin: '{{ _appliedMin }}', rMax: '{{ _appliedMax }}', applied: {{ 'true' if _appliedMin or _appliedMax else 'false' }}, debounce: null }">
             <div class="flex items-center justify-between mb-2">
               <button @click="open = !open" class="flex items-center gap-1 text-sm font-medium text-theme-text">
                 <span>{{ filter.name[localization.language] | default(filter.name.ar) }}</span>
@@ -59,14 +66,12 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                 </svg>
               </button>
-              <button x-show="applied" x-cloak
-                      @click="rMin = ''; rMax = ''; applied = false; removeFilter('{{ filter.handle }}')"
-                      class="text-red-400 hover:text-red-500 transition-colors p-0.5"
-                      :title="'{{t('collection.clear_filters')}}'">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                </svg>
-              </button>
+              {% if _appliedMin or _appliedMax %}
+                <button onclick="qumra.filters.remove('{{ filter.handle }}')"
+                        class="text-[10px] text-red-500 hover:text-red-600 font-medium">
+                  {{t('collection.clear_filters')}}
+                </button>
+              {% endif %}
             </div>
             <div x-show="open" x-cloak dir="ltr"
                  class="transition-opacity duration-300"
@@ -85,17 +90,18 @@
                 <input type="range"
                        min="{{ filter.range.min }}" max="{{ filter.range.max }}" step="{{ filter.range.step | default(1) }}"
                        :value="+(rMin) || {{ filter.range.min }}"
-                       @input="rMin = Math.min(+$event.target.value, +(rMax) || {{ filter.range.max }}); $event.target.value = rMin; applied = true; debouncedApplyRange('{{ filter.handle }}', rMin, rMax || {{ filter.range.max }})">
+                       @input="rMin = Math.min(+$event.target.value, +(rMax) || {{ filter.range.max }}); $event.target.value = rMin; applied = true; clearTimeout(debounce); debounce = setTimeout(() => qumra.filters.range('{{ filter.handle }}', { min: +rMin, max: +(rMax) || {{ filter.range.max }} }), 300)">
                 <input type="range"
                        min="{{ filter.range.min }}" max="{{ filter.range.max }}" step="{{ filter.range.step | default(1) }}"
                        :value="+(rMax) || {{ filter.range.max }}"
-                       @input="rMax = Math.max(+$event.target.value, +(rMin) || {{ filter.range.min }}); $event.target.value = rMax; applied = true; debouncedApplyRange('{{ filter.handle }}', rMin || {{ filter.range.min }}, rMax)">
+                       @input="rMax = Math.max(+$event.target.value, +(rMin) || {{ filter.range.min }}); $event.target.value = rMax; applied = true; clearTimeout(debounce); debounce = setTimeout(() => qumra.filters.range('{{ filter.handle }}', { min: +(rMin) || {{ filter.range.min }}, max: +rMax }), 300)">
               </div>
             </div>
           </div>
 
-        {# Select Filter #}
+        {# Select Filter — auto-detected: data-qumra-filter + data-value (zero JS) #}
         {% elif filter.inputType == 'select' %}
+          {% set _appliedValues = _applied | default([]) %}
           <div x-data="{ open: true }">
             <button @click="open = !open" class="w-full flex items-center justify-between text-sm font-medium text-theme-text mb-2">
               <span>{{ filter.name[localization.language] | default(filter.name.ar) }}</span>
@@ -107,8 +113,8 @@
               {% for item in filter.items %}
                 <label class="flex items-center gap-2.5 py-1 cursor-pointer group">
                   <input type="checkbox"
-                         :checked="isActive('{{ filter.handle }}', '{{ item.value }}')"
-                         @change="toggleFilter('{{ filter.handle }}', '{{ item.value }}')"
+                         data-qumra-filter="{{ filter.handle }}" data-value="{{ item.value }}"
+                         {% if item.value in _appliedValues %}checked{% endif %}
                          class="w-4 h-4 rounded border-gray-300"
                          style="accent-color: var(--color-primary);">
                   <span class="text-sm text-theme-text-secondary group-hover:text-theme-text transition-colors">
@@ -119,9 +125,10 @@
             </div>
           </div>
 
-        {# Search Text Filter #}
+        {# Search Text Filter — JS: qumra.filters.searchText(name, value) #}
         {% elif filter.inputType == 'search_text' %}
-          <div x-data="{ open: true }">
+          {% set _appliedValue = _applied[0] | default('') if _applied else '' %}
+          <div x-data="{ open: true, debounce: null }">
             <button @click="open = !open" class="w-full flex items-center justify-between text-sm font-medium text-theme-text mb-2">
               <span>{{ filter.name[localization.language] | default(filter.name.ar) }}</span>
               <svg class="w-3.5 h-3.5 text-theme-text-secondary/70 transition-transform" :class="open && 'rotate-180'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -131,8 +138,9 @@
             <div x-show="open" x-cloak>
               <div class="relative">
                 <input type="text"
+                       value="{{ _appliedValue }}"
+                       @input="clearTimeout(debounce); debounce = setTimeout(() => qumra.filters.searchText('{{ filter.handle }}', $event.target.value), 500)"
                        placeholder="{{t('common.search')}}..."
-                       @input.debounce.500ms="searchText('{{ filter.handle }}', $event.target.value)"
                        class="w-full border border-theme-border rounded-lg px-3 py-2 pe-9 text-sm focus:outline-none focus:border-primary transition-colors">
                 <svg class="w-4 h-4 text-theme-text-secondary/70 absolute end-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>

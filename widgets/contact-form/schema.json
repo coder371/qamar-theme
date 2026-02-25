@@ -5,7 +5,7 @@
     "title": {
       "type": "string",
       "label": "العنوان",
-      "default": "تواصلي معنا"
+      "default": "تواصل معنا"
     },
     "subtitle": {
       "type": "text",

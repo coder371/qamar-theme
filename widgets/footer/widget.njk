@@ -82,12 +82,12 @@
 
       {# Newsletter #}
       <div>
-        <h3 class="text-base font-bold mb-4">{{t('footer.newsletter_title')}}</h3>
-        <p class="text-white/60 text-sm mb-3">{{t('footer.newsletter_subtitle')}}</p>
+        <h3 class="text-base font-bold mb-4">{{ t('footer.newsletter_title_f') if settings.addressingTone == 'feminine' else t('footer.newsletter_title') }}</h3>
+        <p class="text-white/60 text-sm mb-3">{{ t('footer.newsletter_subtitle_f') if settings.addressingTone == 'feminine' else t('footer.newsletter_subtitle') }}</p>
         <form class="flex gap-2" x-data="{ email: '', sent: false }">
           <input type="email" x-model="email"
                  class="flex-1 bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm text-white placeholder-white/50 focus:outline-none focus:border-primary"
-                 placeholder="{{t('footer.newsletter_placeholder')}}">
+                 placeholder="{{ t('footer.newsletter_placeholder_f') if settings.addressingTone == 'feminine' else t('footer.newsletter_placeholder') }}">
           <button type="submit" class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
             {{t('footer.newsletter_button')}}
           </button>

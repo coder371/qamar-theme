@@ -39,12 +39,12 @@
     gridClass: '{% if hasSidebar %}md:grid-cols-2 lg:grid-cols-3{% elif columns_desktop == "3" %}md:grid-cols-3{% else %}md:grid-cols-4{% endif %}'
   },
   translations: {
-    addToCart: '{{t("product.add_to_cart")}}',
-    chooseOptions: '{{t("product.choose_options")}}',
+    addToCart: '{{ t("product.add_to_cart_f") if settings.addressingTone == "feminine" else t("product.add_to_cart") }}',
+    chooseOptions: '{{ t("product.choose_options_f") if settings.addressingTone == "feminine" else t("product.choose_options") }}',
     outOfStock: '{{t("product.out_of_stock")}}',
     added: '{{t("product.added")}}',
     noResults: '{{t("search.no_results")}}',
-    tryDifferent: '{{t("search.try_different")}}',
+    tryDifferent: '{{ t("search.try_different_f") if settings.addressingTone == "feminine" else t("search.try_different") }}',
     home: '{{t("common.home")}}',
     products: '{{t("common.products")}}',
     resultsFor: '{{t("search.results_for")}}'
@@ -57,9 +57,9 @@
       <h1 class="text-2xl md:text-3xl font-bold text-theme-text mb-6">
         {{t('search.title')}}
       </h1>
-      <form action="/search" method="GET" class="relative">
+      <form action="/shop" method="GET" class="relative">
         <input type="text" name="q" value="{{ searchQuery }}"
-               placeholder="{{t('search.placeholder')}}"
+               placeholder="{{ t('search.placeholder_f') if settings.addressingTone == 'feminine' else t('search.placeholder') }}"
                class="w-full border-2 border-theme-border rounded-2xl py-4 px-6 pe-14 text-base focus:outline-none focus:border-primary transition-colors bg-white"
                autocomplete="off">
         <button type="submit"
@@ -220,7 +220,7 @@
                 <h3 class="text-lg font-bold text-theme-text mb-2">
                   {{t('search.no_results')}} "{{ searchQuery }}"
                 </h3>
-                <p class="text-theme-text-secondary text-sm mb-6 max-w-md mx-auto">{{t('search.try_different')}}</p>
+                <p class="text-theme-text-secondary text-sm mb-6 max-w-md mx-auto">{{ t('search.try_different_f') if settings.addressingTone == 'feminine' else t('search.try_different') }}</p>
                 <a href="/" class="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:opacity-80 transition-colors">
                   {{t('common.home')}}
                   <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -242,8 +242,8 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
           </svg>
         </div>
-        <h3 class="text-lg font-bold text-theme-text mb-2">{{t('search.placeholder')}}</h3>
-        <p class="text-theme-text-secondary text-sm">{{t('search.try_different')}}</p>
+        <h3 class="text-lg font-bold text-theme-text mb-2">{{ t('search.placeholder_f') if settings.addressingTone == 'feminine' else t('search.placeholder') }}</h3>
+        <p class="text-theme-text-secondary text-sm">{{ t('search.try_different_f') if settings.addressingTone == 'feminine' else t('search.try_different') }}</p>
       </div>
     {% endif %}
 

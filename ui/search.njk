@@ -1,4 +1,4 @@
-{# Search Modal #}
+{# Search Modal - fetches rendered HTML from backend via widgetKey #}
 <div x-data x-cloak>
   {# Overlay #}
   <div x-show="$store.modal.current === 'search'"
@@ -21,47 +21,72 @@
        x-transition:leave-start="opacity-100 translate-y-0"
        x-transition:leave-end="opacity-0 -translate-y-4"
        class="fixed top-0 inset-x-0 z-50 bg-white shadow-lg"
-       x-data="{ query: '', suggestions: [] }">
+       x-data="{
+         query: '',
+         loading: false,
+         _abort: null,
+         async fetchResults() {
+           if (this.query.length < 2) { this.$refs.results.innerHTML = ''; return; }
+           if (this._abort) this._abort.abort();
+           this._abort = new AbortController();
+           this.loading = true;
+           try {
+             var res = await fetch('/shop?q=' + encodeURIComponent(this.query) + '&widgetKey=predictive-search', {
+               signal: this._abort.signal,
+               headers: { 'X-Requested-With': 'XMLHttpRequest' }
+             });
+             if (!res.ok) throw new Error(res.status);
+             var html = await res.text();
+             this.$refs.results.innerHTML = html;
+           } catch (e) {
+             if (e.name !== 'AbortError') this.$refs.results.innerHTML = '';
+           } finally {
+             this.loading = false;
+             this._abort = null;
+           }
+         },
+         close() {
+           if (this._abort) this._abort.abort();
+           this.query = '';
+           this.$refs.results.innerHTML = '';
+           $store.modal.close();
+         }
+       }">
 
     <div class="container mx-auto px-4 py-4">
-      <form action="/search" method="get" class="flex items-center gap-3">
-        {# Search Icon #}
+      {# Search Input #}
+      <form action="/shop" method="get" class="flex items-center gap-3">
         <svg class="w-5 h-5 text-theme-text-secondary/70 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
         </svg>
 
-        {# Input #}
         <input type="text"
                name="q"
                x-model="query"
-               @input.debounce.300ms="if(query.length >= 2) Qumra.search.suggest(query, (data) => suggestions = data.products || [])"
+               @input.debounce.300ms="fetchResults()"
                class="flex-1 text-lg border-none outline-none placeholder-theme-text-secondary/70"
-               placeholder="{{t('header.search_placeholder')}}"
+               placeholder="{{ t('header.search_placeholder_f') if settings.addressingTone == 'feminine' else t('header.search_placeholder') }}"
                autocomplete="off"
                autofocus>
 
+        {# Loading #}
+        <div x-show="loading" x-cloak>
+          <svg class="w-5 h-5 animate-spin text-primary" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
+
         {# Close #}
-        <button type="button" @click="$store.modal.close()" class="p-1 hover:bg-surface rounded-full transition-colors">
+        <button type="button" @click="close()" class="p-1 hover:bg-surface rounded-full transition-colors">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
           </svg>
         </button>
       </form>
 
-      {# Suggestions #}
-      <div x-show="suggestions.length > 0" class="mt-4 border-t border-theme-border/40 pt-4">
-        <template x-for="item in suggestions" :key="item._id">
-          <a :href="'/product/' + item.slug" class="flex items-center gap-3 py-2 px-1 hover:bg-surface rounded-lg transition-colors">
-            <template x-if="item.images && item.images.length">
-              <img :src="item.images[0].fileUrl" :alt="item.title" class="w-10 h-10 rounded object-cover">
-            </template>
-            <div class="flex-1 min-w-0">
-              <p class="text-sm font-medium truncate" x-text="item.title"></p>
-              <p class="text-xs text-primary font-bold" x-text="Qumra.utils.formatMoney(item.pricing.price)"></p>
-            </div>
-          </a>
-        </template>
-      </div>
+      {# Results - injected from backend #}
+      <div x-ref="results" class="mt-4 border-t border-theme-border/40 pt-4 max-h-[70vh] overflow-y-auto empty:hidden empty:mt-0 empty:pt-0 empty:border-0"></div>
     </div>
   </div>
 </div>

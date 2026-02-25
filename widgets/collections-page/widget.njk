@@ -42,7 +42,7 @@
 
           {# ---- Card Layout ---- #}
           {% if layout == 'card' %}
-            <a href="/collections/{{ collection.handle }}"
+            <a href="/shop/{{ collection.handle }}"
                class="group block bg-white rounded-2xl overflow-hidden border border-theme-border/40 hover:shadow-lg hover:border-theme-border transition-all duration-300">
               <div class="aspect-[4/3] overflow-hidden bg-surface relative">
                 {% if collection.image %}
@@ -70,7 +70,7 @@
 
           {# ---- Overlay Layout ---- #}
           {% elif layout == 'overlay' %}
-            <a href="/collections/{{ collection.handle }}"
+            <a href="/shop/{{ collection.handle }}"
                class="group block rounded-2xl overflow-hidden relative aspect-square">
               {% if collection.image %}
                 <img src="{{ collection.image.fileUrl }}"
@@ -90,7 +90,7 @@
 
           {# ---- Minimal Layout ---- #}
           {% elif layout == 'minimal' %}
-            <a href="/collections/{{ collection.handle }}"
+            <a href="/shop/{{ collection.handle }}"
                class="group block text-center">
               <div class="aspect-square rounded-full overflow-hidden mx-auto mb-3 w-full max-w-[200px] border-2 border-theme-border/40 group-hover:border-primary transition-all duration-300 shadow-sm group-hover:shadow-md">
                 {% if collection.image %}

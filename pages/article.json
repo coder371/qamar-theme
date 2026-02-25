@@ -5,24 +5,23 @@
   "allowReorder": true,
   "widgets": [
     {
-      "name": "مقالات ذات صلة",
-      "widget": "blog-posts",
+      "name": "صفحة المقالة",
+      "widget": "article-page",
       "settings": {
-        "title": "مقالات ذات صلة",
-        "subtitle": "",
-        "posts_count": 3,
-        "layout": "slider",
         "show_date": true,
-        "show_excerpt": true
+        "show_share": true,
+        "show_views": true,
+        "show_image": true,
+        "show_tags": true
       }
     },
     {
       "name": "النشرة البريدية",
       "widget": "newsletter",
       "settings": {
-        "title": "اشتركي في نشرتنا البريدية",
-        "subtitle": "احصلي على أحدث المقالات والعروض",
-        "placeholder": "أدخلي بريدك الإلكتروني",
+        "title": "اشترك في نشرتنا البريدية",
+        "subtitle": "احصل على أحدث المقالات والعروض",
+        "placeholder": "أدخل بريدك الإلكتروني",
         "button_text": "اشتراك",
         "background_style": "gradient",
         "background_color": "#9C27B0",

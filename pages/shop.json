@@ -1,0 +1,23 @@
+{
+    "layout": "layout",
+    "allowAdd": true,
+    "allowRemove": true,
+    "allowReorder": true,
+    "widgets": [
+        {
+            "name": "السلايدر الرئيسي",
+            "widget": "hero-slider",
+            "settings": {
+                "autoplay": true,
+                "interval": 5,
+                "show_arrows": true,
+                "show_dots": true,
+                "height": "large"
+            }
+        },
+        {
+            "name": "shop-products",
+            "widget": "shop-products"
+        }
+    ]
+}
