@@ -45,20 +45,17 @@
           {{t('404.back_home')}}
         </a>
 
-        {# Search Button #}
-        {% if widget.data.show_search_button %}
-          <button type="button"
-                  @click="$store.modal.toggle('search')"
-                  class="inline-flex items-center gap-2 bg-white hover:bg-surface text-theme-text
-                         font-medium px-8 py-3.5 rounded-xl border border-theme-border
-                         transition-all duration-300 hover:shadow-md hover:-translate-y-0.5
-                         w-full sm:w-auto justify-center">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-            </svg>
-            {{ t('404.search_f') if settings.addressingTone == 'feminine' else t('404.search') }}
-          </button>
-        {% endif %}
+        {# Browse Shop Button #}
+        <a href="/shop"
+           class="inline-flex items-center gap-2 bg-white hover:bg-surface text-theme-text
+                  font-medium px-8 py-3.5 rounded-xl border border-theme-border
+                  transition-all duration-300 hover:shadow-md hover:-translate-y-0.5
+                  w-full sm:w-auto justify-center">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+          </svg>
+          {{t('404.browse_shop')}}
+        </a>
       </div>
 
     </div>

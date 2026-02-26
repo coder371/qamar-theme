@@ -45,5 +45,11 @@
       </ul>
     </nav>
 
+    {# Language Switcher #}
+    <div class="p-4 mt-auto border-t border-theme-border/40">
+      <p class="text-xs text-theme-text-secondary/70 font-medium mb-2 px-2">{{t('common.language') | default('اللغة')}}</p>
+      {% ui "language-switcher.njk", mode="list" %}
+    </div>
+
   </div>
 </div>

@@ -37,6 +37,11 @@
       "label": "إظهار التواصل الاجتماعي",
       "default": true
     },
+    "phone_number": {
+      "type": "string",
+      "label": "رقم الهاتف",
+      "default": ""
+    },
     "instagram_url": {
       "type": "string",
       "label": "Instagram",
@@ -47,14 +52,34 @@
       "label": "Twitter / X",
       "default": ""
     },
+    "facebook_url": {
+      "type": "string",
+      "label": "Facebook",
+      "default": ""
+    },
     "tiktok_url": {
       "type": "string",
       "label": "TikTok",
       "default": ""
     },
+    "youtube_url": {
+      "type": "string",
+      "label": "YouTube",
+      "default": ""
+    },
+    "linkedin_url": {
+      "type": "string",
+      "label": "LinkedIn",
+      "default": ""
+    },
     "snapchat_url": {
       "type": "string",
       "label": "Snapchat",
+      "default": ""
+    },
+    "telegram_url": {
+      "type": "string",
+      "label": "Telegram",
       "default": ""
     },
     "whatsapp_number": {

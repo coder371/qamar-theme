@@ -33,6 +33,11 @@
 
       {# Actions #}
       <div class="flex items-center gap-1">
+        {# Language Switcher (Desktop) #}
+        <div class="hidden md:block">
+          {% ui "language-switcher.njk", mode="dropdown" %}
+        </div>
+
         {# Search #}
         {% if widget.data.show_search %}
           <button @click="$store.modal.toggle('search')"

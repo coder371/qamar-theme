@@ -15,19 +15,14 @@
     "size": 4968
   },
   "locales/ar.json": {
-    "hash": "5965ce9f7c0ba0df3113d5a86028702796b1f5101fec5331d10ffcc93179cf9b",
-    "lastSynced": "2026-02-21T21:36:18.284Z",
-    "size": 10412
+    "hash": "8a627cca2769ac632b7b52a19e684d49927abc679c92a2400f7cbe2c58235af8",
+    "lastSynced": "2026-02-25T23:41:53.812Z",
+    "size": 10458
   },
   "locales/en.json": {
-    "hash": "b866aa6d6ff06845d8ce6d68fd49c7ccf94eb166e410b41d47015b4de6a80c5c",
-    "lastSynced": "2026-02-15T22:03:31.992Z",
-    "size": 6678
-  },
-  "locales/fr.json": {
-    "hash": "fd89de44258a32b9fc67b6b8a5fd832d9638ceaf069093601deff1f7c8a27a28",
-    "lastSynced": "2026-02-06T13:35:08.583Z",
-    "size": 188
+    "hash": "75b70fc2fa5067e4a05675af97a0f980e6b7c3cb7814615a94f3249cde41133b",
+    "lastSynced": "2026-02-25T23:41:54.541Z",
+    "size": 7854
   },
   "pages/article.json": {
     "hash": "5ad6ead57e8a5fec29940581da91e5c7d7b46406cbcada1757868d37d74f609c",
@@ -60,19 +55,14 @@
     "size": 9158
   },
   "pages/page.json": {
-    "hash": "d5ba19c697025b76ae3282c69d44da192ad5124055871e802370b8f69c8d1c9d",
-    "lastSynced": "2026-02-21T21:41:44.725Z",
-    "size": 3223
+    "hash": "77216d47810028dec37b16256fbc682b3249b1868b7f5d4036918e6f15203f76",
+    "lastSynced": "2026-02-25T04:26:34.832Z",
+    "size": 182
   },
   "pages/product.json": {
     "hash": "9fb9a17056a1b766ae131d39558410416a703c3f6fd6d7a46ee4ca71a49900bd",
     "lastSynced": "2026-02-15T20:21:21.278Z",
     "size": 637
-  },
-  "pages/search.json": {
-    "hash": "20bce59f67106fb2cee8755384bc04e6f7e8fdbc913f8a93226abe747bb598a8",
-    "lastSynced": "2026-02-05T20:11:06.609Z",
-    "size": 278
   },
   "settings/settings-schema.json": {
     "hash": "22728808d288feee20c92818d0e7eb18a803fb34205ed00c958e4fe1fd5c040b",
@@ -105,9 +95,9 @@
     "size": 8943
   },
   "ui/sidebar.njk": {
-    "hash": "e1981e7dcee1a6ed5aa62a229791714121dc5171569f77f8e9d038cffb404a3f",
-    "lastSynced": "2026-02-13T12:08:47.033Z",
-    "size": 1959
+    "hash": "0bf851b1560f88469c0d5c27384d67fe8bc7d2b548646598153d7267262c8f2e",
+    "lastSynced": "2026-02-25T23:41:57.101Z",
+    "size": 2242
   },
   "ui/search.njk": {
     "hash": "756e6f06cfa8be761021d152a0224c61edaecc22321de6c19f2d2d148a493464",
@@ -135,9 +125,9 @@
     "size": 555
   },
   "widgets/header/widget.njk": {
-    "hash": "8d48c52645e60e4ed4460a3bb84e29e9736b9b56aef3b729db9cb092213ab7df",
-    "lastSynced": "2026-02-13T11:58:47.688Z",
-    "size": 2840
+    "hash": "7213c3a3c11048af9e6324e5807daa7feef7ade6c6045b756b4aff7acf289e9c",
+    "lastSynced": "2026-02-25T23:41:55.705Z",
+    "size": 2996
   },
   "widgets/footer/schema.json": {
     "hash": "51ebdce60ea65c96ecdafa1b96cad79fff8ef26d09e93c0e40758de6b901b3c5",
@@ -205,9 +195,9 @@
     "size": 3390
   },
   "widgets/features-bar/widget.njk": {
-    "hash": "a957f2e937fda2c8cc159c4b34c233bbdd86a2e30e230c57027b77633ca4d223",
-    "lastSynced": "2026-02-13T13:55:10.227Z",
-    "size": 9258
+    "hash": "ea2769eaceecb8b9a05b73e15a8d6b74c5ee4a6c49dd771aae64301d3bedbbec",
+    "lastSynced": "2026-02-25T23:49:24.039Z",
+    "size": 9319
   },
   "widgets/testimonials/schema.json": {
     "hash": "e4d7f0da41e77af6604abb3f188d3b5fbb6492767352129e20bac8148c06ebb7",
@@ -265,9 +255,9 @@
     "size": 1026
   },
   "widgets/collection-banner/widget.njk": {
-    "hash": "e228ad02d8e106c60724b048420e378203c5617d399b8eb6f3eed48010d7b83c",
-    "lastSynced": "2026-02-13T13:58:16.367Z",
-    "size": 4643
+    "hash": "45b545ba787607b584ecf51bca9cccbaaa9440adf99483b77d5d569a63534c0c",
+    "lastSynced": "2026-02-25T22:53:47.801Z",
+    "size": 4630
   },
   "widgets/related-products/schema.json": {
     "hash": "de918c0cf8246dce7ea711b9d6556ff641a35e4f69d612a1f107084a1d8c5d24",
@@ -280,14 +270,14 @@
     "size": 4001
   },
   "widgets/page-404/schema.json": {
-    "hash": "ea071d3cf57726d6bd1317fd569934feba8c6c5c8409bd1605c97e8203ccf0c9",
-    "lastSynced": "2026-02-21T21:44:08.936Z",
-    "size": 645
+    "hash": "07bea03772d16b2df91f2d411a167a2a2aa660f0dfb000f30a653af93915d9e2",
+    "lastSynced": "2026-02-25T22:47:57.651Z",
+    "size": 518
   },
   "widgets/page-404/widget.njk": {
-    "hash": "cd672d8238c58e538e648acf75af04f31b1a65c93fa84ba97c50849aa189aef4",
-    "lastSynced": "2026-02-21T21:37:50.069Z",
-    "size": 3497
+    "hash": "167bc961d83eed72026197a8239982bc5b2bb0dfa9484c1c31da9d49655c3e20",
+    "lastSynced": "2026-02-25T22:47:52.727Z",
+    "size": 3264
   },
   "widgets/contact-form/schema.json": {
     "hash": "6c4f2445bda7bf148c9e2ada167edbf70fb2c52387bee4eab33ad79ca8305abc",
@@ -370,14 +360,14 @@
     "size": 10434
   },
   "ui/filter-sidebar.njk": {
-    "hash": "f6efabaaa4fbce7ae9cbb375ee7c68b48dd6debda38a2a4abb97253b92f31625",
-    "lastSynced": "2026-02-25T01:46:11.861Z",
-    "size": 10446
+    "hash": "926c6dfaf381f462c9f3d3cdbf52e67dab0c7ee416276a1199193ace34b57279",
+    "lastSynced": "2026-02-25T21:29:18.012Z",
+    "size": 12510
   },
   "ui/filter-mobile.njk": {
-    "hash": "5d1650a11f6c1261cdef9fdb7b47892c178a6e0a5bc0d0349300989a54c02c0b",
-    "lastSynced": "2026-02-25T01:46:55.246Z",
-    "size": 15378
+    "hash": "8a3d4cd11c1cab94ffc91d50382d7d833fd84350c701f417989596da10b45ee2",
+    "lastSynced": "2026-02-25T22:43:49.691Z",
+    "size": 22884
   },
   "widgets/blog-articles/schema.json": {
     "hash": "246b0c83c3a1a6b3b147f4770f32ba697e268d38c88d329a90cb53db15a2f2de",
@@ -410,9 +400,9 @@
     "size": 15187
   },
   "pages/shop.json": {
-    "hash": "8d1d08261631dd06f1f76df5d120d870daf44d5437abfe5cf028a5e2e488c680",
-    "lastSynced": "2026-02-15T20:41:49.853Z",
-    "size": 542
+    "hash": "87aecbbfb2c990a433f4fb7572be24b86129d5d307de0df5452c38740408ece0",
+    "lastSynced": "2026-02-25T22:46:21.892Z",
+    "size": 218
   },
   "widgets/shop-products/schema.json": {
     "hash": "672fc83a00cb1565d59bb7166d1230eb2454a0ada864639d17e819b803b55963",
@@ -420,9 +410,9 @@
     "size": 3198
   },
   "widgets/shop-products/widget.njk": {
-    "hash": "a1bbb44d2d69f23c862bc6c0b0b5a169baa8fe085fcec12f75377ee86108694d",
-    "lastSynced": "2026-02-25T01:43:02.763Z",
-    "size": 6612
+    "hash": "d510392abf92cfd35af24146f1a1b7da0e4aa0aca78f7e00fd8d010838074f4e",
+    "lastSynced": "2026-02-25T22:35:22.022Z",
+    "size": 7570
   },
   "widgets/predictive-search/schema.json": {
     "hash": "0ae47d211dbaa4ded1cf970e2d1a3dd6f0b1962a821590104dda3c719fd9aa8a",
@@ -443,5 +433,20 @@
     "hash": "1e90c957a1a826aed5aaaf372de4ece78994bf1028547329e897af2a88a5b217",
     "lastSynced": "2026-02-25T01:43:37.317Z",
     "size": 8304
+  },
+  "widgets/static-page/schema.json": {
+    "hash": "6aafa739ef0c51a506a9001c3f575ac9e5400e41d915180e1dd1b59a7090addf",
+    "lastSynced": "2026-02-25T04:26:34.806Z",
+    "size": 45
+  },
+  "widgets/static-page/widget.njk": {
+    "hash": "1cf47b7dd71c7cd0dc6dec5b5fbf7cd4327ba969febc6b63a7efb0c520b74773",
+    "lastSynced": "2026-02-25T04:37:11.668Z",
+    "size": 1847
+  },
+  "ui/language-switcher.njk": {
+    "hash": "c5b243be88d87fc01a07fd590bda683546408d7a1692de72a6abb4c75d468b4f",
+    "lastSynced": "2026-02-25T23:46:10.341Z",
+    "size": 4479
   }
 }

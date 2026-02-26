@@ -1,0 +1,77 @@
+{# Language Switcher — uses {% form "localization" %} #}
+{# Params: mode ("dropdown" for desktop, "list" for mobile sidebar) #}
+
+{% set _mode = mode | default('dropdown') %}
+{% set _langs = localization.availableLanguages | default([]) %}
+{% set _current = localization.language | default('ar') %}
+{% set _supported = ['ar', 'en'] %}
+{% set _labels = { ar: 'العربية', en: 'English' } %}
+{% set _shorts = { ar: 'ع', en: 'EN' } %}
+
+{% if _langs | length > 1 %}
+
+  {# ===== Desktop Dropdown ===== #}
+  {% if _mode == 'dropdown' %}
+    <div x-data="{ open: false }" class="relative">
+      <button @click="open = !open" type="button"
+              class="flex items-center gap-1.5 px-2.5 py-2 text-theme-text-secondary hover:text-primary transition-colors rounded-lg hover:bg-surface">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+        </svg>
+        <span class="text-xs font-semibold uppercase">{{ _current }}</span>
+        <svg class="w-3 h-3 transition-transform duration-200" :class="open && 'rotate-180'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </button>
+
+      <div x-show="open" x-cloak
+           @click.outside="open = false"
+           x-transition:enter="transition ease-out duration-200"
+           x-transition:enter-start="opacity-0 translate-y-1"
+           x-transition:enter-end="opacity-100 translate-y-0"
+           x-transition:leave="transition ease-in duration-150"
+           x-transition:leave-start="opacity-100 translate-y-0"
+           x-transition:leave-end="opacity-0 translate-y-1"
+           class="absolute top-full mt-2 end-0 bg-white rounded-xl border border-theme-border/40 shadow-lg overflow-hidden min-w-[160px] z-50">
+        {% for lang in _langs %}{% if lang in _supported %}
+          {% form "localization" %}
+            <input type="hidden" name="lang" value="{{ lang }}">
+            <button type="submit"
+                    class="w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors
+                           {% if lang == _current %}bg-primary/5 text-primary font-semibold{% else %}text-theme-text-secondary hover:bg-surface hover:text-theme-text{% endif %}">
+              <span class="text-xs font-bold text-theme-text-secondary/50 w-6 text-center uppercase">{{ _shorts[lang] | default(lang) }}</span>
+              <span class="flex-1 text-start">{{ _labels[lang] | default(lang) }}</span>
+              {% if lang == _current %}
+                <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+              {% endif %}
+            </button>
+          {% endform %}
+        {% endif %}{% endfor %}
+      </div>
+    </div>
+
+  {# ===== Mobile List (for sidebar) ===== #}
+  {% elif _mode == 'list' %}
+    <div class="space-y-1">
+      {% for lang in _langs %}
+        {% form "localization" %}
+          <input type="hidden" name="lang" value="{{ lang }}">
+          <button type="submit"
+                  class="w-full flex items-center gap-3 py-2.5 px-2 rounded-lg transition-colors
+                         {% if lang == _current %}bg-primary/10 text-primary font-semibold{% else %}text-theme-text-secondary hover:bg-surface hover:text-theme-text{% endif %}">
+            <span class="text-xs font-bold text-theme-text-secondary/50 w-6 text-center uppercase">{{ _shorts[lang] | default(lang) }}</span>
+            <span class="flex-1 text-start text-sm">{{ _labels[lang] | default(lang) }}</span>
+            {% if lang == _current %}
+              <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+            {% endif %}
+          </button>
+        {% endform %}
+      {% endfor %}
+    </div>
+  {% endif %}
+
+{% endif %}

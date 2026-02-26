@@ -82,7 +82,7 @@
       {% elif mode == 'collection' %}
         <h1 class="text-2xl md:text-3xl font-bold text-theme-text">{{ shopCollection.title }}</h1>
         {% if shopCollection.description %}
-          <p class="text-theme-text-secondary text-sm md:text-base mt-2 max-w-2xl">{{ shopCollection.description }}</p>
+          <p class="text-theme-text-secondary text-sm md:text-base mt-2 max-w-2xl">{{ shopCollection.description | safe }}</p>
         {% endif %}
 
       {% else %}
@@ -101,27 +101,12 @@
         <aside class="hidden md:block w-64 flex-shrink-0">
           <div class="sticky bottom-6 space-y-5">
 
-            {# Products Count + Clear #}
-            <div class="bg-white rounded-2xl border border-theme-border/40 p-5">
-              {% if mode == 'search' %}
-                <p class="text-sm text-theme-text-secondary">
-                  {{t('search.results_for')}}
-                  <span class="font-bold text-primary">"{{ searchQuery }}"</span>
-                </p>
-              {% else %}
-                <p class="text-sm text-theme-text-secondary">
-                  <span class="font-bold text-theme-text" id="shop-products-count">{% if pagination %}{{ pagination.totalItems }}{% else %}{{ products | length }}{% endif %}</span>
-                  {{t('common.products')}}
-                </p>
-              {% endif %}
-              <button data-qumra-filter-clear
-                      class="mt-2 text-xs text-red-500 hover:text-red-600 font-medium transition-colors"
-                      x-data="{ show: {{ 'true' if appliedFiltersData | length > 0 else 'false' }} }"
-                      x-show="show || qumra.filters.hasAny()"
-                      x-cloak>
-                {{t('collection.clear_filters')}}
-              </button>
-            </div>
+            {# Clear Filters #}
+            <button data-qumra-filter-clear
+                    class="w-full text-center py-2.5 text-xs text-red-500 hover:text-red-600 font-medium transition-colors bg-white rounded-2xl border border-theme-border/40"
+                    x-data x-show="qumra.filters.hasAny()" x-cloak>
+              {{t('collection.clear_filters')}}
+            </button>
 
             {# Sort + Filter Controls #}
             {% ui "filter-sidebar.njk", show_sort=show_sort, filters=filters, hasFilters=hasFilters, currentSort=currentSort, appliedFilters=appliedFiltersData %}
@@ -143,7 +128,7 @@
       <div class="flex-1 min-w-0">
 
         {# Products Grid Section — ONLY this re-renders on filter change #}
-        <div data-qumra-section="products-grid" class="relative min-h-[200px]">
+        <div data-qumra-section="products-grid" class="relative min-h-[200px] transition-opacity duration-300 [&[data-qumra-loading=true]]:opacity-40 [&[data-qumra-loading=true]]:pointer-events-none">
           {% widget "products-grid" %}
         </div>
 
@@ -152,3 +137,44 @@
 
   </div>
 </section>
+
+{# Filter UX #}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var section = document.querySelector('[data-qumra-section="products-grid"]');
+
+  // Desktop: instant visual toggle for SDK-managed checkboxes
+  document.addEventListener('click', function(e) {
+    var cb = e.target.closest('input[data-qumra-filter]');
+    if (!cb && e.target.closest('label')) cb = e.target.closest('label').querySelector('input[data-qumra-filter]');
+    if (!cb) return;
+    var expected = !cb.checked;
+    requestAnimationFrame(function() {
+      if (cb.checked !== expected) cb.checked = expected;
+    });
+    if (section) section.setAttribute('data-qumra-loading', 'true');
+  }, true);
+
+  // Sync desktop checkboxes from URL
+  function syncFilters() {
+    var params = new URLSearchParams(location.search);
+    document.querySelectorAll('input[data-qumra-filter]').forEach(function(cb) {
+      cb.checked = params.getAll('filters[' + cb.getAttribute('data-qumra-filter') + '][]').indexOf(cb.getAttribute('data-value')) !== -1;
+    });
+    window.dispatchEvent(new Event('filters-synced'));
+  }
+
+  if (window.qumra) {
+    qumra.on('collection:filtered', function() { setTimeout(syncFilters, 50); });
+    qumra.on('collection:reset', function() {
+      setTimeout(syncFilters, 50);
+      window.dispatchEvent(new Event('close-mobile-filters'));
+    });
+
+    // Prevent scroll jump during re-render
+    var savedScroll = 0;
+    qumra.on('section:rendering', function() { savedScroll = window.scrollY; });
+    qumra.on('section:rendered', function() { window.scrollTo(0, savedScroll); });
+  }
+});
+</script>
